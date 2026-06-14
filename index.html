@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiniela FIFA 2026</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0f0f1a;
+      --card:    #1a1a2e;
+      --border:  rgba(255,255,255,0.08);
+      --text:    #e0e0e0;
+      --muted:   #666;
+      --accent:  #f5a623;
+      --blue:    #4fc3f7;
+      --green:   #81c784;
+      --yellow:  #ffd54f;
+      --red:     #e57373;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 14px;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      position: sticky; top: 0; z-index: 100;
+    }
+    header h1 { font-size: 1.15em; color: var(--accent); letter-spacing: 0.5px; }
+    header span { font-size: 0.75em; color: var(--muted); }
+    #btn-update {
+      background: rgba(245,166,35,0.15);
+      border: 1px solid rgba(245,166,35,0.4);
+      color: var(--accent);
+      border-radius: 6px;
+      padding: 6px 14px;
+      cursor: pointer;
+      font-size: 0.8em;
+      font-weight: bold;
+      letter-spacing: 0.3px;
+      transition: background 0.15s;
+    }
+    #btn-update:hover { background: rgba(245,166,35,0.25); }
+
+    /* ── LAYOUT ── */
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px 16px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* ── SECTION TITLES ── */
+    .section-title {
+      font-size: 0.7em;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 10px;
+    }
+
+    /* ── STATS BAR ── */
+    .stats-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .stat-chip {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 16px;
+      flex: 1;
+      min-width: 110px;
+      text-align: center;
+    }
+    .stat-chip .val { font-size: 1.6em; font-weight: bold; color: var(--accent); display: block; }
+    .stat-chip .lbl { font-size: 0.7em; color: var(--muted); margin-top: 2px; }
+
+    /* ── LEADERBOARD ── */
+    .leaderboard {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .lb-row {
+      display: grid;
+      grid-template-columns: 36px 1fr 60px 50px 50px;
+      align-items: center;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      gap: 8px;
+    }
+    .lb-row:last-child { border-bottom: none; }
+    .lb-row.header { background: rgba(0,0,0,0.2); color: var(--muted); font-size: 0.68em; text-transform: uppercase; letter-spacing: 1px; padding: 8px 14px; }
+    .lb-row:not(.header):hover { background: rgba(255,255,255,0.03); }
+
+    .pos { font-weight: bold; font-size: 1em; text-align: center; }
+    .pos.gold   { color: #ffd700; }
+    .pos.silver { color: #c0c0c0; }
+    .pos.bronze { color: #cd7f32; }
+
+    .name { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .pts  { font-weight: bold; color: var(--accent); text-align: right; }
+    .exact, .winner { text-align: center; font-size: 0.85em; color: var(--muted); }
+
+    /* ── MATCH LIST ── */
+    .match-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .match-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 14px;
+      cursor: pointer;
+      user-select: none;
+      flex-wrap: wrap;
+    }
+    .match-header:hover { background: rgba(255,255,255,0.03); }
+
+    .group-badge {
+      background: rgba(79,195,247,0.15);
+      border: 1px solid rgba(79,195,247,0.3);
+      color: var(--blue);
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 0.65em;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      flex-shrink: 0;
+    }
+    .match-teams {
+      flex: 1;
+      font-size: 0.88em;
+      font-weight: 500;
+      min-width: 140px;
+    }
+    .match-date { font-size: 0.68em; color: var(--muted); flex-shrink: 0; }
+    .match-result {
+      font-size: 0.9em;
+      font-weight: bold;
+      padding: 3px 10px;
+      border-radius: 5px;
+      flex-shrink: 0;
+      min-width: 60px;
+      text-align: center;
+    }
+    .match-result.played { background: rgba(129,199,132,0.15); color: var(--green); border: 1px solid rgba(129,199,132,0.3); }
+    .match-result.pending { background: rgba(255,255,255,0.05); color: var(--muted); border: 1px solid var(--border); font-size: 0.72em; }
+
+    .chevron { color: var(--muted); font-size: 0.75em; flex-shrink: 0; transition: transform 0.2s; }
+    .match-card.open .chevron { transform: rotate(180deg); }
+
+    /* ── BETS TABLE ── */
+    .bets-table {
+      display: none;
+      border-top: 1px solid var(--border);
+    }
+    .match-card.open .bets-table { display: block; }
+
+    .bets-row {
+      display: grid;
+      grid-template-columns: 1fr 70px 40px;
+      align-items: center;
+      padding: 7px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      gap: 8px;
+    }
+    .bets-row:last-child { border-bottom: none; }
+    .bets-row.bh { background: rgba(0,0,0,0.15); color: var(--muted); font-size: 0.65em; text-transform: uppercase; letter-spacing: 1px; padding: 6px 14px; }
+
+    .bet-name { font-size: 0.82em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .bet-score { font-size: 0.82em; text-align: center; font-family: monospace; }
+    .bet-pts { font-size: 0.8em; font-weight: bold; text-align: right; }
+
+    .c-exact  { color: var(--green); }
+    .c-winner { color: var(--yellow); }
+    .c-wrong  { color: var(--red); }
+    .c-pending { color: var(--muted); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 480px) {
+      .lb-row { grid-template-columns: 28px 1fr 52px 40px 40px; padding: 8px 10px; }
+      .match-header { padding: 10px 12px; }
+      .bets-row { grid-template-columns: 1fr 60px 36px; padding: 6px 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>🏆 Quiniela FIFA 2026</h1>
+    <span id="last-update"></span>
+  </div>
+  <button id="btn-update" onclick="location.reload()">⟳ Actualizar</button>
+</header>
+
+<main>
+
+  <!-- Stats -->
+  <div class="stats-bar" id="stats-bar"></div>
+
+  <!-- Leaderboard -->
+  <div>
+    <div class="section-title">Posiciones</div>
+    <div class="leaderboard" id="leaderboard"></div>
+  </div>
+
+  <!-- Matches -->
+  <div>
+    <div class="section-title">Partidos — Fase de Grupos</div>
+    <div id="matches" style="display:flex; flex-direction:column; gap:6px;"></div>
+  </div>
+
+</main>
+
+<script src="bets.js"></script>
+<script src="results.js"></script>
+<script>
+// ── SCORING ──────────────────────────────────────────────────
+const MULT = { grupos:0.33, ronda32:1, ronda16:1.5, cuartos:2, semis:3, tercero:4, final:5 };
+
+function calcPts(bet, result, phase) {
+  if (!result) return null; // not played
+  const mult = MULT[phase] || 0.33;
+  const [bh, ba] = bet;
+  const [rh, ra] = result;
+  if (bh === rh && ba === ra) return +(3 * mult).toFixed(2);
+  if (Math.sign(bh - ba) === Math.sign(rh - ra)) return +(1 * mult).toFixed(2);
+  return 0;
+}
+
+function getLeaderboard() {
+  return PARTICIPANTS.map(p => {
+    let total = 0, exact = 0, winner = 0, played = 0;
+    MATCHES.forEach(m => {
+      const result = RESULTS[m.id];
+      if (!result) return;
+      played++;
+      const bet = p.bets[m.id];
+      if (!bet) return;
+      const pts = calcPts(bet, result, m.phase || "grupos");
+      total += pts;
+      if (pts >= 3 * (MULT[m.phase || "grupos"]) - 0.001) exact++;
+      else if (pts > 0) winner++;
+    });
+    return { name: p.name, total: +total.toFixed(2), exact, winner, played };
+  }).sort((a, b) => b.total - a.total || b.exact - a.exact);
+}
+
+// ── STATS BAR ────────────────────────────────────────────────
+function renderStats() {
+  const played = MATCHES.filter(m => RESULTS[m.id]).length;
+  const total  = MATCHES.length;
+  const lb     = getLeaderboard();
+  const leader = lb[0];
+  document.getElementById("stats-bar").innerHTML = `
+    <div class="stat-chip">
+      <span class="val">${played}/${total}</span>
+      <span class="lbl">Partidos jugados</span>
+    </div>
+    <div class="stat-chip">
+      <span class="val">${PARTICIPANTS.length}</span>
+      <span class="lbl">Participantes</span>
+    </div>
+    <div class="stat-chip">
+      <span class="val" style="color:var(--green)">${leader ? leader.total : "—"}</span>
+      <span class="lbl">Pts líder</span>
+    </div>
+    <div class="stat-chip">
+      <span class="val" style="color:var(--blue)">${leader ? leader.name.split(" ")[0] : "—"}</span>
+      <span class="lbl">En primer lugar</span>
+    </div>
+  `;
+}
+
+// ── LEADERBOARD ───────────────────────────────────────────────
+function renderLeaderboard() {
+  const lb = getLeaderboard();
+  const medals = ["🥇","🥈","🥉"];
+  const posClass = ["gold","silver","bronze"];
+  let html = `
+    <div class="lb-row header">
+      <div>Pos</div><div>Nombre</div><div style="text-align:right">Pts</div>
+      <div style="text-align:center">Exactos</div><div style="text-align:center">Ganadores</div>
+    </div>`;
+  lb.forEach((p, i) => {
+    const medal  = i < 3 ? medals[i] : `${i+1}`;
+    const cls    = i < 3 ? posClass[i] : "";
+    html += `
+      <div class="lb-row">
+        <div class="pos ${cls}">${medal}</div>
+        <div class="name">${p.name}</div>
+        <div class="pts">${p.total}</div>
+        <div class="exact">${p.exact || "—"}</div>
+        <div class="winner">${p.winner || "—"}</div>
+      </div>`;
+  });
+  document.getElementById("leaderboard").innerHTML = html;
+}
+
+// ── MATCHES ───────────────────────────────────────────────────
+function renderMatches() {
+  const container = document.getElementById("matches");
+  container.innerHTML = "";
+
+  MATCHES.forEach(m => {
+    const result  = RESULTS[m.id];
+    const played  = !!result;
+    const resHtml = played
+      ? `<div class="match-result played">${result[0]} – ${result[1]}</div>`
+      : `<div class="match-result pending">⏳ Pendiente</div>`;
+
+    // bets table rows
+    let betsHtml = `<div class="bets-row bh"><div>Participante</div><div style="text-align:center">Apuesta</div><div style="text-align:right">Pts</div></div>`;
+    PARTICIPANTS.forEach(p => {
+      const bet = p.bets[m.id];
+      if (!bet) return;
+      const pts = calcPts(bet, result, m.phase || "grupos");
+      let cls = "c-pending", ptsStr = "—";
+      if (played) {
+        if (pts >= 3 * (MULT[m.phase || "grupos"]) - 0.001) cls = "c-exact";
+        else if (pts > 0) cls = "c-winner";
+        else cls = "c-wrong";
+        ptsStr = pts > 0 ? `+${pts}` : "0";
+      }
+      betsHtml += `
+        <div class="bets-row">
+          <div class="bet-name ${cls}">${p.name}</div>
+          <div class="bet-score ${cls}">${bet[0]}–${bet[1]}</div>
+          <div class="bet-pts ${cls}">${ptsStr}</div>
+        </div>`;
+    });
+
+    const card = document.createElement("div");
+    card.className = "match-card";
+    card.innerHTML = `
+      <div class="match-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="group-badge">Grupo ${m.group}</span>
+        <span class="match-teams">${m.hf} ${m.home} vs ${m.away} ${m.af}</span>
+        <span class="match-date">${m.date.slice(5).replace("-","/")} jun</span>
+        ${resHtml}
+        <span class="chevron">▼</span>
+      </div>
+      <div class="bets-table">${betsHtml}</div>`;
+    container.appendChild(card);
+  });
+}
+
+// ── LAST UPDATE ───────────────────────────────────────────────
+function renderLastUpdate() {
+  const played = MATCHES.filter(m => RESULTS[m.id]);
+  if (played.length === 0) {
+    document.getElementById("last-update").textContent = "Sin resultados cargados aún";
+    return;
+  }
+  const last = played[played.length - 1];
+  const m = MATCHES.find(x => x.id === last.id);
+  document.getElementById("last-update").textContent = `Último resultado: ${m.home} vs ${m.away}`;
+}
+
+// ── INIT ──────────────────────────────────────────────────────
+renderStats();
+renderLeaderboard();
+renderMatches();
+renderLastUpdate();
+</script>
+</body>
+</html>
