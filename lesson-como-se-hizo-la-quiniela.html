@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cómo se hizo la Quiniela Familiar</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/moon.css" />
+  <style>
+    :root { --accent: #f5a623; --accent2: #4fc3f7; }
+    .reveal h1, .reveal h2 { color: var(--accent); }
+    .reveal .slides section { text-align: left; }
+    .slide-label {
+      position: absolute; top: -40px; right: 0;
+      font-size: 0.45em; color: #666; letter-spacing: 1px; text-transform: uppercase;
+    }
+    .emoji-anchor { font-size: 2.2em; display: block; margin-bottom: 8px; }
+    ul { list-style: none; padding: 0; margin: 0; }
+    ul li { padding: 5px 0; font-size: 0.78em; line-height: 1.4; }
+    ul li::before { content: "▸ "; color: var(--accent); font-size: 1em; }
+    .quiz-question { font-size: 0.85em; font-weight: bold; color: #eee; margin-bottom: 14px; line-height: 1.4; }
+    .quiz-options { list-style: none; padding: 0; }
+    .quiz-options li { padding: 7px 14px; margin: 5px 0; border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; font-size: 0.75em; cursor: default; }
+    .quiz-options li::before { content: none; }
+    .quiz-answer { background: rgba(76,175,80,0.2); border: 1px solid #81c784 !important; color: #81c784; }
+    .reveal-hint { font-size: 0.55em; color: #666; margin-top: 8px; font-style: italic; }
+    .remember { background: rgba(245,166,35,0.15); border-radius: 6px; padding: 11px 16px; font-size: 0.75em; margin-top: 14px; color: var(--accent); font-weight: bold; }
+    .remember span { color: #aaa; font-weight: normal; }
+    .nav-hint { font-size: 0.42em; color: #444; text-align: center; margin-top: 28px; }
+    .ci { background: rgba(255,255,255,0.1); border-radius: 4px; padding: 1px 7px; font-family: monospace; font-size: 0.9em; color: var(--accent2); }
+
+    /* Step badge */
+    .paso-badge {
+      display: inline-block;
+      background: rgba(245,166,35,0.18); border: 1px solid rgba(245,166,35,0.4);
+      color: var(--accent); border-radius: 20px;
+      padding: 3px 12px; font-size: 0.62em; font-weight: bold;
+      letter-spacing: 1px; margin-bottom: 10px;
+    }
+
+    /* Numbered steps */
+    .step { display: flex; align-items: flex-start; gap: 13px; margin: 8px 0; }
+    .sn {
+      min-width: 28px; height: 28px; background: var(--accent); color: #1a1a2e;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-weight: bold; font-size: 0.75em; flex-shrink: 0; margin-top: 1px;
+    }
+    .st { font-size: 0.77em; line-height: 1.5; color: #ddd; }
+    .st strong { color: #fff; }
+
+    /* File cards */
+    .file-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 14px; }
+    .file-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 13px 14px; }
+    .file-card .fn { font-family: monospace; font-size: 0.78em; color: var(--accent2); font-weight: bold; margin-bottom: 6px; display: block; }
+    .file-card .fd { font-size: 0.7em; color: #999; line-height: 1.4; }
+    .file-card .ft { font-size: 0.65em; margin-top: 8px; color: #666; font-style: italic; }
+    .file-card.never { border-color: rgba(229,115,115,0.25); }
+    .file-card.always { border-color: rgba(129,199,132,0.3); }
+    .file-card.never .fn { color: #e57373; }
+    .file-card.always .fn { color: #81c784; }
+
+    /* Score table */
+    .score-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.74em; }
+    .score-table th { background: rgba(245,166,35,0.15); color: var(--accent); padding: 6px 12px; text-align: left; font-size: 0.88em; }
+    .score-table td { padding: 7px 12px; border-bottom: 1px solid rgba(255,255,255,0.06); color: #ccc; }
+    .score-table tr:last-child td { border-bottom: none; }
+    .score-table .hl { color: var(--accent); font-weight: bold; }
+
+    /* UI preview */
+    .ui-row { display: flex; gap: 10px; margin: 8px 0; align-items: flex-start; }
+    .ui-badge { background: rgba(79,195,247,0.12); border: 1px solid rgba(79,195,247,0.3); color: var(--accent2); border-radius: 5px; padding: 3px 10px; font-size: 0.68em; font-weight: bold; white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
+    .ui-desc { font-size: 0.76em; color: #bbb; line-height: 1.4; }
+
+    /* Color dots */
+    .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
+    .dot.g { background: #81c784; }
+    .dot.y { background: #ffd54f; }
+    .dot.r { background: #e57373; }
+
+    /* Git commands */
+    .git-block { background: rgba(0,0,0,0.35); border-radius: 6px; padding: 10px 14px; font-family: monospace; font-size: 0.76em; line-height: 1.8; margin: 10px 0; border: 1px solid rgba(255,255,255,0.07); }
+    .git-block .cmd { color: var(--accent2); }
+    .git-block .cmt { color: #555; }
+
+    /* Stats row */
+    .stat-row { display: flex; gap: 14px; margin: 14px 0; }
+    .stat-box { flex: 1; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 10px 14px; text-align: center; }
+    .stat-box .sv { font-size: 1.6em; font-weight: bold; color: var(--accent); display: block; }
+    .stat-box .sl { font-size: 0.65em; color: #666; margin-top: 2px; }
+  </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+  <!-- SLIDE 1: HOOK -->
+  <section>
+    <div class="slide-label">Lección · Slide 1 de 11</div>
+    <span class="emoji-anchor">🏆</span>
+    <h2>¿Cómo se construyó la quiniela familiar desde cero en una tarde?</h2>
+    <p style="font-size:0.81em; line-height:1.65; color:#ccc;">
+      18 participantes. 24 partidos. Un leaderboard con puntos en tiempo real.
+      Publicado en internet para que toda la familia lo vea desde el celular.<br/><br/>
+      Todo construido en una sola sesión de trabajo —
+      sin ser programador — usando <strong style="color:var(--accent)">IA como herramienta</strong>
+      y aprendiendo en el camino cómo funciona cada pieza.
+    </p>
+    <div class="nav-hint">Presioná → para continuar</div>
+  </section>
+
+  <!-- SLIDE 2: DEDICATORIA -->
+  <section>
+    <div class="slide-label">Lección · Slide 2 de 11</div>
+    <div style="text-align:center; padding:6px 0;">
+      <div style="font-size:0.52em; color:#555; letter-spacing:3px; text-transform:uppercase; margin-bottom:18px;">Una dedicatoria</div>
+
+      <p style="font-size:0.9em; line-height:2.1; font-style:italic; color:#ccc;">
+        Esta quiniela no es solo código.<br/>
+        <span style="color:#aaa;">Es la familia reunida alrededor del mundial.</span><br/>
+        <span style="color:#888;">Es el mensaje de madrugada: "¡Acerté el exacto!"</span><br/>
+        <span style="color:#aaa;">Es el orgullo. La revancha dulce.</span>
+      </p>
+
+      <div style="margin:18px auto; max-width:480px; border-top:1px solid rgba(255,255,255,0.07); border-bottom:1px solid rgba(255,255,255,0.07); padding:14px 0;">
+        <p style="font-size:0.78em; line-height:2; color:#bbb;">
+          Inspirada en la lección ayayai de
+          <strong style="color:var(--accent)">Jean</strong><br/>
+          <span style="font-size:0.92em; color:#888;">Pedida con corazón por
+          <strong style="color:#ddd;">Jonathan</strong></span>
+        </p>
+      </div>
+
+      <p style="font-size:0.82em; color:#ccc; line-height:1.9; margin-top:14px;">
+        Hecha para
+        <strong style="color:var(--accent2)">usar</strong> ·
+        para <strong style="color:var(--accent2)">aprender</strong> ·
+        para <strong style="color:var(--accent2)">reír juntos</strong>.<br/>
+        <span style="color:#666; font-size:0.88em; font-style:italic;">Para toda la familia. Con todo el amor del mundo.</span>
+      </p>
+
+      <div style="margin-top:22px; font-size:2em; letter-spacing:8px;">🏆 ❤️ ⚽</div>
+    </div>
+  </section>
+
+  <!-- SLIDE 3: EL PROYECTO -->
+  <section>
+    <div class="slide-label">Lección · Slide 3 de 11</div>
+    <h2>🎯 Qué queríamos hacer</h2>
+    <p style="font-size:0.8em; line-height:1.5; color:#ddd; margin-bottom:14px;">
+      Una página web simple para que la familia siga el Mundial —
+      sin aplicaciones externas, sin pagos, hecha a medida.
+    </p>
+    <div class="step">
+      <div class="sn">1</div>
+      <div class="st">Mostrar los <strong>partidos del Mundial</strong> con sus resultados reales</div>
+    </div>
+    <div class="step">
+      <div class="sn">2</div>
+      <div class="st">Comparar cada resultado con las <strong>apuestas de 18 familiares</strong></div>
+    </div>
+    <div class="step">
+      <div class="sn">3</div>
+      <div class="st">Calcular <strong>puntos automáticamente</strong> según reglas de puntuación definidas</div>
+    </div>
+    <div class="step">
+      <div class="sn">4</div>
+      <div class="st">Publicar en una <strong>URL gratuita</strong> para ver desde el celular</div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-box"><span class="sv">3</span><span class="sl">archivos de código</span></div>
+      <div class="stat-box"><span class="sv">18</span><span class="sl">participantes</span></div>
+      <div class="stat-box"><span class="sv">24</span><span class="sl">partidos cargados</span></div>
+      <div class="stat-box"><span class="sv">0</span><span class="sl">servidores / instalación</span></div>
+    </div>
+  </section>
+
+  <!-- SLIDE 4: PASO 1 -->
+  <section>
+    <div class="slide-label">Lección · Slide 4 de 11</div>
+    <span class="paso-badge">PASO 1 DE 7 — DATOS</span>
+    <h2>📋 Definir reglas y juntar las apuestas</h2>
+    <div class="step">
+      <div class="sn">1</div>
+      <div class="st">
+        Las <strong>reglas de puntuación</strong> se escribieron en Notion:
+        ganador correcto = 1 pt · marcador exacto = 3 pts ·
+        con multiplicadores según la fase (×0.33 grupos → ×5 final)
+      </div>
+    </div>
+    <div class="step">
+      <div class="sn">2</div>
+      <div class="st">
+        Los 18 participantes completaron sus apuestas en un <strong>Google Form</strong> →
+        las respuestas se guardaron automáticamente en un Google Sheet
+      </div>
+    </div>
+    <div class="step">
+      <div class="sn">3</div>
+      <div class="st">
+        El Sheet tenía <strong>52 columnas</strong>: nombre · equipo favorito ·
+        y 2 columnas por partido (goles local y goles visitante)
+      </div>
+    </div>
+    <div class="step">
+      <div class="sn">4</div>
+      <div class="st">
+        Resultado: <strong>18 filas × 24 partidos = 432 predicciones</strong>
+        listas para leer
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 5: PASO 2 -->
+  <section>
+    <div class="slide-label">Lección · Slide 5 de 11</div>
+    <span class="paso-badge">PASO 2 DE 7 — EXTRACCIÓN</span>
+    <h2>📊 Leer las 432 apuestas del Sheet</h2>
+    <div class="step">
+      <div class="sn">1</div>
+      <div class="st">
+        Se hizo el Google Sheet <strong>público</strong> (cualquiera con el link puede ver)
+      </div>
+    </div>
+    <div class="step">
+      <div class="sn">2</div>
+      <div class="st">
+        Claude Code leyó el Sheet directamente en formato CSV —
+        sin descargar nada, directo desde internet
+      </div>
+    </div>
+    <div class="step">
+      <div class="sn">3</div>
+      <div class="st">
+        La IA analizó las 52 columnas, identificó el orden de los partidos
+        y emparejó cada par de columnas con cada partido
+      </div>
+    </div>
+    <div class="step">
+      <div class="sn">4</div>
+      <div class="st">
+        Generó automáticamente el archivo <span class="ci">bets.js</span> con
+        todas las apuestas estructuradas y listas para usar — sin tipear un solo número a mano
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 6: PASO 3 -->
+  <section>
+    <div class="slide-label">Lección · Slide 6 de 11</div>
+    <span class="paso-badge">PASO 3 DE 7 — ARQUITECTURA</span>
+    <h2>🗂️ Los 3 archivos de la app</h2>
+    <p style="font-size:0.76em; color:#888; margin-bottom:4px;">
+      Sin servidor, sin instalación — solo 3 archivos que viven juntos en una carpeta.
+    </p>
+    <div class="file-grid">
+      <div class="file-card never">
+        <span class="fn">bets.js</span>
+        <span class="fd">Las apuestas de los 18 participantes para los 24 partidos. Se crea una sola vez al inicio del torneo.</span>
+        <span class="ft">🔒 Nunca se modifica</span>
+      </div>
+      <div class="file-card always">
+        <span class="fn">results.js</span>
+        <span class="fd">Los resultados reales de cada partido. Empieza vacío (null) y se actualiza después de cada partido.</span>
+        <span class="ft">✏️ Vos lo actualizás</span>
+      </div>
+      <div class="file-card">
+        <span class="fn">index.html</span>
+        <span class="fd">La página que ve la familia. Carga los otros dos, calcula los puntos y muestra el leaderboard.</span>
+        <span class="ft">🖥️ La app completa</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 7: PASO 4 -->
+  <section>
+    <div class="slide-label">Lección · Slide 7 de 11</div>
+    <span class="paso-badge">PASO 4 DE 7 — PUNTUACIÓN</span>
+    <h2>⚙️ Cómo se calculan los puntos</h2>
+    <p style="font-size:0.76em; color:#aaa; margin-bottom:8px;">
+      JavaScript lee las dos apuestas (la del participante y el resultado real) y aplica las reglas:
+    </p>
+    <table class="score-table">
+      <tr><th>¿Qué acertaste?</th><th>Puntos base</th><th>× Fase de grupos</th><th>× Final</th></tr>
+      <tr><td>Marcador exacto (ej. 2-1 exacto)</td><td class="hl">3 pts</td><td>0.99 pts</td><td>15 pts</td></tr>
+      <tr><td>Ganador correcto (ej. ganó el local)</td><td class="hl">1 pt</td><td>0.33 pts</td><td>5 pts</td></tr>
+      <tr><td>Empate correcto (ambos predijeron 0-0)</td><td class="hl">1 pt</td><td>0.33 pts</td><td>5 pts</td></tr>
+      <tr><td>Nada correcto</td><td>0 pts</td><td>0 pts</td><td>0 pts</td></tr>
+    </table>
+    <p style="font-size:0.7em; color:#666; margin-top:10px; font-style:italic;">
+      Los multiplicadores suben en cada ronda — acertar la final vale 15× más que acertar en grupos.
+    </p>
+  </section>
+
+  <!-- SLIDE 8: PASO 5 -->
+  <section>
+    <div class="slide-label">Lección · Slide 8 de 11</div>
+    <span class="paso-badge">PASO 5 DE 7 — INTERFAZ</span>
+    <h2>🖥️ Lo que ve la familia</h2>
+    <div class="ui-row">
+      <span class="ui-badge">Barra de stats</span>
+      <span class="ui-desc">Partidos jugados · total de participantes · puntos del líder · quién va primero — siempre visible arriba</span>
+    </div>
+    <div class="ui-row">
+      <span class="ui-badge">Leaderboard</span>
+      <span class="ui-desc">Tabla ordenada con 🥇🥈🥉 para los primeros tres · columnas de Pts, Exactos y Ganadores</span>
+    </div>
+    <div class="ui-row">
+      <span class="ui-badge">Partidos</span>
+      <span class="ui-desc">Cada partido con grupos, banderas, fecha y resultado. Click → se abre y muestra la apuesta de cada persona</span>
+    </div>
+    <div class="ui-row">
+      <span class="ui-badge">Colores</span>
+      <span class="ui-desc">
+        <span class="dot g"></span>verde = marcador exacto ·
+        <span class="dot y"></span>amarillo = ganador correcto ·
+        <span class="dot r"></span>rojo = incorrecto ·
+        gris = pendiente
+      </span>
+    </div>
+    <div class="ui-row">
+      <span class="ui-badge">Botón actualizar</span>
+      <span class="ui-desc">Recarga la página. En la fase 2 se conectará a una API para traer resultados en vivo automáticamente</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 9: PASO 6 -->
+  <section>
+    <div class="slide-label">Lección · Slide 9 de 11</div>
+    <span class="paso-badge">PASO 6 DE 7 — PUBLICAR</span>
+    <h2>🌐 Publicar en internet para toda la familia</h2>
+    <div class="step">
+      <div class="sn">1</div>
+      <div class="st">
+        Se creó una cuenta en <strong>GitHub</strong> — la plataforma donde los programadores guardan su código
+      </div>
+    </div>
+    <div class="step">
+      <div class="sn">2</div>
+      <div class="st">
+        Se creó un <strong>repositorio</strong> (carpeta pública en la nube) llamado <span class="ci">quiniela-familia</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="sn">3</div>
+      <div class="st">
+        Se subieron los 3 archivos con <strong>Git</strong> — 3 comandos en la terminal
+      </div>
+    </div>
+    <div class="step">
+      <div class="sn">4</div>
+      <div class="st">
+        Se activó <strong>GitHub Pages</strong> → URL pública gratuita en segundos:
+        <span class="ci">boadaedgar.github.io/quiniela-familia</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="sn">5</div>
+      <div class="st">
+        La familia la abre desde el celular — sin instalar nada, sin login, funciona en cualquier browser
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 10: PASO 7 -->
+  <section>
+    <div class="slide-label">Lección · Slide 10 de 11</div>
+    <span class="paso-badge">PASO 7 DE 7 — MANTENIMIENTO</span>
+    <h2>🔄 Cargar resultados después de cada partido</h2>
+    <p style="font-size:0.76em; color:#aaa; margin-bottom:10px;">
+      Cada vez que termina un partido, el flujo es siempre el mismo — 4 pasos, 2 minutos:
+    </p>
+    <div class="step">
+      <div class="sn">1</div>
+      <div class="st">Abrís <span class="ci">results.js</span> y buscás la línea del partido (tiene el nombre como comentario)</div>
+    </div>
+    <div class="step">
+      <div class="sn">2</div>
+      <div class="st">Cambiás <span class="ci">null</span> por <span class="ci">[goles_local, goles_visitante]</span> — ejemplo: <span class="ci">[2, 1]</span></div>
+    </div>
+    <div class="step">
+      <div class="sn">3</div>
+      <div class="st">Guardás el archivo y corrés los 3 comandos de git en la terminal:</div>
+    </div>
+    <div class="git-block">
+      <span class="cmd">git add results.js</span><br/>
+      <span class="cmd">git commit -m "Resultados 15-Jun"</span><br/>
+      <span class="cmd">git push</span>
+    </div>
+    <div class="step">
+      <div class="sn">4</div>
+      <div class="st">La familia recarga el browser → <strong>leaderboard actualizado en tiempo real</strong></div>
+    </div>
+  </section>
+
+  <!-- SLIDE 11: QUIZ -->
+  <section>
+    <div class="slide-label">Lección · Slide 11 de 11</div>
+    <h2>🧠 ¿Lo entendiste?</h2>
+    <p class="quiz-question">¿Cuál de los 3 archivos editás para cargar el resultado de un partido?</p>
+    <ul class="quiz-options">
+      <li>A) <span class="ci">index.html</span> — la página principal que ve la familia</li>
+      <li>B) <span class="ci">bets.js</span> — las apuestas de los 18 participantes</li>
+      <li>C) <span class="ci">results.js</span> — la planilla con los resultados reales</li>
+    </ul>
+    <p class="reveal-hint">Presioná → para ver la respuesta</p>
+    <div class="fragment">
+      <ul class="quiz-options">
+        <li class="quiz-answer">✓ Correcto: C) <span class="ci">results.js</span> — la planilla con los resultados reales</li>
+      </ul>
+      <div class="remember">
+        💡 Recordá: <span>La quiniela son 3 archivos — <code>bets.js</code> nunca cambia, <code>results.js</code> lo actualizás vos, <code>index.html</code> muestra todo.</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    transition: 'slide',
+    transitionSpeed: 'fast',
+    controls: true,
+    progress: true,
+    slideNumber: false,
+    width: 1280,
+    height: 720,
+    margin: 0.04,
+    minScale: 0.2,
+    maxScale: 2.0,
+  });
+</script>
+</body>
+</html>

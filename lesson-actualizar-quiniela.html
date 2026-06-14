@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cómo actualizar los resultados de la quiniela</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/moon.css" />
+  <style>
+    :root { --accent: #f5a623; --accent2: #4fc3f7; }
+    .reveal h1, .reveal h2 { color: var(--accent); }
+    .reveal .slides section { text-align: left; }
+    .slide-label {
+      position: absolute; top: -40px; right: 0;
+      font-size: 0.45em; color: #666; letter-spacing: 1px; text-transform: uppercase;
+    }
+    .emoji-anchor { font-size: 2.2em; display: block; margin-bottom: 8px; }
+    .metaphor {
+      background: rgba(245,166,35,0.12);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 6px 6px 0;
+      padding: 9px 14px; font-size: 0.78em;
+      margin-top: 10px; font-style: italic; color: #ddd;
+    }
+    .metaphor strong { color: var(--accent); font-style: normal; }
+    ul { list-style: none; padding: 0; margin: 0; }
+    ul li { padding: 5px 0; font-size: 0.78em; line-height: 1.4; }
+    ul li::before { content: "▸ "; color: var(--accent); font-size: 1em; }
+    .example-box {
+      background: rgba(79,195,247,0.1);
+      border: 1px solid rgba(79,195,247,0.3);
+      border-radius: 8px; padding: 14px 18px;
+      font-size: 0.78em; line-height: 1.65;
+    }
+    .example-box .label {
+      font-size: 0.72em; color: var(--accent2);
+      text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 8px; display: block;
+    }
+    .quiz-question {
+      font-size: 0.85em; font-weight: bold;
+      color: #eee; margin-bottom: 14px; line-height: 1.4;
+    }
+    .quiz-options { list-style: none; padding: 0; }
+    .quiz-options li {
+      padding: 7px 14px; margin: 5px 0;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 6px; font-size: 0.75em; cursor: default;
+    }
+    .quiz-options li::before { content: none; }
+    .quiz-answer {
+      background: rgba(76,175,80,0.2);
+      border: 1px solid #81c784 !important; color: #81c784;
+    }
+    .reveal-hint { font-size: 0.55em; color: #666; margin-top: 8px; font-style: italic; }
+    .remember {
+      background: rgba(245,166,35,0.15);
+      border-radius: 6px; padding: 11px 16px;
+      font-size: 0.75em; margin-top: 14px;
+      color: var(--accent); font-weight: bold;
+    }
+    .remember span { color: #aaa; font-weight: normal; }
+    .nav-hint { font-size: 0.42em; color: #444; text-align: center; margin-top: 28px; }
+    .code-inline {
+      background: rgba(255,255,255,0.1); border-radius: 4px;
+      padding: 1px 8px; font-family: monospace; font-size: 0.9em;
+      color: var(--accent2);
+    }
+    .code-block {
+      background: rgba(0,0,0,0.35); border-radius: 6px;
+      padding: 10px 14px; font-family: monospace; font-size: 0.78em;
+      line-height: 1.7; margin: 8px 0; color: #ccc;
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+    .code-block .hi  { color: var(--accent); font-weight: bold; }
+    .code-block .dim { color: #555; }
+
+    /* Pasos numerados */
+    .step { display: flex; align-items: flex-start; gap: 14px; margin: 9px 0; }
+    .step-num {
+      min-width: 30px; height: 30px;
+      background: var(--accent); color: #1a1a2e;
+      border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; font-weight: bold; font-size: 0.78em;
+      flex-shrink: 0; margin-top: 1px;
+    }
+    .step-text { font-size: 0.78em; line-height: 1.5; color: #ddd; }
+    .step-text strong { color: #fff; }
+
+    /* Comparación antes/después */
+    .diff-row { display: flex; gap: 14px; margin: 12px 0; }
+    .diff-box {
+      flex: 1; border-radius: 7px; padding: 10px 14px;
+      font-family: monospace; font-size: 0.74em; line-height: 1.6;
+    }
+    .diff-before {
+      background: rgba(229,115,115,0.1);
+      border: 1px solid rgba(229,115,115,0.3);
+    }
+    .diff-after {
+      background: rgba(129,199,132,0.1);
+      border: 1px solid rgba(129,199,132,0.3);
+    }
+    .diff-label {
+      font-size: 0.68em; font-weight: bold; letter-spacing: 0.5px;
+      margin-bottom: 6px; display: block; font-family: sans-serif;
+    }
+    .diff-before .diff-label { color: #e57373; }
+    .diff-after  .diff-label { color: #81c784; }
+  </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+  <!-- SLIDE 1: HOOK -->
+  <section>
+    <div class="slide-label">Lección · Slide 1 de 5</div>
+    <span class="emoji-anchor">⚽</span>
+    <h2>Terminó un partido. ¿Cómo sabe la quiniela el resultado?</h2>
+    <p style="font-size:0.82em; line-height:1.6; color:#ccc;">
+      La quiniela no se actualiza sola. Alguien tiene que escribir el resultado
+      — como un árbitro que anota en una planilla oficial.<br/><br/>
+      Ese "alguien" sos vos. El archivo que actualizás se llama
+      <strong style="color:var(--accent)">results.js</strong>.
+      Un cambio, guardar, subir — y toda la familia ve el leaderboard actualizado.
+    </p>
+    <div class="nav-hint">Presioná → para continuar</div>
+  </section>
+
+  <!-- SLIDE 2: GRAN IDEA -->
+  <section>
+    <div class="slide-label">Lección · Slide 2 de 5</div>
+    <h2>📋 results.js — la planilla de resultados</h2>
+    <p style="font-size:0.83em; line-height:1.55; color:#ddd;">
+      <span class="code-inline">results.js</span> es el <strong style="color:var(--accent)">único archivo que tocás</strong>
+      para actualizar la quiniela. Tiene una línea por partido.
+      Cuando cargás el resultado y lo subís a GitHub, la app se actualiza sola para todos.
+    </p>
+    <div class="metaphor">
+      <strong>Metáfora:</strong> La quiniela es un marcador electrónico de estadio.
+      <span class="code-inline" style="font-style:normal;">results.js</span> es el control remoto.
+      Vos apretás los números, el marcador los muestra para todo el público.
+      Sin el control, el marcador queda congelado en el último resultado.
+    </div>
+  </section>
+
+  <!-- SLIDE 3: LOS 4 PASOS -->
+  <section>
+    <div class="slide-label">Lección · Slide 3 de 5</div>
+    <h2>⚙️ Los 4 pasos para cargar un resultado</h2>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-text">
+        Abrís <strong>results.js</strong> con VS Code o cualquier editor de texto
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-text">
+        Buscás la línea del partido — cada uno tiene un código como
+        <span class="code-inline">m09</span>, <span class="code-inline">m14</span>, etc.
+        con el nombre del partido en comentario al lado
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-text">
+        Cambiás <span class="code-inline">null</span> por
+        <span class="code-inline">[goles_local, goles_visitante]</span>
+        — ejemplo: <span class="code-inline">[3, 1]</span> — y guardás el archivo
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-text">
+        Corrés los 3 comandos de git para subir el cambio a GitHub →
+        la familia recarga el browser y ve el leaderboard actualizado
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 4: EJEMPLO REAL -->
+  <section>
+    <div class="slide-label">Lección · Slide 4 de 5</div>
+    <h2>🗂️ Ejemplo: Alemania venció a Curazao 4 a 0</h2>
+    <div class="example-box">
+      <span class="label">Qué cambiás en results.js</span>
+      <div class="diff-row">
+        <div class="diff-box diff-before">
+          <span class="diff-label">❌ Antes (sin resultado)</span>
+          <span style="color:#555;">"m09":</span> <span style="color:#e57373;">null</span><span style="color:#666;">,  // Alemania vs Curazao</span>
+        </div>
+        <div class="diff-box diff-after">
+          <span class="diff-label">✅ Después (con resultado)</span>
+          <span style="color:#aaa;">"m09":</span> <span style="color:#81c784;">[4, 0]</span><span style="color:#666;">,  // Alemania vs Curazao</span>
+        </div>
+      </div>
+      Luego en la terminal, los 3 comandos de siempre:<br/><br/>
+      <div class="code-block">
+        <span class="dim">git add results.js</span><br/>
+        <span class="dim">git commit -m "</span><span class="hi">Resultados 13-Jun</span><span class="dim">"</span><br/>
+        <span class="dim">git push</span>
+      </div>
+      En 1 minuto, <strong style="color:var(--accent2)">boadaedgar.github.io/quiniela-familia</strong>
+      muestra los puntos actualizados para todos.
+    </div>
+  </section>
+
+  <!-- SLIDE 5: QUIZ -->
+  <section>
+    <div class="slide-label">Lección · Slide 5 de 5</div>
+    <h2>🧠 ¿Lo entendiste?</h2>
+    <p class="quiz-question">Argentina le ganó a Argelia 3 a 0. ¿Cómo escribís el resultado en results.js?</p>
+    <ul class="quiz-options">
+      <li>A) <span style="font-family:monospace">"m19": "3-0",</span> — un texto entre comillas</li>
+      <li>B) <span style="font-family:monospace">"m19": [3, 0],</span> — dos números entre corchetes</li>
+      <li>C) <span style="font-family:monospace">"m19": Argentina gana 3 a 0,</span> — en texto libre</li>
+    </ul>
+    <p class="reveal-hint">Presioná → para ver la respuesta</p>
+    <div class="fragment">
+      <ul class="quiz-options">
+        <li class="quiz-answer">✓ Correcto: B) <span style="font-family:monospace">"m19": [3, 0],</span> — dos números entre corchetes</li>
+      </ul>
+      <div class="remember">
+        💡 Recordá: <span>Cambiás <code>null</code> por <code>[local, visitante]</code>, guardás, hacés push — la quiniela se actualiza sola.</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    transition: 'slide',
+    transitionSpeed: 'fast',
+    controls: true,
+    progress: true,
+    slideNumber: false,
+    width: 1280,
+    height: 720,
+    margin: 0.04,
+    minScale: 0.2,
+    maxScale: 2.0,
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resumen — Todo lo que aprendiste hoy</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/moon.css" />
+  <style>
+    :root { --accent: #f5a623; --accent2: #4fc3f7; }
+    .reveal h1, .reveal h2 { color: var(--accent); }
+    .reveal .slides section { text-align: left; }
+    .slide-label {
+      position: absolute; top: -40px; right: 0;
+      font-size: 0.45em; color: #666; letter-spacing: 1px; text-transform: uppercase;
+    }
+    .emoji-anchor { font-size: 2.2em; display: block; margin-bottom: 8px; }
+    .metaphor {
+      background: rgba(245,166,35,0.12);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 6px 6px 0;
+      padding: 9px 14px; font-size: 0.78em;
+      margin-top: 10px; font-style: italic; color: #ddd;
+    }
+    .metaphor strong { color: var(--accent); font-style: normal; }
+    ul { list-style: none; padding: 0; margin: 0; }
+    ul li { padding: 5px 0; font-size: 0.78em; line-height: 1.4; }
+    ul li::before { content: "▸ "; color: var(--accent); font-size: 1em; }
+    .example-box {
+      background: rgba(79,195,247,0.1);
+      border: 1px solid rgba(79,195,247,0.3);
+      border-radius: 8px; padding: 14px 18px;
+      font-size: 0.78em; line-height: 1.65;
+    }
+    .example-box .label {
+      font-size: 0.72em; color: var(--accent2);
+      text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 8px; display: block;
+    }
+    .quiz-question {
+      font-size: 0.85em; font-weight: bold;
+      color: #eee; margin-bottom: 14px; line-height: 1.4;
+    }
+    .quiz-options { list-style: none; padding: 0; }
+    .quiz-options li {
+      padding: 7px 14px; margin: 5px 0;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 6px; font-size: 0.75em; cursor: default;
+    }
+    .quiz-options li::before { content: none; }
+    .quiz-answer {
+      background: rgba(76,175,80,0.2);
+      border: 1px solid #81c784 !important; color: #81c784;
+    }
+    .reveal-hint { font-size: 0.55em; color: #666; margin-top: 8px; font-style: italic; }
+    .remember {
+      background: rgba(245,166,35,0.15);
+      border-radius: 6px; padding: 11px 16px;
+      font-size: 0.75em; margin-top: 14px;
+      color: var(--accent); font-weight: bold;
+    }
+    .remember span { color: #aaa; font-weight: normal; }
+    .nav-hint { font-size: 0.42em; color: #444; text-align: center; margin-top: 28px; }
+
+    /* Lesson grid (slide 3) */
+    .lesson-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .lesson-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 12px 12px 10px 12px;
+      transition: border-color 0.2s;
+    }
+    .lesson-card:hover { border-color: rgba(245,166,35,0.4); }
+    .lesson-card .lc-icon { font-size: 1.5em; display: block; margin-bottom: 5px; }
+    .lesson-card .lc-name {
+      font-weight: bold; color: var(--accent);
+      font-size: 0.72em; display: block; margin-bottom: 3px;
+    }
+    .lesson-card .lc-tag {
+      color: #777; font-size: 0.65em; font-style: italic;
+    }
+
+    /* Connection list (slide 4) */
+    .conn-row {
+      display: flex; align-items: flex-start; gap: 10px; margin: 6px 0;
+    }
+    .conn-badge {
+      background: rgba(245,166,35,0.15); border: 1px solid rgba(245,166,35,0.35);
+      color: var(--accent); border-radius: 4px; padding: 2px 9px;
+      font-size: 0.65em; font-weight: bold; white-space: nowrap;
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .conn-desc { font-size: 0.73em; color: #ccc; line-height: 1.4; }
+
+    /* Number badge (slide 1) */
+    .stat-row { display: flex; gap: 30px; margin-top: 18px; align-items: center; }
+    .stat-num { font-size: 2.8em; font-weight: bold; color: var(--accent); line-height: 1; }
+    .stat-label { font-size: 0.72em; color: #888; margin-top: 2px; }
+  </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+  <!-- SLIDE 1: HOOK -->
+  <section>
+    <div class="slide-label">Lección · Slide 1 de 5</div>
+    <span class="emoji-anchor">🗺️</span>
+    <h2>¿Cuánto aprendiste hoy sin darte cuenta?</h2>
+    <p style="font-size:0.82em; line-height:1.6; color:#ccc;">
+      Empezaste la sesión sin saber qué era una API.<br/>
+      Terminaste entendiendo cómo los desarrolladores construyen, formatean,
+      organizan y guardan su trabajo.<br/><br/>
+      Eso no es poco. Es la base completa.
+    </p>
+    <div class="stat-row">
+      <div>
+        <div class="stat-num">8</div>
+        <div class="stat-label">lecciones completadas</div>
+      </div>
+      <div>
+        <div class="stat-num">40</div>
+        <div class="stat-label">slides recorridos</div>
+      </div>
+      <div>
+        <div class="stat-num">1</div>
+        <div class="stat-label">sesión de trabajo real</div>
+      </div>
+    </div>
+    <div class="nav-hint">Presioná → para continuar</div>
+  </section>
+
+  <!-- SLIDE 2: GRAN IDEA -->
+  <section>
+    <div class="slide-label">Lección · Slide 2 de 5</div>
+    <h2>🧱 Una base completa en un solo día</h2>
+    <p style="font-size:0.83em; line-height:1.55; color:#ddd;">
+      No aprendiste temas sueltos — aprendiste
+      <strong style="color:var(--accent)">el mapa completo</strong>
+      de cómo funciona el desarrollo de software moderno.
+      Cada lección fue una pieza. Juntas forman una imagen completa.
+    </p>
+    <div class="metaphor">
+      <strong>Metáfora:</strong> Querías aprender a cocinar.
+      Hoy aprendiste los nombres de todos los utensilios y para qué sirve cada uno —
+      la olla, el cuchillo, la balanza, el horno. No cocinaste todavía,
+      pero ya podés entrar a cualquier cocina, entender lo que pasa
+      y saber qué herramienta usar. El próximo paso es cocinar.
+    </div>
+  </section>
+
+  <!-- SLIDE 3: LAS 8 LECCIONES -->
+  <section>
+    <div class="slide-label">Lección · Slide 3 de 5</div>
+    <h2>⚙️ Las 8 lecciones de hoy</h2>
+    <div class="lesson-grid">
+      <div class="lesson-card">
+        <span class="lc-icon">🌐</span>
+        <span class="lc-name">API</span>
+        <span class="lc-tag">el mensajero entre apps</span>
+      </div>
+      <div class="lesson-card">
+        <span class="lc-icon">🤝</span>
+        <span class="lc-name">Humano + IA</span>
+        <span class="lc-tag">arquitecto y constructor</span>
+      </div>
+      <div class="lesson-card">
+        <span class="lc-icon">📋</span>
+        <span class="lc-name">Skills en Claude</span>
+        <span class="lc-tag">recetas de comportamiento</span>
+      </div>
+      <div class="lesson-card">
+        <span class="lc-icon">⚡</span>
+        <span class="lc-name">JS + Node.js</span>
+        <span class="lc-tag">la electricidad del web</span>
+      </div>
+      <div class="lesson-card">
+        <span class="lc-icon">📦</span>
+        <span class="lc-name">npm</span>
+        <span class="lc-tag">ferretería del código</span>
+      </div>
+      <div class="lesson-card">
+        <span class="lc-icon">✍️</span>
+        <span class="lc-name">Markdown</span>
+        <span class="lc-tag">texto con superpoderes</span>
+      </div>
+      <div class="lesson-card">
+        <span class="lc-icon">🏠</span>
+        <span class="lc-name">HTML + CSS</span>
+        <span class="lc-tag">estructura y diseño</span>
+      </div>
+      <div class="lesson-card">
+        <span class="lc-icon">⏪</span>
+        <span class="lc-name">Git</span>
+        <span class="lc-tag">máquina del tiempo</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 4: EJEMPLO REAL -->
+  <section>
+    <div class="slide-label">Lección · Slide 4 de 5</div>
+    <h2>🗂️ Todo junto en el proyecto quiniela</h2>
+    <div class="example-box">
+      <span class="label">Cómo se usan los 8 conceptos en un solo proyecto</span>
+      <div class="conn-row">
+        <span class="conn-badge">HTML + CSS</span>
+        <span class="conn-desc">arman la página que ve la familia — tabla de resultados, colores, botones</span>
+      </div>
+      <div class="conn-row">
+        <span class="conn-badge">API</span>
+        <span class="conn-desc">trae los resultados de los partidos desde internet en tiempo real</span>
+      </div>
+      <div class="conn-row">
+        <span class="conn-badge">JS + Node.js</span>
+        <span class="conn-desc">calcula los puntos de cada apostador y actualiza la pantalla</span>
+      </div>
+      <div class="conn-row">
+        <span class="conn-badge">npm</span>
+        <span class="conn-desc">instala las herramientas de desarrollo que se necesiten</span>
+      </div>
+      <div class="conn-row">
+        <span class="conn-badge">Git</span>
+        <span class="conn-desc">guarda cada versión del proyecto — si algo se rompe, se vuelve atrás</span>
+      </div>
+      <div class="conn-row">
+        <span class="conn-badge">Markdown</span>
+        <span class="conn-desc">documenta cómo funciona todo en archivos .md legibles</span>
+      </div>
+      <div class="conn-row">
+        <span class="conn-badge">Skills + IA</span>
+        <span class="conn-desc">generan lecciones, código y assets — el humano dirige, la IA construye</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 5: QUIZ + RECORDÁ -->
+  <section>
+    <div class="slide-label">Lección · Slide 5 de 5</div>
+    <h2>🧠 ¿Lo entendiste?</h2>
+    <p class="quiz-question">Necesitás instalar una herramienta nueva en tu proyecto.<br/>¿Qué usás?</p>
+    <ul class="quiz-options">
+      <li>A) Git — que guarda el historial de cambios de tus archivos</li>
+      <li>B) Markdown — que da formato a texto plano con símbolos</li>
+      <li>C) npm — que descarga e instala herramientas con un solo comando</li>
+    </ul>
+    <p class="reveal-hint">Presioná → para ver la respuesta</p>
+    <div class="fragment">
+      <ul class="quiz-options">
+        <li class="quiz-answer">✓ Correcto: C) npm — que descarga e instala herramientas con un solo comando</li>
+      </ul>
+      <div class="remember">
+        💡 Recordá: <span>Con estas 8 herramientas en tu vocabulario, ya podés entender cómo se construye cualquier proyecto de software moderno.</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    transition: 'slide',
+    transitionSpeed: 'fast',
+    controls: true,
+    progress: true,
+    slideNumber: false,
+    width: 1280,
+    height: 720,
+    margin: 0.04,
+    minScale: 0.2,
+    maxScale: 2.0,
+  });
+</script>
+</body>
+</html>
