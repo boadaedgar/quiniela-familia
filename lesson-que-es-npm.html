@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Qué es npm, cómo instalarlo y por qué</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/moon.css" />
+  <style>
+    :root { --accent: #f5a623; --accent2: #4fc3f7; }
+    .reveal h1, .reveal h2 { color: var(--accent); }
+    .reveal .slides section { text-align: left; }
+    .slide-label {
+      position: absolute; top: -40px; right: 0;
+      font-size: 0.45em; color: #666; letter-spacing: 1px; text-transform: uppercase;
+    }
+    .emoji-anchor { font-size: 2.2em; display: block; margin-bottom: 8px; }
+    .metaphor {
+      background: rgba(245,166,35,0.12);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 6px 6px 0;
+      padding: 9px 14px; font-size: 0.78em;
+      margin-top: 10px; font-style: italic; color: #ddd;
+    }
+    .metaphor strong { color: var(--accent); font-style: normal; }
+    ul { list-style: none; padding: 0; margin: 0; }
+    ul li { padding: 5px 0; font-size: 0.78em; line-height: 1.4; }
+    ul li::before { content: "▸ "; color: var(--accent); font-size: 1em; }
+    .example-box {
+      background: rgba(79,195,247,0.1);
+      border: 1px solid rgba(79,195,247,0.3);
+      border-radius: 8px; padding: 14px 18px;
+      font-size: 0.78em; line-height: 1.65;
+    }
+    .example-box .label {
+      font-size: 0.72em; color: var(--accent2);
+      text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 8px; display: block;
+    }
+    .quiz-question {
+      font-size: 0.85em; font-weight: bold;
+      color: #eee; margin-bottom: 14px; line-height: 1.4;
+    }
+    .quiz-options { list-style: none; padding: 0; }
+    .quiz-options li {
+      padding: 7px 14px; margin: 5px 0;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 6px; font-size: 0.75em; cursor: default;
+    }
+    .quiz-options li::before { content: none; }
+    .quiz-answer {
+      background: rgba(76,175,80,0.2);
+      border: 1px solid #81c784 !important; color: #81c784;
+    }
+    .reveal-hint { font-size: 0.55em; color: #666; margin-top: 8px; font-style: italic; }
+    .remember {
+      background: rgba(245,166,35,0.15);
+      border-radius: 6px; padding: 11px 16px;
+      font-size: 0.75em; margin-top: 14px;
+      color: var(--accent); font-weight: bold;
+    }
+    .remember span { color: #aaa; font-weight: normal; }
+    .nav-hint { font-size: 0.42em; color: #444; text-align: center; margin-top: 28px; }
+    .code-inline {
+      background: rgba(255,255,255,0.1); border-radius: 4px;
+      padding: 1px 8px; font-family: monospace; font-size: 0.95em;
+      color: var(--accent2);
+    }
+    .step {
+      display: flex; align-items: flex-start; gap: 14px; margin: 8px 0;
+    }
+    .step-num {
+      min-width: 30px; height: 30px;
+      background: var(--accent); color: #1a1a2e;
+      border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; font-weight: bold; font-size: 0.8em;
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .step-text { font-size: 0.78em; line-height: 1.45; color: #ddd; }
+    .included-badge {
+      display: inline-block;
+      background: rgba(76,175,80,0.2); border: 1px solid #81c784;
+      color: #81c784; border-radius: 4px; padding: 2px 10px;
+      font-size: 0.7em; font-weight: bold; margin-left: 8px;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+  <!-- SLIDE 1: HOOK -->
+  <section>
+    <div class="slide-label">Lección · Slide 1 de 5</div>
+    <span class="emoji-anchor">📦</span>
+    <h2>¿Cómo instalan los desarrolladores miles de herramientas en segundos?</h2>
+    <p style="font-size:0.82em; line-height:1.6; color:#ccc;">
+      Imaginá una ferretería gigante donde todas las herramientas del mundo
+      están ordenadas, numeradas y te las traen a domicilio con un solo pedido —
+      sin salir de casa, sin buscar en internet, sin instalar manualmente.<br/><br/>
+      Eso es <strong style="color:var(--accent)">npm</strong>.
+      La ferretería del mundo del código.
+    </p>
+    <div class="nav-hint">Presioná → para continuar</div>
+  </section>
+
+  <!-- SLIDE 2: GRAN IDEA -->
+  <section>
+    <div class="slide-label">Lección · Slide 2 de 5</div>
+    <h2>📦 ¿Qué es npm?</h2>
+    <p style="font-size:0.83em; line-height:1.55; color:#ddd;">
+      npm es el sistema que <strong style="color:var(--accent)">descarga e instala herramientas de programación</strong>
+      con un solo comando — como un delivery de software que llega en segundos.
+      <br/><br/>
+      El nombre significa <em>Node Package Manager</em> —
+      el administrador de paquetes de Node.js.
+    </p>
+    <div class="metaphor">
+      <strong>Metáfora:</strong> Pensalo como el mercado de apps de tu celular,
+      pero para herramientas de código. En vez de buscar, descargar e instalar manualmente,
+      escribís el nombre de lo que querés y npm lo hace todo solo —
+      en segundos, con la versión correcta.
+    </div>
+  </section>
+
+  <!-- SLIDE 3: CÓMO SE INSTALA -->
+  <section>
+    <div class="slide-label">Lección · Slide 3 de 5</div>
+    <h2>⬇️ ¿Cómo se instala?</h2>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-text">
+        npm viene <strong>incluido con Node.js</strong>
+        <span class="included-badge">✓ gratis</span>
+        — no se instala por separado
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-text">
+        Vas a <span class="code-inline">nodejs.org</span> y descargás el instalador
+        (como cualquier programa normal)
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-text">
+        Doble clic en el instalador → Siguiente → Siguiente → Finalizar
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-text">
+        Abrís la terminal y escribís <span class="code-inline">npm --version</span>
+        — si aparece un número, ya está listo ✅
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 4: POR QUÉ -->
+  <section>
+    <div class="slide-label">Lección · Slide 4 de 5</div>
+    <h2>🤔 ¿Por qué lo necesitamos?</h2>
+    <div class="example-box">
+      <span class="label">Sin npm vs con npm</span>
+      <strong style="color:#e57373;">❌ Sin npm</strong> — para instalar una herramienta tenés que:
+      buscarla en internet · descargar los archivos · configurar todo a mano ·
+      actualizar cada parte por separado · rezar para que funcione<br/><br/>
+      <strong style="color:#81c784;">✅ Con npm</strong> — escribís un comando y listo:
+      <br/><span class="code-inline">npm install slidev</span>
+      <br/><br/>
+      npm descarga la herramienta, todas sus dependencias, la versión correcta,
+      y deja todo configurado — en segundos.
+    </div>
+  </section>
+
+  <!-- SLIDE 5: QUIZ + RECORDÁ -->
+  <section>
+    <div class="slide-label">Lección · Slide 5 de 5</div>
+    <h2>🧠 ¿Lo entendiste?</h2>
+    <p class="quiz-question">¿Qué hace npm cuando escribís <span class="code-inline">npm install slidev</span>?</p>
+    <ul class="quiz-options">
+      <li>A) Abre el navegador y muestra el sitio web de Slidev</li>
+      <li>B) Descarga e instala Slidev automáticamente con todo lo que necesita</li>
+      <li>C) Crea una carpeta vacía llamada "slidev" en tu computadora</li>
+    </ul>
+    <p class="reveal-hint">Presioná → para ver la respuesta</p>
+    <div class="fragment">
+      <ul class="quiz-options">
+        <li class="quiz-answer">✓ Correcto: B) Descarga e instala Slidev automáticamente con todo lo que necesita</li>
+      </ul>
+      <div class="remember">
+        💡 Recordá: <span>npm es el delivery del código — escribís el nombre de lo que querés y lo trae, instala y configura solo.</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    transition: 'slide',
+    transitionSpeed: 'fast',
+    controls: true,
+    progress: true,
+    slideNumber: false,
+    width: 1280,
+    height: 720,
+    margin: 0.04,
+    minScale: 0.2,
+    maxScale: 2.0,
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaScript y por qué se necesita Node.js</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/moon.css" />
+  <style>
+    :root { --accent: #f5a623; --accent2: #4fc3f7; }
+    .reveal h1, .reveal h2 { color: var(--accent); }
+    .reveal h3 { color: var(--accent2); font-size: 1em; margin-bottom: 16px; }
+    .reveal .slides section { text-align: left; }
+    .slide-label {
+      position: absolute; top: -40px; right: 0;
+      font-size: 0.45em; color: #666; letter-spacing: 1px; text-transform: uppercase;
+    }
+    .emoji-anchor { font-size: 2.2em; display: block; margin-bottom: 8px; }
+    .metaphor {
+      background: rgba(245,166,35,0.12);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 6px 6px 0;
+      padding: 9px 14px; font-size: 0.78em;
+      margin-top: 10px; font-style: italic; color: #ddd;
+    }
+    .metaphor strong { color: var(--accent); font-style: normal; }
+    ul { list-style: none; padding: 0; margin: 0; }
+    ul li { padding: 5px 0; font-size: 0.78em; line-height: 1.4; }
+    ul li::before { content: "▸ "; color: var(--accent); font-size: 1em; }
+    .example-box {
+      background: rgba(79,195,247,0.1);
+      border: 1px solid rgba(79,195,247,0.3);
+      border-radius: 8px; padding: 14px 18px;
+      font-size: 0.78em; line-height: 1.65;
+    }
+    .example-box .label {
+      font-size: 0.72em; color: var(--accent2);
+      text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 8px; display: block;
+    }
+    .quiz-question {
+      font-size: 0.85em; font-weight: bold;
+      color: #eee; margin-bottom: 14px; line-height: 1.4;
+    }
+    .quiz-options { list-style: none; padding: 0; }
+    .quiz-options li {
+      padding: 7px 14px; margin: 5px 0;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 6px; font-size: 0.75em; cursor: default;
+    }
+    .quiz-options li::before { content: none; }
+    .quiz-answer {
+      background: rgba(76,175,80,0.2);
+      border: 1px solid #81c784 !important; color: #81c784;
+    }
+    .reveal-hint { font-size: 0.55em; color: #666; margin-top: 8px; font-style: italic; }
+    .remember {
+      background: rgba(245,166,35,0.15);
+      border-radius: 6px; padding: 11px 16px;
+      font-size: 0.75em; margin-top: 14px;
+      color: var(--accent); font-weight: bold;
+    }
+    .remember span { color: #aaa; font-weight: normal; }
+    .nav-hint { font-size: 0.42em; color: #444; text-align: center; margin-top: 28px; }
+    .code-inline {
+      background: rgba(255,255,255,0.1); border-radius: 4px;
+      padding: 1px 7px; font-family: monospace; font-size: 0.95em;
+      color: var(--accent2);
+    }
+    .tag {
+      display: inline-block; border-radius: 4px;
+      padding: 2px 8px; font-size: 0.7em; margin: 2px 3px 0 0;
+      font-weight: bold;
+    }
+    .tag-html { background: rgba(255,87,34,0.2); color: #ff8a65; }
+    .tag-css  { background: rgba(33,150,243,0.2); color: #64b5f6; }
+    .tag-js   { background: rgba(255,193,7,0.2);  color: #ffd54f; }
+  </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+  <!-- SLIDE 1: HOOK -->
+  <section>
+    <div class="slide-label">Lección · Slide 1 de 5</div>
+    <span class="emoji-anchor">🌐</span>
+    <h2>¿El lenguaje de las páginas web corriendo en tu computadora?</h2>
+    <p style="font-size:0.82em; line-height:1.6; color:#ccc;">
+      JavaScript nació para hacer que los sitios web se muevan y respondan.
+      Vivía solo dentro del navegador.<br/><br/>
+      Pero hace unos años, alguien lo sacó del navegador y lo puso a correr
+      directamente en la computadora. Eso creó
+      <strong style="color:var(--accent)">Node.js</strong> —
+      y cambió cómo se construyen las herramientas digitales.
+    </p>
+    <div class="nav-hint">Presioná → para continuar</div>
+  </section>
+
+  <!-- SLIDE 2: GRAN IDEA -->
+  <section>
+    <div class="slide-label">Lección · Slide 2 de 5</div>
+    <h2>🟨 ¿Qué es JavaScript?</h2>
+    <p style="font-size:0.83em; line-height:1.55; color:#ddd;">
+      JavaScript es el lenguaje que hace que las páginas web sean
+      <strong style="color:var(--accent)">interactivas</strong> —
+      botones que responden, menús que se abren, formularios que validan.
+      Toda página web usa tres ingredientes:
+      <span class="tag tag-html">HTML</span> estructura ·
+      <span class="tag tag-css">CSS</span> diseño ·
+      <span class="tag tag-js">JavaScript</span> comportamiento
+    </p>
+    <div class="metaphor">
+      <strong>Metáfora:</strong> Si una página web fuera una casa —
+      el HTML son las paredes y el techo,
+      el CSS es la pintura y la decoración,
+      y el JavaScript es la <em>electricidad</em>:
+      lo que hace que las luces prendan, las puertas se abran y la heladera funcione.
+    </div>
+  </section>
+
+  <!-- SLIDE 3: CÓMO FUNCIONA -->
+  <section>
+    <div class="slide-label">Lección · Slide 3 de 5</div>
+    <h2>⚙️ ¿Y Node.js qué tiene que ver?</h2>
+    <ul>
+      <li>JavaScript <strong>solo funciona dentro de un navegador</strong> — Chrome, Firefox, Edge</li>
+      <li>Node.js es un programa que permite correr JavaScript <strong>fuera del navegador</strong>, directo en tu PC</li>
+      <li>Muchas herramientas de desarrollo están escritas en JavaScript — <strong>necesitan Node.js</strong> para funcionar</li>
+      <li>Al instalar Node.js también instalás <span class="code-inline">npm</span> — el sistema que descarga esas herramientas</li>
+    </ul>
+  </section>
+
+  <!-- SLIDE 4: EJEMPLO REAL -->
+  <section>
+    <div class="slide-label">Lección · Slide 4 de 5</div>
+    <h2>🛠️ Por qué Slidev lo necesita y Reveal.js no</h2>
+    <div class="example-box">
+      <span class="label">Lo que pasó en nuestro proyecto</span>
+      Cuando exploramos <strong>Slidev</strong>, el sistema pedía correr:<br/>
+      <span class="code-inline">npm create slidev my-slides</span><br/><br/>
+      Eso requería Node.js instalado en tu PC — porque Slidev es una herramienta
+      escrita en JavaScript que corre <em>fuera</em> del navegador.<br/><br/>
+      <strong style="color:#81c784;">Reveal.js con CDN no lo necesita</strong> —
+      el archivo HTML se abre directo con doble clic, el navegador hace todo.<br/><br/>
+      Por eso elegimos Reveal.js para empezar: <strong style="color:var(--accent);">cero instalación</strong>.
+    </div>
+  </section>
+
+  <!-- SLIDE 5: QUIZ + RECORDÁ -->
+  <section>
+    <div class="slide-label">Lección · Slide 5 de 5</div>
+    <h2>🧠 ¿Lo entendiste?</h2>
+    <p class="quiz-question">¿Para qué sirve Node.js?</p>
+    <ul class="quiz-options">
+      <li>A) Para diseñar páginas web con colores y fuentes bonitas</li>
+      <li>B) Para correr JavaScript fuera del navegador, directo en tu computadora</li>
+      <li>C) Para conectarse a internet más rápido</li>
+    </ul>
+    <p class="reveal-hint">Presioná → para ver la respuesta</p>
+    <div class="fragment">
+      <ul class="quiz-options">
+        <li class="quiz-answer">✓ Correcto: B) Para correr JavaScript fuera del navegador, directo en tu computadora</li>
+      </ul>
+      <div class="remember">
+        💡 Recordá: <span>Node.js le permite a JavaScript salir del navegador y correr en tu PC — por eso muchas herramientas lo necesitan para instalarse.</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    transition: 'slide',
+    transitionSpeed: 'fast',
+    controls: true,
+    progress: true,
+    slideNumber: false,
+    width: 1280,
+    height: 720,
+    margin: 0.04,
+    minScale: 0.2,
+    maxScale: 2.0,
+  });
+</script>
+</body>
+</html>

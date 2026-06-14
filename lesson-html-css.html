@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HTML y CSS — los dos ingredientes de toda página web</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/moon.css" />
+  <style>
+    :root { --accent: #f5a623; --accent2: #4fc3f7; --html-color: #e44d26; --css-color: #264de4; }
+    .reveal h1, .reveal h2 { color: var(--accent); }
+    .reveal .slides section { text-align: left; }
+    .slide-label {
+      position: absolute; top: -40px; right: 0;
+      font-size: 0.45em; color: #666; letter-spacing: 1px; text-transform: uppercase;
+    }
+    .emoji-anchor { font-size: 2.2em; display: block; margin-bottom: 8px; }
+    .metaphor {
+      background: rgba(245,166,35,0.12);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 6px 6px 0;
+      padding: 9px 14px; font-size: 0.78em;
+      margin-top: 10px; font-style: italic; color: #ddd;
+    }
+    .metaphor strong { color: var(--accent); font-style: normal; }
+    ul { list-style: none; padding: 0; margin: 0; }
+    ul li { padding: 5px 0; font-size: 0.78em; line-height: 1.4; }
+    ul li::before { content: "▸ "; color: var(--accent); font-size: 1em; }
+    .example-box {
+      background: rgba(79,195,247,0.1);
+      border: 1px solid rgba(79,195,247,0.3);
+      border-radius: 8px; padding: 14px 18px;
+      font-size: 0.78em; line-height: 1.65;
+    }
+    .example-box .label {
+      font-size: 0.72em; color: var(--accent2);
+      text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 8px; display: block;
+    }
+    .quiz-question {
+      font-size: 0.85em; font-weight: bold;
+      color: #eee; margin-bottom: 14px; line-height: 1.4;
+    }
+    .quiz-options { list-style: none; padding: 0; }
+    .quiz-options li {
+      padding: 7px 14px; margin: 5px 0;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 6px; font-size: 0.75em; cursor: default;
+    }
+    .quiz-options li::before { content: none; }
+    .quiz-answer {
+      background: rgba(76,175,80,0.2);
+      border: 1px solid #81c784 !important; color: #81c784;
+    }
+    .reveal-hint { font-size: 0.55em; color: #666; margin-top: 8px; font-style: italic; }
+    .remember {
+      background: rgba(245,166,35,0.15);
+      border-radius: 6px; padding: 11px 16px;
+      font-size: 0.75em; margin-top: 14px;
+      color: var(--accent); font-weight: bold;
+    }
+    .remember span { color: #aaa; font-weight: normal; }
+    .nav-hint { font-size: 0.42em; color: #444; text-align: center; margin-top: 28px; }
+
+    /* Badge HTML / CSS */
+    .badge {
+      display: inline-block; border-radius: 5px;
+      padding: 3px 10px; font-size: 0.75em;
+      font-weight: bold; letter-spacing: 0.5px;
+      vertical-align: middle; margin: 0 3px;
+    }
+    .badge-html { background: rgba(228,77,38,0.2); color: #e44d26; border: 1px solid rgba(228,77,38,0.4); }
+    .badge-css  { background: rgba(38,77,228,0.2); color: #6d8de4; border: 1px solid rgba(38,77,228,0.4); }
+
+    /* Duo cards slide 3 */
+    .duo-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 18px; margin-top: 12px;
+    }
+    .duo-card {
+      border-radius: 8px; padding: 14px 16px; font-size: 0.74em;
+    }
+    .duo-card-html {
+      background: rgba(228,77,38,0.1);
+      border: 1px solid rgba(228,77,38,0.35);
+    }
+    .duo-card-css {
+      background: rgba(38,77,228,0.1);
+      border: 1px solid rgba(38,77,228,0.35);
+    }
+    .duo-card h3 {
+      margin: 0 0 10px 0; font-size: 1em;
+    }
+    .duo-card-html h3 { color: #e44d26; }
+    .duo-card-css  h3 { color: #6d8de4; }
+    .duo-card .role {
+      font-style: italic; color: #aaa;
+      font-size: 0.88em; margin-bottom: 10px; display: block;
+    }
+    .duo-card code {
+      display: block;
+      background: rgba(0,0,0,0.3);
+      border-radius: 4px; padding: 8px 10px;
+      font-family: monospace; font-size: 0.88em;
+      line-height: 1.6; color: #ccc; margin-bottom: 8px;
+    }
+    .duo-card .result {
+      font-size: 0.85em; color: #888;
+    }
+    .duo-card .result strong { color: #bbb; }
+
+    .code-inline {
+      background: rgba(255,255,255,0.1); border-radius: 4px;
+      padding: 1px 8px; font-family: monospace; font-size: 0.9em;
+      color: var(--accent2);
+    }
+  </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+  <!-- SLIDE 1: HOOK -->
+  <section>
+    <div class="slide-label">Lección · Slide 1 de 5</div>
+    <span class="emoji-anchor">🏠</span>
+    <h2>Toda página web que abrís tiene exactamente dos ingredientes</h2>
+    <p style="font-size:0.82em; line-height:1.6; color:#ccc;">
+      No importa si es Google, Instagram, un banco o un blog —
+      toda página web del mundo está construida con las mismas dos cosas.<br/><br/>
+      Una define <strong style="color:var(--accent)">qué hay</strong> en la página.
+      La otra define <strong style="color:var(--accent2)">cómo se ve</strong>.
+      Las dos juntas hacen lo que ves en tu pantalla.
+    </p>
+    <div class="nav-hint">Presioná → para continuar</div>
+  </section>
+
+  <!-- SLIDE 2: GRAN IDEA -->
+  <section>
+    <div class="slide-label">Lección · Slide 2 de 5</div>
+    <h2>🏗️ El dúo que construye toda página web</h2>
+    <p style="font-size:0.83em; line-height:1.55; color:#ddd;">
+      <span class="badge badge-html">HTML</span> pone el <strong>contenido</strong>
+      — textos, imágenes, botones, títulos.<br/>
+      <span class="badge badge-css">CSS</span> lo <strong>viste</strong>
+      — colores, tamaños, posiciones, fuentes.<br/><br/>
+      Sin HTML no hay nada. Sin CSS, todo es texto negro sobre fondo blanco.
+    </p>
+    <div class="metaphor">
+      <strong>Metáfora:</strong> Construir una casa.
+      El HTML son los ladrillos, las paredes y las ventanas — la estructura.
+      El CSS es la pintura, los muebles y la decoración — lo que hace que se vea bien.
+      Podés tener paredes sin pintura, pero no pintura sin paredes.
+    </div>
+  </section>
+
+  <!-- SLIDE 3: CADA UNO HACE SU TRABAJO -->
+  <section>
+    <div class="slide-label">Lección · Slide 3 de 5</div>
+    <h2>⚙️ Cada uno hace su trabajo</h2>
+    <div class="duo-grid">
+      <div class="duo-card duo-card-html">
+        <h3>HTML — el contenido</h3>
+        <span class="role">Define qué existe en la página</span>
+        <code>&lt;h1&gt;Quiniela FIFA&lt;/h1&gt;
+&lt;p&gt;Argentina 2 - Francia 0&lt;/p&gt;
+&lt;button&gt;Actualizar&lt;/button&gt;</code>
+        <div class="result">→ Aparece texto, párrafo y botón.<br/><strong>Sin color, sin estilo.</strong></div>
+      </div>
+      <div class="duo-card duo-card-css">
+        <h3>CSS — el diseño</h3>
+        <span class="role">Define cómo se ve cada elemento</span>
+        <code>h1 { color: orange; }
+p  { font-size: 18px; }
+button { background: blue;
+         border-radius: 8px; }</code>
+        <div class="result">→ El título es naranja, el texto grande,<br/><strong>el botón azul y redondeado.</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 4: EJEMPLO REAL -->
+  <section>
+    <div class="slide-label">Lección · Slide 4 de 5</div>
+    <h2>🖥️ Los dos en nuestro proyecto</h2>
+    <div class="example-box">
+      <span class="label">Las lecciones que generamos juntos</span>
+      Cada archivo <span class="code-inline">lesson-*.html</span> que creamos en este proyecto
+      usa HTML y CSS al mismo tiempo:<br/><br/>
+      <span class="badge badge-html">HTML</span>
+      define las secciones de cada slide, los títulos, el texto de las preguntas
+      y las opciones del quiz.<br/><br/>
+      <span class="badge badge-css">CSS</span>
+      define los colores naranja y azul, el tamaño de la letra,
+      los bordes redondeados de los cajones y el fondo oscuro.<br/><br/>
+      <strong style="color:#81c784;">Los dos viven en el mismo archivo</strong> —
+      el CSS va dentro de la etiqueta <span class="code-inline">&lt;style&gt;</span>
+      al principio del HTML.
+    </div>
+  </section>
+
+  <!-- SLIDE 5: QUIZ + RECORDÁ -->
+  <section>
+    <div class="slide-label">Lección · Slide 5 de 5</div>
+    <h2>🧠 ¿Lo entendiste?</h2>
+    <p class="quiz-question">¿Cuál es la diferencia entre HTML y CSS?</p>
+    <ul class="quiz-options">
+      <li>A) HTML es para imágenes y CSS es solo para texto</li>
+      <li>B) HTML define el contenido de la página y CSS define cómo se ve</li>
+      <li>C) Son lo mismo, solo tienen nombres diferentes</li>
+    </ul>
+    <p class="reveal-hint">Presioná → para ver la respuesta</p>
+    <div class="fragment">
+      <ul class="quiz-options">
+        <li class="quiz-answer">✓ Correcto: B) HTML define el contenido de la página y CSS define cómo se ve</li>
+      </ul>
+      <div class="remember">
+        💡 Recordá: <span>HTML pone el contenido, CSS lo viste. Toda página web en internet — sin excepción — usa los dos.</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    transition: 'slide',
+    transitionSpeed: 'fast',
+    controls: true,
+    progress: true,
+    slideNumber: false,
+    width: 1280,
+    height: 720,
+    margin: 0.04,
+    minScale: 0.2,
+    maxScale: 2.0,
+  });
+</script>
+</body>
+</html>

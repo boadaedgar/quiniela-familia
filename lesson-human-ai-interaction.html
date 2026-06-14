@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Human-AI Interaction — How This Skill Was Born</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/moon.css" />
+  <style>
+    :root { --accent: #f5a623; --accent2: #4fc3f7; }
+
+    .reveal h1, .reveal h2 { color: var(--accent); }
+    .reveal h3 { color: var(--accent2); font-size: 1em; margin-bottom: 16px; }
+    .reveal .slides section { text-align: left; }
+
+    .slide-label {
+      position: absolute; top: -40px; right: 0;
+      font-size: 0.45em; color: #666; letter-spacing: 1px; text-transform: uppercase;
+    }
+
+    .emoji-anchor { font-size: 2.2em; display: block; margin-bottom: 8px; }
+
+    .metaphor {
+      background: rgba(245,166,35,0.12);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 6px 6px 0;
+      padding: 9px 14px;
+      font-size: 0.78em;
+      margin-top: 10px;
+      font-style: italic;
+      color: #ddd;
+    }
+    .metaphor strong { color: var(--accent); font-style: normal; }
+
+    ul { list-style: none; padding: 0; margin: 0; }
+    ul li { padding: 5px 0; font-size: 0.78em; line-height: 1.4; }
+    ul li::before { content: "▸ "; color: var(--accent); font-size: 1em; }
+
+    .example-box {
+      background: rgba(79,195,247,0.1);
+      border: 1px solid rgba(79,195,247,0.3);
+      border-radius: 8px;
+      padding: 16px 20px;
+      font-size: 0.76em;
+      line-height: 1.7;
+    }
+    .example-box .label {
+      font-size: 0.75em; color: var(--accent2);
+      text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 8px; display: block;
+    }
+
+    .chat-line { margin: 5px 0; }
+    .human { color: #f5a623; }
+    .ai    { color: #4fc3f7; }
+    .result { color: #81c784; font-weight: bold; margin-top: 10px; display: block; }
+
+    .quiz-question {
+      font-size: 0.85em; font-weight: bold;
+      color: #eee; margin-bottom: 18px; line-height: 1.4;
+    }
+    .quiz-options { list-style: none; padding: 0; }
+    .quiz-options li {
+      padding: 8px 14px; margin: 6px 0;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 6px; font-size: 0.75em; cursor: default;
+    }
+    .quiz-options li::before { content: none; }
+    .quiz-answer {
+      background: rgba(76,175,80,0.2);
+      border: 1px solid #81c784 !important;
+      color: #81c784;
+    }
+    .reveal-hint {
+      font-size: 0.55em; color: #666;
+      margin-top: 10px; font-style: italic;
+    }
+
+    .remember {
+      background: rgba(245,166,35,0.15);
+      border-radius: 6px; padding: 12px 16px;
+      font-size: 0.75em; margin-top: 20px;
+      color: var(--accent); font-weight: bold;
+    }
+    .remember span { color: #aaa; font-weight: normal; }
+
+    .nav-hint {
+      font-size: 0.42em; color: #444;
+      text-align: center; margin-top: 30px;
+    }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 10px; }
+    .role-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px; padding: 12px 14px;
+    }
+    .role-card h3 { margin: 0 0 8px; font-size: 0.8em; }
+    .role-card p  { font-size: 0.7em; color: #bbb; margin: 0; line-height: 1.5; }
+  </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+  <!-- SLIDE 1: HOOK -->
+  <section>
+    <div class="slide-label">Lesson · Slide 1 of 5</div>
+    <span class="emoji-anchor">🤝</span>
+    <h2>You just watched a tool get born</h2>
+    <p style="font-size:0.82em; line-height:1.6; color:#ccc;">
+      A few minutes ago, the <strong style="color:var(--accent)">reveal-minilesson skill</strong> didn't exist anywhere.
+      You described an idea in plain words. An AI built it.
+      Now it's a real, reusable tool that lives in your system — created in under 10 minutes.<br/><br/>
+      That is <strong style="color:var(--accent2)">human-AI interaction</strong>: two different kinds of intelligence,
+      working together.
+    </p>
+    <div class="nav-hint">Press → to continue</div>
+  </section>
+
+  <!-- SLIDE 2: THE BIG IDEA -->
+  <section>
+    <div class="slide-label">Lesson · Slide 2 of 5</div>
+    <h2>🧠 What is Human-AI Interaction?</h2>
+    <p style="font-size:0.82em; line-height:1.5; color:#ddd;">
+      Human-AI interaction is a back-and-forth conversation where the
+      <strong style="color:var(--accent)">human gives direction and judgment</strong>,
+      and the <strong style="color:var(--accent2)">AI provides knowledge and execution</strong> —
+      together creating things neither could make alone.
+    </p>
+    <div class="metaphor">
+      <strong>Metaphor:</strong> Think of an architect and a master builder.
+      The architect (you) decides <em>what</em> to build and <em>why</em>.
+      The builder (AI) knows every technique to construct it.
+      Neither is enough alone — the architect can't build, the builder doesn't know what to build.
+      Together, they finish in a day what would take a year solo.
+    </div>
+  </section>
+
+  <!-- SLIDE 3: HOW IT WORKS -->
+  <section>
+    <div class="slide-label">Lesson · Slide 3 of 5</div>
+    <h2>⚙️ How the skill was created — step by step</h2>
+    <ul>
+      <li>You had the idea: "a skill that makes mini-lessons in Reveal.js"</li>
+      <li>You defined what mattered: non-tech audience, 3–5 slides, quiz at the end</li>
+      <li>AI explored options and asked one clarifying question: "quiz toggle — yes or no?"</li>
+      <li>AI wrote the skill file, tested it, fixed a registration error, and confirmed it worked</li>
+    </ul>
+    <div class="two-col" style="margin-top:16px;">
+      <div class="role-card">
+        <h3 style="color:var(--accent)">You brought</h3>
+        <p>The goal · The audience · The judgment on what felt right · The "yes, build it"</p>
+      </div>
+      <div class="role-card">
+        <h3 style="color:var(--accent2)">AI brought</h3>
+        <p>Knowledge of Reveal.js · Skill file format · HTML/CSS · Testing · Error fixing</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 4: REAL EXAMPLE -->
+  <section>
+    <div class="slide-label">Lesson · Slide 4 of 5</div>
+    <h2>💬 The exact conversation that built it</h2>
+    <div class="example-box">
+      <span class="label">This session — verbatim</span>
+      <div class="chat-line"><span class="human">You →</span> "make a skill. reveal minilesson."</div>
+      <div class="chat-line"><span class="ai">AI →</span> "first give me more ideas for this skill"</div>
+      <div class="chat-line"><span class="human">You →</span> "yes, build v1 with the quiz toggle"</div>
+      <div class="chat-line"><span class="ai">AI →</span> reads existing skill format · writes SKILL.md · tests it</div>
+      <div class="chat-line"><span class="ai">AI →</span> skill not found → fixes registration → confirms it works</div>
+      <div class="chat-line"><span class="human">You →</span> /reveal-minilesson qué es una API</div>
+      <div class="chat-line"><span class="ai">AI →</span> generates lesson · saves HTML · done</div>
+      <span class="result">✓ A working, reusable tool — built in one conversation.</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 5: QUIZ + TAKEAWAY -->
+  <section>
+    <div class="slide-label">Lesson · Slide 5 of 5</div>
+    <h2>🧠 Did you get it?</h2>
+    <p class="quiz-question">In human-AI interaction, what is the human's most important contribution?</p>
+    <ul class="quiz-options">
+      <li>A) Writing the code and technical instructions</li>
+      <li>B) Knowing every detail about the tools being used</li>
+      <li>C) Providing direction, intent, and judgment about what matters</li>
+    </ul>
+    <p class="reveal-hint">Press → to see the answer</p>
+    <div class="fragment">
+      <ul class="quiz-options">
+        <li class="quiz-answer">✓ Correct: C) Providing direction, intent, and judgment about what matters</li>
+      </ul>
+      <div class="remember">
+        💡 Remember: <span>The human brings the "what and why" — the AI brings the "how." Together they build faster than either could alone.</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    transition: 'slide',
+    transitionSpeed: 'fast',
+    controls: true,
+    progress: true,
+    slideNumber: false,
+    width: 1280,
+    height: 720,
+    margin: 0.04,
+    minScale: 0.2,
+    maxScale: 2.0,
+  });
+</script>
+</body>
+</html>
