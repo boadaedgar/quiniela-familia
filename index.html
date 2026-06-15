@@ -214,7 +214,7 @@
     <h1>🏆 Quiniela FIFA 2026</h1>
     <span id="last-update"></span>
   </div>
-  <button id="btn-update" onclick="location.reload()">⟳ Actualizar</button>
+  <button id="btn-update" onclick="fetchResults()">⟳ Actualizar</button>
 </header>
 
 <main>
@@ -381,11 +381,53 @@ function renderLastUpdate() {
   document.getElementById("last-update").textContent = `Último resultado: ${m.home} vs ${m.away}`;
 }
 
+// ── API FETCH ─────────────────────────────────────────────────
+const API_MAP = {
+  "m01":"1",  "m02":"3",  "m03":"8",  "m04":"7",
+  "m05":"4",  "m06":"2",  "m07":"5",  "m08":"6",
+  "m09":"10", "m10":"11", "m11":"9",  "m12":"12",
+  "m13":"15", "m14":"14", "m15":"13", "m16":"16",
+  "m17":"17", "m18":"18", "m19":"19", "m20":"20",
+  "m21":"21", "m22":"23", "m23":"22", "m24":"24"
+};
+
+async function fetchResults() {
+  const btn = document.getElementById("btn-update");
+  const original = btn.textContent;
+  btn.textContent = "⟳ Cargando...";
+  btn.disabled = true;
+  try {
+    const res = await fetch("https://worldcup26.ir/get/games");
+    if (!res.ok) throw new Error(res.status);
+    const data = await res.json();
+    const games = data.games || data;
+    const byId = {};
+    games.forEach(g => { byId[String(g.id)] = g; });
+    Object.entries(API_MAP).forEach(([mid, gid]) => {
+      const g = byId[gid];
+      if (!g) return;
+      RESULTS[mid] = g.finished === "TRUE"
+        ? [parseInt(g.home_score, 10), parseInt(g.away_score, 10)]
+        : null;
+    });
+    renderStats();
+    renderLeaderboard();
+    renderMatches();
+    renderLastUpdate();
+    btn.textContent = "✓ Actualizado";
+    setTimeout(() => { btn.textContent = original; btn.disabled = false; }, 2000);
+  } catch (e) {
+    btn.textContent = "✗ Error";
+    setTimeout(() => { btn.textContent = original; btn.disabled = false; }, 3000);
+  }
+}
+
 // ── INIT ──────────────────────────────────────────────────────
 renderStats();
 renderLeaderboard();
 renderMatches();
 renderLastUpdate();
+fetchResults();
 </script>
 </body>
 </html>
