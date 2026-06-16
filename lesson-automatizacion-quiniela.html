@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cómo se automatizó la Quiniela</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/moon.css" />
+  <style>
+    :root { --accent: #f5a623; --accent2: #4fc3f7; }
+    .reveal h1, .reveal h2 { color: var(--accent); }
+    .reveal h3 { color: var(--accent2); font-size: 1em; margin-bottom: 16px; }
+    .reveal .slides section { text-align: left; }
+    .slide-label {
+      position: absolute; top: -40px; right: 0;
+      font-size: 0.45em; color: #666; letter-spacing: 1px; text-transform: uppercase;
+    }
+    .emoji-anchor { font-size: 2.2em; display: block; margin-bottom: 8px; }
+    .metaphor {
+      background: rgba(245,166,35,0.12);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 6px 6px 0;
+      padding: 12px 16px; font-size: 0.78em;
+      margin-top: 16px; font-style: italic; color: #ddd;
+    }
+    .metaphor strong { color: var(--accent); font-style: normal; }
+    ul { list-style: none; padding: 0; margin: 0; }
+    ul li { padding: 5px 0; font-size: 0.78em; line-height: 1.4; }
+    ul li::before { content: "▸ "; color: var(--accent); font-size: 1em; }
+    .example-box {
+      background: rgba(79,195,247,0.1);
+      border: 1px solid rgba(79,195,247,0.3);
+      border-radius: 8px; padding: 16px 20px;
+      font-size: 0.78em; line-height: 1.6;
+    }
+    .example-box .label {
+      font-size: 0.75em; color: var(--accent2);
+      text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 6px; display: block;
+    }
+    .quiz-question {
+      font-size: 0.85em; font-weight: bold;
+      color: #eee; margin-bottom: 18px; line-height: 1.4;
+    }
+    .quiz-options { list-style: none; padding: 0; }
+    .quiz-options li {
+      padding: 8px 14px; margin: 6px 0;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 6px; font-size: 0.75em; cursor: default;
+    }
+    .quiz-options li::before { content: none; }
+    .quiz-answer {
+      background: rgba(76,175,80,0.2);
+      border: 1px solid #81c784 !important; color: #81c784;
+    }
+    .reveal-hint { font-size: 0.55em; color: #666; margin-top: 10px; font-style: italic; }
+    .remember {
+      background: rgba(245,166,35,0.15);
+      border-radius: 6px; padding: 12px 16px;
+      font-size: 0.75em; margin-top: 20px;
+      color: var(--accent); font-weight: bold;
+    }
+    .remember span { color: #aaa; font-weight: normal; }
+    .nav-hint { font-size: 0.42em; color: #444; text-align: center; margin-top: 30px; }
+    .before-after {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 10px;
+    }
+    .before {
+      background: rgba(244,67,54,0.1); border: 1px solid rgba(244,67,54,0.3);
+      border-radius: 8px; padding: 14px; font-size: 0.72em; line-height: 1.6;
+    }
+    .after {
+      background: rgba(76,175,80,0.1); border: 1px solid rgba(76,175,80,0.3);
+      border-radius: 8px; padding: 14px; font-size: 0.72em; line-height: 1.6;
+    }
+    .before strong { color: #e57373; }
+    .after strong { color: #81c784; }
+    code {
+      background: rgba(255,255,255,0.08); border-radius: 4px;
+      padding: 1px 6px; font-size: 0.9em; color: var(--accent2);
+    }
+  </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+  <!-- SLIDE 1: HOOK -->
+  <section>
+    <div class="slide-label">Lección · Slide 1 de 5</div>
+    <span class="emoji-anchor">⚽</span>
+    <h2>¿Y si la quiniela se actualizara sola?</h2>
+    <p style="font-size:0.82em; line-height:1.5; color:#ccc;">
+      Antes, después de cada partido había que entrar al código, escribir el marcador a mano,
+      y subirlo a GitHub. Un proceso tedioso que se podía olvidar o demorar.<br/><br/>
+      Ahora el sitio consulta los resultados en tiempo real y se actualiza solo — sin tocar nada.
+    </p>
+    <div class="nav-hint">Presioná → para continuar</div>
+  </section>
+
+  <!-- SLIDE 2: GRAN IDEA -->
+  <section>
+    <div class="slide-label">Lección · Slide 2 de 5</div>
+    <h2>La Gran Idea</h2>
+    <p style="font-size:0.85em; line-height:1.5; color:#ddd;">
+      La quiniela ahora <em>le pregunta</em> a un servicio externo cuáles son los marcadores del Mundial,
+      en lugar de esperar que alguien los escriba a mano.
+    </p>
+    <div class="metaphor">
+      <strong>Metáfora:</strong> Es como el pizarrón de llegadas en un aeropuerto — vos no actualizás
+      los vuelos uno por uno. El pizarrón consulta el sistema del aeropuerto y se actualiza solo.
+      Tu quiniela hace lo mismo con los resultados del Mundial.
+    </div>
+  </section>
+
+  <!-- SLIDE 3: CÓMO FUNCIONA -->
+  <section>
+    <div class="slide-label">Lección · Slide 3 de 5</div>
+    <h2>¿Cómo funciona?</h2>
+    <ul>
+      <li>La página carga → automáticamente consulta <code>worldcup26.ir</code>, una API gratuita del Mundial 2026</li>
+      <li>La API responde con todos los partidos: equipos, marcador, y si el partido terminó o no</li>
+      <li>El sitio traduce esa información a su formato interno (m01, m02… m24) usando una tabla de equivalencias</li>
+      <li>La tabla de posiciones, los puntos, y los partidos se recalculan y se muestran solos — sin recargar</li>
+    </ul>
+    <div class="metaphor" style="margin-top:20px;">
+      <strong>API</strong> = una puerta de acceso a datos de otro sistema. Le pedís algo, te responde con información.
+    </div>
+  </section>
+
+  <!-- SLIDE 4: EJEMPLO REAL -->
+  <section>
+    <div class="slide-label">Lección · Slide 4 de 5</div>
+    <h2>Antes y después</h2>
+    <div class="before-after">
+      <div class="before">
+        <strong>❌ Antes (manual)</strong><br/><br/>
+        1. Ver el marcador del partido<br/>
+        2. Abrir <code>results.js</code><br/>
+        3. Escribir el resultado<br/>
+        4. Guardar el archivo<br/>
+        5. Subir a GitHub<br/>
+        6. Repetir por cada partido
+      </div>
+      <div class="after">
+        <strong>✅ Ahora (automático)</strong><br/><br/>
+        1. La página carga<br/>
+        2. ✓ Listo — o presionás "Actualizar"<br/><br/>
+        Sin editar código.<br/>
+        Sin abrir GitHub.<br/>
+        Sin olvidarse.
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 5: QUIZ + RECORDÁ -->
+  <section>
+    <div class="slide-label">Lección · Slide 5 de 5</div>
+    <h2>🧠 ¿Lo entendiste?</h2>
+    <p class="quiz-question">¿Qué hace el botón "Actualizar" ahora en la quiniela?</p>
+    <ul class="quiz-options">
+      <li>A) Recarga la página completa desde cero</li>
+      <li>B) Consulta una API externa y actualiza los resultados sin recargar</li>
+      <li>C) Abre el archivo results.js para que lo edites</li>
+    </ul>
+    <p class="reveal-hint">Presioná → para ver la respuesta</p>
+    <div class="fragment">
+      <ul class="quiz-options">
+        <li class="quiz-answer">✓ Correcto: B — consulta <code>worldcup26.ir</code>, recibe los marcadores, y actualiza la tabla sin recargar la página</li>
+      </ul>
+      <div class="remember">
+        💡 Recordá: <span>La quiniela consulta una API del Mundial para actualizar sola los resultados — sin tocar ningún archivo.</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    transition: 'slide',
+    transitionSpeed: 'fast',
+    controls: true,
+    progress: true,
+    slideNumber: false,
+    width: 1280,
+    height: 720,
+    margin: 0.04,
+    minScale: 0.2,
+    maxScale: 2.0,
+  });
+</script>
+</body>
+</html>

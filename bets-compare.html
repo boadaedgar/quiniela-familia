@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comparar Apuestas — Quiniela FIFA 2026</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0f0f1a;
+      --card:    #1a1a2e;
+      --border:  rgba(255,255,255,0.08);
+      --text:    #e0e0e0;
+      --muted:   #666;
+      --accent:  #f5a623;
+      --blue:    #4fc3f7;
+      --green:   #81c784;
+      --yellow:  #ffd54f;
+      --red:     #e57373;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 14px;
+      min-height: 100vh;
+    }
+
+    header {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      position: sticky; top: 0; z-index: 100;
+    }
+    header h1 { font-size: 1.15em; color: var(--accent); letter-spacing: 0.5px; }
+    .btn-back {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 6px;
+      padding: 6px 14px;
+      cursor: pointer;
+      font-size: 0.8em;
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+    }
+    .btn-back:hover { background: rgba(255,255,255,0.1); color: var(--text); }
+
+    main {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 20px 16px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .section-title {
+      font-size: 0.7em;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 10px;
+    }
+
+    /* ── SELECTORS ── */
+    .selectors {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .selector-wrap label {
+      display: block;
+      font-size: 0.7em;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+    select {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 9px 12px;
+      font-size: 0.88em;
+      cursor: pointer;
+      width: 100%;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 32px;
+    }
+    select:focus { outline: 1px solid var(--accent); border-color: var(--accent); }
+
+    /* ── CONTROLS ── */
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .legend {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75em;
+      color: var(--muted);
+    }
+    .legend-dot {
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .btn-toggle {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 6px;
+      padding: 6px 14px;
+      cursor: pointer;
+      font-size: 0.8em;
+      font-weight: bold;
+      letter-spacing: 0.3px;
+      transition: background 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+    .btn-toggle:hover { background: rgba(255,255,255,0.1); color: var(--text); }
+
+    /* ── TABLE ── */
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 540px;
+    }
+    thead th {
+      background: #141428;
+      padding: 10px 12px;
+      text-align: center;
+      font-size: 0.72em;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 2px solid var(--border);
+      font-weight: 600;
+    }
+    thead th.col-match { text-align: left; min-width: 180px; }
+    thead th.col-result { min-width: 60px; }
+    thead th.col-player {
+      min-width: 100px;
+      color: var(--text);
+      font-size: 0.78em;
+      text-transform: none;
+      letter-spacing: 0;
+      line-height: 1.35;
+    }
+    thead th.col-empty { color: rgba(255,255,255,0.15); }
+
+    tbody td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+      vertical-align: middle;
+    }
+    tbody td.col-match { text-align: left; }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: rgba(255,255,255,0.02); }
+
+    /* Group separator row */
+    .group-row td {
+      background: rgba(245,166,35,0.05);
+      color: var(--accent);
+      font-size: 0.68em;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      text-align: left;
+    }
+
+    /* Match cell */
+    .match-teams {
+      font-size: 0.85em;
+      line-height: 1.4;
+    }
+    .match-vs { color: var(--muted); font-size: 0.9em; }
+    .match-meta {
+      font-size: 0.72em;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* Result cell */
+    .result-score {
+      font-weight: bold;
+      font-size: 1em;
+      color: var(--blue);
+      letter-spacing: 0.5px;
+    }
+    .result-pending { color: var(--muted); }
+
+    /* Bet cells */
+    .bet-cell {
+      font-size: 0.92em;
+      font-weight: bold;
+      letter-spacing: 0.3px;
+    }
+    .bet-exact  { color: var(--green); }
+    .bet-winner { color: var(--yellow); }
+    .bet-wrong  { color: var(--red); opacity: 0.65; }
+    .bet-none   { color: rgba(255,255,255,0.15); font-weight: normal; }
+    .bet-pts {
+      display: block;
+      font-size: 0.7em;
+      font-weight: normal;
+      margin-top: 1px;
+      opacity: 0.75;
+    }
+
+    /* Totals row */
+    .total-row td {
+      background: rgba(245,166,35,0.07);
+      border-top: 2px solid rgba(245,166,35,0.25);
+      font-weight: bold;
+      padding: 11px 12px;
+    }
+    .total-label {
+      font-size: 0.72em;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-align: left;
+    }
+    .total-pts {
+      font-size: 1.05em;
+      color: var(--accent);
+    }
+
+    /* Empty state */
+    .empty-hint {
+      padding: 48px 24px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9em;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 520px) {
+      .selectors { grid-template-columns: 1fr; }
+      .controls { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>⚖️ Comparar Apuestas</h1>
+  <a class="btn-back" href="index.html">← Inicio</a>
+</header>
+
+<main>
+
+  <div>
+    <div class="section-title">Elegir participantes</div>
+    <div class="selectors">
+      <div class="selector-wrap">
+        <label>Columna 1</label>
+        <select id="sel-1" onchange="render()">
+          <option value="">— Elegir —</option>
+        </select>
+      </div>
+      <div class="selector-wrap">
+        <label>Columna 2</label>
+        <select id="sel-2" onchange="render()">
+          <option value="">— Elegir —</option>
+        </select>
+      </div>
+      <div class="selector-wrap">
+        <label>Columna 3</label>
+        <select id="sel-3" onchange="render()">
+          <option value="">— Elegir —</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--green)"></div> Marcador exacto
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--yellow)"></div> Ganador correcto
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--red)"></div> Incorrecto
+      </div>
+    </div>
+    <button class="btn-toggle" id="btn-toggle" onclick="togglePending()">Ocultar pendientes</button>
+  </div>
+
+  <div class="table-wrap" id="table-wrap">
+    <div class="empty-hint">Selecciona al menos un participante para ver las apuestas.</div>
+  </div>
+
+</main>
+
+<script src="bets.js"></script>
+<script src="results.js"></script>
+<script>
+const MULT = { grupos:0.33, ronda32:1, ronda16:1.5, cuartos:2, semis:3, tercero:4, final:5 };
+
+function calcPts(bet, result, phase) {
+  if (!result) return null;
+  const mult = MULT[phase] || 0.33;
+  const [bh, ba] = bet;
+  const [rh, ra] = result;
+  if (bh === rh && ba === ra) return +(3 * mult).toFixed(2);
+  if (Math.sign(bh - ba) === Math.sign(rh - ra)) return +(1 * mult).toFixed(2);
+  return 0;
+}
+
+function classifyBet(bet, result) {
+  if (!result) return "none";
+  const [bh, ba] = bet;
+  const [rh, ra] = result;
+  if (bh === rh && ba === ra) return "exact";
+  if (Math.sign(bh - ba) === Math.sign(rh - ra)) return "winner";
+  return "wrong";
+}
+
+let showPending = true;
+
+function togglePending() {
+  showPending = !showPending;
+  document.getElementById("btn-toggle").textContent =
+    showPending ? "Ocultar pendientes" : "Mostrar pendientes";
+  render();
+}
+
+function initSelects() {
+  const names = PARTICIPANTS.map(p => p.name).sort((a, b) =>
+    a.localeCompare(b, "es", { sensitivity: "base" })
+  );
+  ["sel-1", "sel-2", "sel-3"].forEach(id => {
+    const sel = document.getElementById(id);
+    names.forEach(name => {
+      const opt = document.createElement("option");
+      opt.value = name;
+      opt.textContent = name;
+      sel.appendChild(opt);
+    });
+  });
+}
+
+function getSelected() {
+  return ["sel-1", "sel-2", "sel-3"].map(id => document.getElementById(id).value);
+}
+
+function findP(name) {
+  return PARTICIPANTS.find(p => p.name === name) || null;
+}
+
+function shortName(name) {
+  const parts = name.split(" ");
+  if (parts.length === 1) return name;
+  return `<span style="color:var(--text)">${parts[0]}</span><br><span style="color:var(--muted);font-size:0.85em;font-weight:normal">${parts.slice(1).join(" ")}</span>`;
+}
+
+function render() {
+  const selected = getSelected();
+  const participants = selected.map(findP);
+  const hasAny = participants.some(p => p !== null);
+  const wrap = document.getElementById("table-wrap");
+
+  if (!hasAny) {
+    wrap.innerHTML = '<div class="empty-hint">Selecciona al menos un participante para ver las apuestas.</div>';
+    return;
+  }
+
+  const matches = showPending
+    ? MATCHES
+    : MATCHES.filter(m => RESULTS[m.id] !== null);
+
+  if (matches.length === 0) {
+    wrap.innerHTML = '<div class="empty-hint">No hay partidos jugados todavía.</div>';
+    return;
+  }
+
+  // Compute totals across ALL played matches (not filtered)
+  const totals = participants.map(p => {
+    if (!p) return null;
+    let total = 0;
+    MATCHES.forEach(m => {
+      const result = RESULTS[m.id];
+      if (!result) return;
+      const bet = p.bets[m.id];
+      if (!bet) return;
+      total += calcPts(bet, result, m.phase || "grupos");
+    });
+    return +total.toFixed(2);
+  });
+
+  let html = "<table><thead><tr>";
+  html += '<th class="col-match">Partido</th>';
+  html += '<th class="col-result">Resultado</th>';
+  participants.forEach(p => {
+    if (p) {
+      html += `<th class="col-player">${shortName(p.name)}</th>`;
+    } else {
+      html += '<th class="col-empty">—</th>';
+    }
+  });
+  html += "</tr></thead><tbody>";
+
+  let lastGroup = null;
+  matches.forEach(m => {
+    if (m.group !== lastGroup) {
+      lastGroup = m.group;
+      html += `<tr class="group-row"><td colspan="5">Grupo ${m.group}</td></tr>`;
+    }
+
+    const result = RESULTS[m.id];
+    const resultStr = result ? `${result[0]}–${result[1]}` : null;
+
+    html += "<tr>";
+
+    // Match
+    html += `<td class="col-match match-teams">
+      ${m.hf} ${m.home} <span class="match-vs">vs</span> ${m.away} ${m.af}
+      <div class="match-meta">${m.date.slice(5).replace("-","/")} · ${m.id.toUpperCase()}</div>
+    </td>`;
+
+    // Result
+    if (resultStr) {
+      html += `<td><span class="result-score">${resultStr}</span></td>`;
+    } else {
+      html += `<td><span class="result-pending">⏳</span></td>`;
+    }
+
+    // Bet columns
+    participants.forEach(p => {
+      if (!p) { html += '<td class="bet-none">—</td>'; return; }
+      const bet = p.bets[m.id];
+      if (!bet) { html += '<td class="bet-none">—</td>'; return; }
+
+      const pts = calcPts(bet, result, m.phase || "grupos");
+      const cls = "bet-" + classifyBet(bet, result);
+      const betStr = `${bet[0]}–${bet[1]}`;
+      const ptsStr = pts !== null ? `<span class="bet-pts">+${pts}pt</span>` : "";
+
+      html += `<td class="bet-cell ${cls}">${betStr}${ptsStr}</td>`;
+    });
+
+    html += "</tr>";
+  });
+
+  // Totals row
+  html += '<tr class="total-row">';
+  html += '<td class="total-label" colspan="2">Total (partidos jugados)</td>';
+  participants.forEach((p, i) => {
+    if (!p || totals[i] === null) {
+      html += '<td class="bet-none">—</td>';
+    } else {
+      html += `<td><span class="total-pts">${totals[i]}pt</span></td>`;
+    }
+  });
+  html += "</tr>";
+
+  html += "</tbody></table>";
+  wrap.innerHTML = html;
+}
+
+initSelects();
+render();
+</script>
+
+</body>
+</html>

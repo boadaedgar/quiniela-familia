@@ -214,7 +214,10 @@
     <h1>🏆 Quiniela FIFA 2026</h1>
     <span id="last-update"></span>
   </div>
-  <button id="btn-update" onclick="fetchResults()">⟳ Actualizar</button>
+  <div style="display:flex; gap:8px; align-items:center;">
+    <a href="bets-compare.html" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);color:#666;border-radius:6px;padding:6px 14px;font-size:0.8em;text-decoration:none;transition:color 0.15s;" onmouseover="this.style.color='#e0e0e0'" onmouseout="this.style.color='#666'">⚖️ Comparar</a>
+    <button id="btn-update" onclick="fetchResults()">⟳ Actualizar</button>
+  </div>
 </header>
 
 <main>
