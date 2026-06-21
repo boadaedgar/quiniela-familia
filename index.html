@@ -385,13 +385,54 @@ function renderLastUpdate() {
 }
 
 // ── API FETCH ─────────────────────────────────────────────────
-const API_MAP = {
-  "m01":"1",  "m02":"3",  "m03":"8",  "m04":"7",
-  "m05":"4",  "m06":"2",  "m07":"5",  "m08":"6",
-  "m09":"10", "m10":"11", "m11":"9",  "m12":"12",
-  "m13":"15", "m14":"14", "m15":"13", "m16":"16",
-  "m17":"17", "m18":"18", "m19":"19", "m20":"20",
-  "m21":"21", "m22":"23", "m23":"22", "m24":"24"
+const TEAM_NAME_MAP = {
+  "México":          "Mexico",
+  "Sudáfrica":       "South Africa",
+  "Canadá":          "Canada",
+  "Bosnia-Herz.":    "Bosnia and Herzegovina",
+  "Qatar":           "Qatar",
+  "Suiza":           "Switzerland",
+  "Brasil":          "Brazil",
+  "Marruecos":       "Morocco",
+  "EE.UU.":          "United States",
+  "Paraguay":        "Paraguay",
+  "Corea del Sur":   "South Korea",
+  "Rep. Checa":      "Czech Republic",
+  "Haití":           "Haiti",
+  "Escocia":         "Scotland",
+  "Australia":       "Australia",
+  "Turquía":         "Turkey",
+  "Alemania":        "Germany",
+  "Curazao":         "Curaçao",
+  "Países Bajos":    "Netherlands",
+  "Japón":           "Japan",
+  "Costa de Marfil": "Ivory Coast",
+  "Ecuador":         "Ecuador",
+  "Suecia":          "Sweden",
+  "Túnez":           "Tunisia",
+  "Bélgica":         "Belgium",
+  "Egipto":          "Egypt",
+  "España":          "Spain",
+  "Cabo Verde":      "Cape Verde",
+  "Irán":            "Iran",
+  "Nueva Zelanda":   "New Zealand",
+  "Arabia Saudita":  "Saudi Arabia",
+  "Uruguay":         "Uruguay",
+  "Francia":         "France",
+  "Senegal":         "Senegal",
+  "Irak":            "Iraq",
+  "Noruega":         "Norway",
+  "Argentina":       "Argentina",
+  "Argelia":         "Algeria",
+  "Austria":         "Austria",
+  "Jordania":        "Jordan",
+  "Portugal":        "Portugal",
+  "R.D. del Congo":  "Democratic Republic of the Congo",
+  "Uzbekistán":      "Uzbekistan",
+  "Inglaterra":      "England",
+  "Croacia":         "Croatia",
+  "Ghana":           "Ghana",
+  "Panamá":          "Panama"
 };
 
 async function fetchResults() {
@@ -404,15 +445,28 @@ async function fetchResults() {
     if (!res.ok) throw new Error(res.status);
     const data = await res.json();
     const games = data.games || data;
-    const byId = {};
-    games.forEach(g => { byId[String(g.id)] = g; });
-    Object.entries(API_MAP).forEach(([mid, gid]) => {
-      const g = byId[gid];
-      if (!g) return;
-      RESULTS[mid] = g.finished === "TRUE"
-        ? [parseInt(g.home_score, 10), parseInt(g.away_score, 10)]
-        : null;
+
+    // Key by sorted team pair — handles home/away swaps between API and our data
+    const byTeams = {};
+    games.forEach(g => {
+      const key = [g.home_team_name_en, g.away_team_name_en].sort().join("|");
+      byTeams[key] = g;
     });
+
+    MATCHES.forEach(m => {
+      const homeEn = TEAM_NAME_MAP[m.home];
+      const awayEn = TEAM_NAME_MAP[m.away];
+      if (!homeEn || !awayEn) return;
+      const key = [homeEn, awayEn].sort().join("|");
+      const g = byTeams[key];
+      if (!g) return;
+      if (g.finished !== "TRUE") { RESULTS[m.id] = null; return; }
+      const hs = parseInt(g.home_score, 10);
+      const as_ = parseInt(g.away_score, 10);
+      // Align scores to our home/away order
+      RESULTS[m.id] = g.home_team_name_en === homeEn ? [hs, as_] : [as_, hs];
+    });
+
     renderStats();
     renderLeaderboard();
     renderMatches();
