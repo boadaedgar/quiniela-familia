@@ -445,6 +445,8 @@ async function fetchResults() {
     if (!res.ok) throw new Error(res.status);
     const data = await res.json();
     const games = data.games || data;
+    console.log("API sample:", games.slice(0, 3));
+    console.log("API finished values:", [...new Set(games.map(g => g.finished))]);
 
     // Key by sorted team pair — handles home/away swaps between API and our data
     const byTeams = {};
