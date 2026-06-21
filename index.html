@@ -432,7 +432,8 @@ const TEAM_NAME_MAP = {
   "Inglaterra":      "England",
   "Croacia":         "Croatia",
   "Ghana":           "Ghana",
-  "Panamá":          "Panama"
+  "Panamá":          "Panama",
+  "Colombia":        "Colombia"
 };
 
 async function fetchResults() {
@@ -445,8 +446,6 @@ async function fetchResults() {
     if (!res.ok) throw new Error(res.status);
     const data = await res.json();
     const games = data.games || data;
-    console.log("API sample:", games.slice(0, 3));
-    console.log("API finished values:", [...new Set(games.map(g => g.finished))]);
 
     // Key by sorted team pair — handles home/away swaps between API and our data
     const byTeams = {};
@@ -458,7 +457,7 @@ async function fetchResults() {
     MATCHES.forEach(m => {
       const homeEn = TEAM_NAME_MAP[m.home];
       const awayEn = TEAM_NAME_MAP[m.away];
-      if (!homeEn || !awayEn) return;
+      if (!homeEn || !awayEn) { console.warn("No map for:", m.home, m.away); return; }
       const key = [homeEn, awayEn].sort().join("|");
       const g = byTeams[key];
       if (!g) return;
