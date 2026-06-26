@@ -389,12 +389,12 @@ const TEAM_NAME_MAP = {
   "México":          "Mexico",
   "Sudáfrica":       "South Africa",
   "Canadá":          "Canada",
-  "Bosnia-Herz.":    "Bosnia and Herzegovina",
+  "Bosnia-Herz.":    "Bosnia & Herzegovina",
   "Qatar":           "Qatar",
   "Suiza":           "Switzerland",
   "Brasil":          "Brazil",
   "Marruecos":       "Morocco",
-  "EE.UU.":          "United States",
+  "EE.UU.":          "USA",
   "Paraguay":        "Paraguay",
   "Corea del Sur":   "South Korea",
   "Rep. Checa":      "Czech Republic",
@@ -427,7 +427,7 @@ const TEAM_NAME_MAP = {
   "Austria":         "Austria",
   "Jordania":        "Jordan",
   "Portugal":        "Portugal",
-  "R.D. del Congo":  "Democratic Republic of the Congo",
+  "R.D. del Congo":  "DR Congo",
   "Uzbekistán":      "Uzbekistan",
   "Inglaterra":      "England",
   "Croacia":         "Croatia",
@@ -442,16 +442,17 @@ async function fetchResults() {
   btn.textContent = "⟳ Cargando...";
   btn.disabled = true;
   try {
-    const res = await fetch("https://worldcup26.ir/get/games");
+    const res = await fetch("https://raw.githubusercontent.com/openfootball/world-cup.json/master/2026/worldcup.json");
     if (!res.ok) throw new Error(res.status);
     const data = await res.json();
-    const games = data.games || data;
 
     // Key by sorted team pair — handles home/away swaps between API and our data
     const byTeams = {};
-    games.forEach(g => {
-      const key = [g.home_team_name_en, g.away_team_name_en].sort().join("|");
-      byTeams[key] = g;
+    (data.rounds || []).forEach(round => {
+      (round.matches || []).forEach(g => {
+        const key = [g.team1, g.team2].sort().join("|");
+        byTeams[key] = g;
+      });
     });
 
     MATCHES.forEach(m => {
@@ -461,11 +462,10 @@ async function fetchResults() {
       const key = [homeEn, awayEn].sort().join("|");
       const g = byTeams[key];
       if (!g) return;
-      if (g.finished !== "TRUE") { RESULTS[m.id] = null; return; }
-      const hs = parseInt(g.home_score, 10);
-      const as_ = parseInt(g.away_score, 10);
+      if (!g.score || !g.score.ft) { RESULTS[m.id] = null; return; }
+      const [t1, t2] = g.score.ft;
       // Align scores to our home/away order
-      RESULTS[m.id] = g.home_team_name_en === homeEn ? [hs, as_] : [as_, hs];
+      RESULTS[m.id] = g.team1 === homeEn ? [t1, t2] : [t2, t1];
     });
 
     renderStats();
