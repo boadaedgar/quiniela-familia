@@ -462,7 +462,7 @@ async function fetchResults() {
       const key = [homeEn, awayEn].sort().join("|");
       const g = byTeams[key];
       if (!g) return;
-      if (!g.score || !g.score.ft) { RESULTS[m.id] = null; return; }
+      if (!g.score || !g.score.ft) return;
       const [t1, t2] = g.score.ft;
       // Align scores to our home/away order
       RESULTS[m.id] = g.team1 === homeEn ? [t1, t2] : [t2, t1];
