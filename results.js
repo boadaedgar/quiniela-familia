@@ -74,7 +74,7 @@ const RESULTS = {
   "m62": null,   // Nueva Zelanda vs Bélgica   (26-Jun, 23:00 local)
   "m63": null,   // Cabo Verde vs Arabia Saudita(26-Jun, 19:00 local)
   "m64": null,   // Uruguay vs España          (26-Jun, 18:00 local)
-  "m65": [4,1],  // Noruega vs Francia         (26-Jun)
+  "m65": [1,4],  // Noruega vs Francia         (26-Jun)
   "m66": [5,0],  // Senegal vs Irak            (26-Jun)
   "m67": null,  // Argelia vs Austria         (27-Jun)
   "m68": null,  // Jordania vs Argentina      (27-Jun)
