@@ -246,13 +246,25 @@
 const MULT = { grupos:0.33, ronda32:1, ronda16:1.5, cuartos:2, semis:3, tercero:4, final:5 };
 
 function calcPts(bet, result, phase) {
-  if (!result) return null; // not played
+  if (!result) return null;
   const mult = MULT[phase] || 0.33;
-  const [bh, ba] = bet;
-  const [rh, ra] = result;
-  if (bh === rh && ba === ra) return +(3 * mult).toFixed(2);
-  if (Math.sign(bh - ba) === Math.sign(rh - ra)) return +(1 * mult).toFixed(2);
-  return 0;
+  const [bh, ba, bPen] = bet;
+  const [rh, ra, rPen] = result;
+
+  if (phase === "grupos") {
+    if (bh === rh && ba === ra) return +(3 * mult).toFixed(2);
+    if (Math.sign(bh - ba) === Math.sign(rh - ra)) return +(1 * mult).toFixed(2);
+    return 0;
+  }
+
+  // Knockout: determine predicted and actual winner
+  const betWinner = bPen || (bh != null && ba != null ? (bh > ba ? "H" : bh < ba ? "A" : null) : null);
+  const realWinner = rPen || (rh > ra ? "H" : rh < ra ? "A" : null);
+  if (!betWinner || betWinner !== realWinner) return 0;
+
+  if (!bPen && !rPen && bh === rh && ba === ra) return +(3 * mult).toFixed(2); // exact + winner in 90min
+  if (bPen && rPen) return +(2 * mult).toFixed(2);                             // winner via penalties
+  return +(1 * mult).toFixed(2);                                                // correct winner, wrong method/score
 }
 
 function getLeaderboard() {
@@ -329,30 +341,53 @@ function renderMatches() {
   const container = document.getElementById("matches");
   container.innerHTML = "";
 
+  const PHASE_LABELS = { grupos:"Fase de Grupos", ronda32:"Ronda de 32", ronda16:"Ronda de 16", cuartos:"Cuartos de Final", semis:"Semifinal", tercero:"3er Lugar", final:"Final" };
+  const ROUND_BADGES = { ronda32:"R32", ronda16:"R16", cuartos:"QF", semis:"SF", tercero:"3er", final:"FINAL" };
+  const MONTHS = { "06":"jun", "07":"jul", "08":"ago" };
+
+  let lastSection = null;
   MATCHES.forEach(m => {
+    const phase = m.phase || "grupos";
+
+    if (phase !== lastSection) {
+      const sec = document.createElement("div");
+      sec.className = "section-title";
+      sec.style.marginTop = lastSection ? "16px" : "0";
+      sec.textContent = PHASE_LABELS[phase] || phase;
+      container.appendChild(sec);
+      lastSection = phase;
+    }
+
     const result  = RESULTS[m.id];
     const played  = !!result;
+    const resScore = played
+      ? (result[2] ? `${result[0]}–${result[1]} (P)` : `${result[0]} – ${result[1]}`)
+      : null;
     const resHtml = played
-      ? `<div class="match-result played">${result[0]} – ${result[1]}</div>`
+      ? `<div class="match-result played">${resScore}</div>`
       : `<div class="match-result pending">⏳ Pendiente</div>`;
 
-    // bets table rows
+    const badge = m.group ? `Grupo ${m.group}` : (ROUND_BADGES[phase] || phase);
+    const mo = m.date.slice(5, 7);
+    const dateStr = `${m.date.slice(8)}/${m.date.slice(5,7)} ${MONTHS[mo] || mo}`;
+
     let betsHtml = `<div class="bets-row bh"><div>Participante</div><div style="text-align:center">Apuesta</div><div style="text-align:right">Pts</div></div>`;
     PARTICIPANTS.forEach(p => {
       const bet = p.bets[m.id];
       if (!bet) return;
-      const pts = calcPts(bet, result, m.phase || "grupos");
+      const pts = calcPts(bet, result, phase);
       let cls = "c-pending", ptsStr = "—";
       if (played) {
-        if (pts >= 3 * (MULT[m.phase || "grupos"]) - 0.001) cls = "c-exact";
+        if (pts >= 3 * (MULT[phase]) - 0.001) cls = "c-exact";
         else if (pts > 0) cls = "c-winner";
         else cls = "c-wrong";
         ptsStr = pts > 0 ? `+${pts}` : "0";
       }
+      const betDisplay = bet[2] ? `PEN-${bet[2] === "H" ? "L" : "V"}` : `${bet[0]}–${bet[1]}`;
       betsHtml += `
         <div class="bets-row">
           <div class="bet-name ${cls}">${p.name}</div>
-          <div class="bet-score ${cls}">${bet[0]}–${bet[1]}</div>
+          <div class="bet-score ${cls}">${betDisplay}</div>
           <div class="bet-pts ${cls}">${ptsStr}</div>
         </div>`;
     });
@@ -361,9 +396,9 @@ function renderMatches() {
     card.className = "match-card";
     card.innerHTML = `
       <div class="match-header" onclick="this.parentElement.classList.toggle('open')">
-        <span class="group-badge">Grupo ${m.group}</span>
+        <span class="group-badge">${badge}</span>
         <span class="match-teams">${m.hf} ${m.home} vs ${m.away} ${m.af}</span>
-        <span class="match-date">${m.date.slice(5).replace("-","/")} jun</span>
+        <span class="match-date">${dateStr}</span>
         ${resHtml}
         <span class="chevron">▼</span>
       </div>

@@ -82,4 +82,21 @@ const RESULTS = {
   "m70": null,  // R.D. del Congo vs Uzbekistán(27-Jun)
   "m71": null,  // Panamá vs Inglaterra       (27-Jun)
   "m72": null,  // Croacia vs Ghana           (27-Jun)
+
+  // === RONDA DE 32 ===
+  "m73": null,  // Brasil vs Japón            (29-Jun)
+  "m74": null,  // Alemania vs Paraguay       (30-Jun)
+  "m75": null,  // Países Bajos vs Marruecos  (30-Jun)
+  "m76": null,  // Costa de Marfil vs Noruega (30-Jun)
+  "m77": null,  // Francia vs Suecia          (1-Jul)
+  "m78": null,  // México vs Ecuador          (1-Jul)
+  "m79": null,  // Inglaterra vs R.D. del Congo (1-Jul)
+  "m80": null,  // Bélgica vs Senegal         (2-Jul)
+  "m81": null,  // EE.UU. vs Bosnia-Herz.     (2-Jul)
+  "m82": null,  // España vs Austria          (3-Jul)
+  "m83": null,  // Portugal vs Croacia        (3-Jul)
+  "m84": null,  // Suiza vs Argelia           (3-Jul)
+  "m85": null,  // Australia vs Egipto        (3-Jul)
+  "m86": null,  // Argentina vs Cabo Verde    (4-Jul)
+  "m87": null,  // Colombia vs Ghana          (4-Jul)
 };
