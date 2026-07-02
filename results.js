@@ -90,8 +90,8 @@ const RESULTS = {
   "m76": [1,2],        // Costa de Marfil vs Noruega (30-Jun)
   "m77": [3,0],        // Francia vs Suecia          (30-Jun)
   "m78": [2,0],        // México vs Ecuador          (30-Jun)
-  "m79": null,         // Inglaterra vs R.D. del Congo (1-Jul)
-  "m80": null,  // Bélgica vs Senegal         (2-Jul)
+  "m79": [2,1],        // Inglaterra vs R.D. del Congo (1-Jul)
+  "m80": [3,2],        // Bélgica vs Senegal         (1-Jul) — ET
   "m81": null,  // EE.UU. vs Bosnia-Herz.     (2-Jul)
   "m82": null,  // España vs Austria          (3-Jul)
   "m83": null,  // Portugal vs Croacia        (3-Jul)
