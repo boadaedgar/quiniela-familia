@@ -483,11 +483,9 @@ async function fetchResults() {
 
     // Key by sorted team pair — handles home/away swaps between API and our data
     const byTeams = {};
-    (data.rounds || []).forEach(round => {
-      (round.matches || []).forEach(g => {
-        const key = [g.team1, g.team2].sort().join("|");
-        byTeams[key] = g;
-      });
+    (data.matches || []).forEach(g => {
+      const key = [g.team1, g.team2].sort().join("|");
+      byTeams[key] = g;
     });
 
     MATCHES.forEach(m => {

@@ -1,0 +1,34 @@
+name: Update quiniela results
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"   # every 6 hours
+  workflow_dispatch: {}       # manual "Run workflow" button
+
+permissions:
+  contents: write
+
+jobs:
+  update-results:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Fetch and apply new results
+        run: node scripts/update-results.js
+
+      - name: Commit if changed
+        run: |
+          if git diff --quiet -- results.js; then
+            echo "No changes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add results.js
+          git commit -m "Auto-update results.js from openfootball feed"
+          git push
