@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nota Quiniela Server</title>
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0f0f1a;
+      --surface: #1a1a2e;
+      --border:  rgba(255,255,255,0.08);
+      --text:    #e0e0e0;
+      --muted:   #666;
+      --accent:  #f5a623;
+      --blue:    #4fc3f7;
+      --green:   #81c784;
+      --yellow:  #ffd54f;
+      --red:     #e57373;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 15px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      width: 100%;
+      max-width: 560px;
+      overflow: hidden;
+    }
+
+    /* ── HEADER ── */
+    .card-header {
+      background: rgba(245, 166, 35, 0.08);
+      border-bottom: 1px solid rgba(245, 166, 35, 0.2);
+      padding: 20px 24px 18px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .icon-alert {
+      font-size: 28px;
+      line-height: 1;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .header-text .label {
+      font-size: 0.65em;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .header-text h1 {
+      font-size: 1.1em;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.4px;
+      line-height: 1.3;
+    }
+
+    /* ── BODY ── */
+    .card-body {
+      padding: 22px 24px;
+    }
+
+    .intro {
+      font-size: 0.9em;
+      color: var(--muted);
+      margin-bottom: 18px;
+      line-height: 1.5;
+    }
+
+    /* ── SITUATIONS ── */
+    .situations {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .situation {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+
+    .situation-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(229, 115, 115, 0.15);
+      border: 1px solid rgba(229, 115, 115, 0.35);
+      color: var(--red);
+      font-size: 0.7em;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .situation-text {
+      font-size: 0.9em;
+      line-height: 1.45;
+      color: var(--text);
+    }
+
+    .situation-text strong {
+      color: var(--blue);
+      font-weight: 600;
+    }
+
+    .tag {
+      display: inline-block;
+      background: rgba(229, 115, 115, 0.1);
+      border: 1px solid rgba(229, 115, 115, 0.25);
+      color: var(--red);
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 0.78em;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 20px 0;
+    }
+
+    /* ── CULPABLE ── */
+    .blame-block {
+      background: rgba(79, 195, 247, 0.06);
+      border: 1px solid rgba(79, 195, 247, 0.18);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+    }
+
+    .blame-block p {
+      font-size: 0.88em;
+      line-height: 1.55;
+      color: var(--text);
+    }
+
+    .blame-block .ai-tag {
+      color: var(--blue);
+      font-weight: 700;
+    }
+
+    /* ── SIN EMBARGO ── */
+    .sin-embargo {
+      text-align: center;
+      padding: 10px 0 12px;
+      position: relative;
+    }
+
+    .sin-embargo::before,
+    .sin-embargo::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 30%;
+      height: 1px;
+      background: var(--border);
+    }
+    .sin-embargo::before { left: 0; }
+    .sin-embargo::after  { right: 0; }
+
+    .sin-embargo span {
+      font-size: 0.75em;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent);
+      font-weight: 700;
+      background: var(--surface);
+      padding: 0 10px;
+      position: relative;
+    }
+
+    /* ── INVESTIGATION ── */
+    .investigation {
+      background: rgba(245, 166, 35, 0.06);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 14px;
+      margin-top: 14px;
+    }
+
+    .investigation p {
+      font-size: 0.88em;
+      line-height: 1.6;
+      color: var(--text);
+      font-style: italic;
+    }
+
+    /* ── FOOTER ── */
+    .card-footer {
+      border-top: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-label {
+      font-size: 0.65em;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+    }
+
+    .footer-badge {
+      font-size: 0.65em;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent);
+      background: rgba(245, 166, 35, 0.1);
+      border: 1px solid rgba(245, 166, 35, 0.25);
+      border-radius: 4px;
+      padding: 3px 8px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+
+    <div class="card-header">
+      <div class="icon-alert">⚠️</div>
+      <div class="header-text">
+        <div class="label">Quiniela Server</div>
+        <h1>Nota Oficial del Sistema</h1>
+      </div>
+    </div>
+
+    <div class="card-body">
+
+      <p class="intro">Se han detectado <strong style="color:var(--red)">tres situaciones alarmantes</strong> en la quiniela.</p>
+
+      <div class="situations">
+
+        <div class="situation">
+          <div class="situation-num">1</div>
+          <div class="situation-text">
+            <strong>Alex</strong> sigue en la punta.<br>
+            <span class="tag">Líder Invicto</span>
+          </div>
+        </div>
+
+        <div class="situation">
+          <div class="situation-num">2</div>
+          <div class="situation-text">
+            El partido <strong>Inglaterra vs Ghana</strong><br>
+            no lo Ghanó nadie.
+          </div>
+        </div>
+
+        <div class="situation">
+          <div class="situation-num">3</div>
+          <div class="situation-text">
+            Dos partidos donde todos predicen <strong>0–0</strong>:
+            <br>Inglaterra–Ghana &nbsp;·&nbsp; Jordania–Argelia
+            <br><span class="tag">Predicción Colectiva Sospechosa</span>
+          </div>
+        </div>
+
+      </div>
+
+      <hr class="divider" />
+
+      <div class="blame-block">
+        <p>Por los momentos, y para evitar discusiones humanas, le echaremos la culpa a los <span class="ai-tag">AI</span>...</p>
+      </div>
+
+      <div class="sin-embargo">
+        <span>sin embargo</span>
+      </div>
+
+      <div class="investigation">
+        <p>...estamos investigando. Llegaremos al fondo de esto y no dejaremos piedra sin revisar.</p>
+      </div>
+
+    </div>
+
+    <div class="card-footer">
+      <span class="footer-label">Quiniela FIFA 2026 · ayayai</span>
+      <span class="footer-badge">En Investigación</span>
+    </div>
+
+  </div>
+</body>
+</html>

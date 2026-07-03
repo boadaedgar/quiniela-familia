@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Infograph with Claude + Figma — User Guide</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/moon.css" />
+  <style>
+    :root {
+      --accent:  #f5a623;
+      --blue:    #4fc3f7;
+      --green:   #81c784;
+      --red:     #e57373;
+      --yellow:  #ffd54f;
+      --bg:      #0f0f1a;
+      --surface: #1a1a2e;
+      --border:  rgba(255,255,255,0.08);
+      --text:    #e0e0e0;
+      --muted:   #888;
+    }
+    .reveal .slides section { text-align: left; }
+    .reveal h1, .reveal h2 { color: var(--accent); }
+    .reveal h3 { color: var(--blue); font-size: 0.95em; margin-bottom: 12px; }
+    .reveal p, .reveal li { font-size: 0.78em; line-height: 1.55; color: var(--text); }
+    .reveal ul { list-style: none; padding: 0; margin: 0; }
+    .reveal ul li { padding: 4px 0; }
+    .reveal ul li::before { content: "▸ "; color: var(--accent); }
+
+    .slide-label {
+      position: absolute; top: -38px; right: 0;
+      font-size: 0.42em; color: #444;
+      letter-spacing: 1px; text-transform: uppercase;
+    }
+
+    .cover-title { font-size: 1.5em; font-weight: 800; color: var(--accent); margin-bottom: 6px; }
+    .cover-sub   { font-size: 0.8em; color: var(--muted); margin-bottom: 24px; }
+    .cover-tags  { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; }
+    .tag {
+      display: inline-block;
+      background: rgba(79,195,247,0.1); border: 1px solid rgba(79,195,247,0.25);
+      border-radius: 20px; padding: 3px 12px;
+      font-size: 0.65em; color: var(--blue);
+    }
+    .tag.amber {
+      background: rgba(245,166,35,0.1); border-color: rgba(245,166,35,0.25);
+      color: var(--accent);
+    }
+
+    .section-number { font-size: 0.6em; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+    .section-title  { font-size: 1.4em; font-weight: 700; color: var(--accent); line-height: 1.2; margin-bottom: 12px; }
+    .section-desc   { font-size: 0.78em; color: #aaa; max-width: 600px; }
+
+    .code {
+      background: rgba(0,0,0,0.5); border: 1px solid var(--border);
+      border-radius: 8px; padding: 14px 18px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.68em; line-height: 1.8; color: #ccc; margin: 10px 0;
+    }
+    .code .k   { color: var(--blue); }
+    .code .s   { color: var(--green); }
+    .code .c   { color: #444; font-style: italic; }
+    .code .hl  { color: var(--accent); }
+    .code .dim { color: #555; }
+
+    .callout {
+      background: rgba(245,166,35,0.08); border-left: 3px solid var(--accent);
+      border-radius: 0 6px 6px 0; padding: 10px 14px;
+      font-size: 0.74em; margin: 12px 0; color: #ccc; font-style: italic;
+    }
+    .callout strong { color: var(--accent); font-style: normal; }
+    .callout.blue   { background: rgba(79,195,247,0.08); border-left-color: var(--blue); }
+    .callout.blue strong { color: var(--blue); }
+    .callout.green  { background: rgba(129,199,132,0.08); border-left-color: var(--green); }
+    .callout.green strong { color: var(--green); }
+    .callout.red    { background: rgba(229,115,115,0.08); border-left-color: var(--red); }
+    .callout.red strong { color: var(--red); }
+
+    .tool-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    .tool-table th {
+      font-size: 0.6em; color: var(--muted); text-transform: uppercase;
+      letter-spacing: 1px; padding: 6px 10px; text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .tool-table td { padding: 7px 10px; font-size: 0.68em; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: top; }
+    .tool-table tr:last-child td { border-bottom: none; }
+    .tool-name { font-family: 'Courier New', monospace; color: var(--blue); white-space: nowrap; }
+    .tool-desc { color: #bbb; }
+    .tool-out  { color: var(--muted); font-size: 0.9em; font-style: italic; }
+
+    .workflow-step { display: flex; align-items: flex-start; gap: 14px; margin: 10px 0; }
+    .step-num {
+      min-width: 28px; height: 28px; background: var(--accent); color: #0f0f1a;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 0.8em; flex-shrink: 0; margin-top: 2px;
+    }
+    .step-title { font-size: 0.78em; font-weight: 600; color: var(--text); }
+    .step-sub   { font-size: 0.68em; color: var(--muted); margin-top: 2px; font-family: monospace; }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 10px; }
+    .col-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+    .col-card h4 { font-size: 0.72em; color: var(--accent); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .badge {
+      display: inline-block; border-radius: 4px; padding: 1px 7px;
+      font-size: 0.6em; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.5px; vertical-align: middle; margin-left: 6px;
+    }
+    .badge-beta { background: rgba(255,213,79,0.15); color: var(--yellow); border: 1px solid rgba(255,213,79,0.3); }
+    .badge-free { background: rgba(129,199,132,0.15); color: var(--green); border: 1px solid rgba(129,199,132,0.3); }
+    .badge-warn { background: rgba(229,115,115,0.15); color: var(--red);   border: 1px solid rgba(229,115,115,0.3); }
+
+    .pill {
+      display: inline-block; background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border); border-radius: 20px;
+      padding: 2px 10px; font-size: 0.62em; color: #aaa; margin: 2px;
+    }
+    .pill.accent { background: rgba(245,166,35,0.08); border-color: rgba(245,166,35,0.2); color: var(--accent); }
+    .pill.blue   { background: rgba(79,195,247,0.08);  border-color: rgba(79,195,247,0.2);  color: var(--blue); }
+
+    .nav-hint { font-size: 0.4em; color: #333; text-align: center; margin-top: 20px; }
+
+    .arch-diagram {
+      display: flex; align-items: center; gap: 10px;
+      margin: 16px 0; flex-wrap: wrap;
+    }
+    .arch-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 10px 14px; text-align: center;
+      font-size: 0.68em;
+    }
+    .arch-box .label { color: var(--muted); font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; }
+    .arch-box .name  { color: var(--accent); font-weight: 700; margin-top: 2px; }
+    .arch-arrow { color: var(--muted); font-size: 1.2em; }
+  </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ── COVER ── -->
+<section>
+  <p class="section-number">User Guide</p>
+  <div class="cover-title">Infographics with Claude + Figma MCP</div>
+  <p class="cover-sub">From brandbook tokens to a Figma file — zero Photoshop, zero manual design.</p>
+  <ul style="color:#888; font-size:0.72em;">
+    <li>Claude reads your design system and writes brand-consistent HTML</li>
+    <li>Figma MCP captures the HTML and places it inside a Figma file</li>
+    <li>You export PNG — ready for WhatsApp, Slack, or social media</li>
+  </ul>
+  <div class="cover-tags">
+    <span class="tag amber">Claude Code</span>
+    <span class="tag">Figma MCP</span>
+    <span class="tag">HTML → Design</span>
+    <span class="tag">Design Tokens</span>
+    <span class="tag">npx serve</span>
+    <span class="tag">MCP Protocol</span>
+  </div>
+  <div class="nav-hint">→ next section · ↓ sub-slides within section</div>
+</section>
+
+<!-- ── SECTION 01: THE STACK ── -->
+<section>
+
+  <section>
+    <div class="slide-label">Section 1 — The Stack</div>
+    <p class="section-number">01</p>
+    <div class="section-title">What Is This Stack?</div>
+    <p class="section-desc">Three pieces that talk to each other: Claude Code, Figma MCP, and a local HTTP server.</p>
+    <div class="nav-hint">↓ to dive in</div>
+  </section>
+
+  <section>
+    <div class="slide-label">Section 1 — The Stack</div>
+    <h3>How the pieces connect</h3>
+    <div class="arch-diagram">
+      <div class="arch-box">
+        <div class="label">You</div>
+        <div class="name">Chat Prompt</div>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-box">
+        <div class="label">AI Agent</div>
+        <div class="name">Claude Code</div>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-box">
+        <div class="label">Protocol</div>
+        <div class="name">MCP Server</div>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-box">
+        <div class="label">Design App</div>
+        <div class="name">Figma API</div>
+      </div>
+    </div>
+    <p style="margin-top:6px;">MCP = <strong style="color:var(--accent)">Model Context Protocol</strong>. It is a standard way for Claude to call external tools — like a USB port for AI integrations. Figma publishes an MCP server that exposes their API as Claude-callable tools.</p>
+    <div class="callout blue"><strong>Key insight:</strong> Claude never opens Figma in a browser. It calls the Figma REST API through MCP tools, invisibly, in the background.</div>
+  </section>
+
+  <section>
+    <div class="slide-label">Section 1 — The Stack</div>
+    <h3>What is a brandbook in this context?</h3>
+    <p>A <strong style="color:var(--accent)">DESIGN.md</strong> file that defines colors, typography, spacing, and component rules in plain text. Claude reads it before writing any HTML.</p>
+    <div class="code">
+<span class="c"># DESIGN.md — ayayai brandbook</span>
+colors:
+  accent:  <span class="s">"#f5a623"</span>   <span class="c"># amber — primary brand color</span>
+  bg:      <span class="s">"#0f0f1a"</span>   <span class="c"># deepest dark background</span>
+  surface: <span class="s">"#1a1a2e"</span>   <span class="c"># card / panel background</span>
+  blue:    <span class="s">"#4fc3f7"</span>   <span class="c"># secondary accent</span>
+  green:   <span class="s">"#81c784"</span>   <span class="c"># success / win</span>
+  red:     <span class="s">"#e57373"</span>   <span class="c"># error / alert</span>
+    </div>
+    <div class="callout"><strong>Why this matters:</strong> Claude translates these tokens directly into CSS variables — brand consistency without a designer in the loop.</div>
+  </section>
+
+</section>
+
+<!-- ── SECTION 02: SETUP ── -->
+<section>
+
+  <section>
+    <div class="slide-label">Section 2 — Setup</div>
+    <p class="section-number">02</p>
+    <div class="section-title">What You Need</div>
+    <p class="section-desc">Three things to have ready before starting: Claude Code, Figma MCP connected, and Node.js for the local server.</p>
+    <div class="nav-hint">↓ requirements</div>
+  </section>
+
+  <section>
+    <div class="slide-label">Section 2 — Setup</div>
+    <h3>Requirements checklist</h3>
+    <table class="tool-table">
+      <thead><tr><th>Requirement</th><th>What to verify</th><th>How</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="tool-name">Claude Code</td>
+          <td class="tool-desc">CLI installed and running</td>
+          <td class="tool-out">claude --version</td>
+        </tr>
+        <tr>
+          <td class="tool-name">Figma MCP</td>
+          <td class="tool-desc">Connected and authenticated</td>
+          <td class="tool-out">mcp__figma__whoami</td>
+        </tr>
+        <tr>
+          <td class="tool-name">Figma account</td>
+          <td class="tool-desc">Any plan — drafts folder works</td>
+          <td class="tool-out">figma.com login</td>
+        </tr>
+        <tr>
+          <td class="tool-name">Node.js / npx</td>
+          <td class="tool-desc">To run local HTTP server</td>
+          <td class="tool-out">node --version</td>
+        </tr>
+        <tr>
+          <td class="tool-name">DESIGN.md</td>
+          <td class="tool-desc">Brandbook in the project folder</td>
+          <td class="tool-out">ls ayayai/DESIGN.md</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="callout blue"><strong>Seat type matters:</strong> A "View" seat on a team still lets Claude create files in your personal drafts folder.</div>
+  </section>
+
+  <section>
+    <div class="slide-label">Section 2 — Setup</div>
+    <h3>Figma MCP — verify auth before starting</h3>
+    <p>Always call <span style="color:var(--blue); font-family:monospace;">whoami</span> first. It returns your email, plan key, and seat type. You need the <strong style="color:var(--accent)">planKey</strong> to create files.</p>
+    <div class="code">
+<span class="c"># What Claude does internally:</span>
+<span class="hl">mcp__figma__whoami</span>()
+
+<span class="c"># Returns:</span>
+{
+  <span class="k">"handle"</span>: <span class="s">"Edgar Boada"</span>,
+  <span class="k">"plans"</span>: [{
+    <span class="k">"key"</span>:  <span class="s">"team::1647650559785762643"</span>,  <span class="c">← this is your planKey</span>
+    <span class="k">"seat"</span>: <span class="s">"View"</span>,
+    <span class="k">"tier"</span>: <span class="s">"starter"</span>
+  }]
+}
+    </div>
+  </section>
+
+</section>
+
+<!-- ── SECTION 03: MCP TOOLS ── -->
+<section>
+
+  <section>
+    <div class="slide-label">Section 3 — MCP Tools</div>
+    <p class="section-number">03</p>
+    <div class="section-title">Figma MCP Tools Used</div>
+    <p class="section-desc">Five tools did all the work. Each tool is a function Claude calls — you never touch Figma's UI until the final export.</p>
+    <div class="nav-hint">↓ tool reference</div>
+  </section>
+
+  <section>
+    <div class="slide-label">Section 3 — MCP Tools</div>
+    <h3>The five tools</h3>
+    <table class="tool-table">
+      <thead><tr><th>Tool</th><th>What it does</th><th>Returns</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="tool-name">whoami</td>
+          <td class="tool-desc">Checks who is authenticated in Figma</td>
+          <td class="tool-out">email, planKey, seat</td>
+        </tr>
+        <tr>
+          <td class="tool-name">create_new_file</td>
+          <td class="tool-desc">Creates a blank design file in your drafts</td>
+          <td class="tool-out">fileKey, file_url</td>
+        </tr>
+        <tr>
+          <td class="tool-name">generate_figma_design</td>
+          <td class="tool-desc">Captures a webpage (HTML) as a Figma frame</td>
+          <td class="tool-out">captureId → frame node</td>
+        </tr>
+        <tr>
+          <td class="tool-name">ReadMcpResourceTool</td>
+          <td class="tool-desc">Loads a skill file required before create_new_file</td>
+          <td class="tool-out">skill instructions</td>
+        </tr>
+        <tr>
+          <td class="tool-name">get_metadata</td>
+          <td class="tool-desc">Reads file/page structure — useful for inspection</td>
+          <td class="tool-out">node tree in XML</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <div class="slide-label">Section 3 — MCP Tools</div>
+    <h3>The mandatory skill pattern</h3>
+    <p>Before calling <span style="color:var(--blue); font-family:monospace;">create_new_file</span>, Claude must load a skill from the Figma MCP resource. This is a contract — skip it and the tool may behave unexpectedly.</p>
+    <div class="code">
+<span class="c"># Step A: load the skill</span>
+<span class="hl">ReadMcpResourceTool</span>(
+  server = <span class="s">"figma"</span>,
+  uri    = <span class="s">"skill://figma/figma-create-new-file/SKILL.md"</span>
+)
+
+<span class="c"># Step B: now call create_new_file safely</span>
+<span class="hl">mcp__figma__create_new_file</span>(
+  fileName  = <span class="s">"Nota Quiniela Server"</span>,
+  planKey   = <span class="s">"team::1647650559785762643"</span>,
+  editorType = <span class="s">"design"</span>
+)
+    </div>
+    <div class="callout"><strong>Why:</strong> The skill encodes the plan-resolution contract and post-creation handoff rules. Without it, Claude may skip required steps.</div>
+  </section>
+
+  <section>
+    <div class="slide-label">Section 3 — MCP Tools</div>
+    <h3>generate_figma_design — two-phase call</h3>
+    <p>This tool works in two phases. First call returns a <strong style="color:var(--accent)">captureId</strong>. Second call (with captureId) polls until <strong style="color:var(--green)">completed</strong>.</p>
+    <div class="code">
+<span class="c"># Phase 1: get captureId</span>
+<span class="hl">generate_figma_design</span>(fileKey = <span class="s">"5Hr8rCeHsuQD8AQtqa1FGq"</span>)
+<span class="c">→ captureId: "ae3a64df-c930-42ad-b440-b2d4c1d53060"</span>
+
+<span class="c"># Phase 2: open this URL in browser (local capture)</span>
+<span class="s">http://localhost:3333/nota-server.html
+  #figmacapture=ae3a64df...
+  &figmaendpoint=https://mcp.figma.com/mcp/capture/.../submit
+  &figmadelay=1000</span>
+
+<span class="c"># Phase 3: poll until completed</span>
+<span class="hl">generate_figma_design</span>(
+  fileKey   = <span class="s">"5Hr8rCeHsuQD8AQtqa1FGq"</span>,
+  captureId = <span class="s">"ae3a64df-c930-42ad-b440-b2d4c1d53060"</span>
+)
+    </div>
+    <div class="callout red"><strong>Each captureId is single-use.</strong> Never reuse one for a second capture.</div>
+  </section>
+
+</section>
+
+<!-- ── SECTION 04: WORKFLOW ── -->
+<section>
+
+  <section>
+    <div class="slide-label">Section 4 — Workflow</div>
+    <p class="section-number">04</p>
+    <div class="section-title">The Full Workflow</div>
+    <p class="section-desc">Eight steps from "make me an infographic" to a PNG ready for WhatsApp.</p>
+    <div class="nav-hint">↓ step by step</div>
+  </section>
+
+  <section>
+    <div class="slide-label">Section 4 — Workflow</div>
+    <h3>Steps 1–4: Build the HTML</h3>
+    <div class="workflow-step">
+      <div class="step-num">1</div>
+      <div>
+        <div class="step-title">Claude reads DESIGN.md</div>
+        <div class="step-sub">ayayai/DESIGN.md → extracts color tokens, typography, spacing rules</div>
+      </div>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">2</div>
+      <div>
+        <div class="step-title">Claude writes the infographic HTML</div>
+        <div class="step-sub">nota-server.html — CSS variables map 1:1 to DESIGN.md tokens</div>
+      </div>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">3</div>
+      <div>
+        <div class="step-title">You review in browser</div>
+        <div class="step-sub">Open nota-server.html — iterate on copy/layout before pushing to Figma</div>
+      </div>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">4</div>
+      <div>
+        <div class="step-title">Inject capture script into HTML</div>
+        <div class="step-sub">&lt;script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async&gt;&lt;/script&gt;</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-label">Section 4 — Workflow</div>
+    <h3>Steps 5–8: Push to Figma</h3>
+    <div class="workflow-step">
+      <div class="step-num">5</div>
+      <div>
+        <div class="step-title">Start local HTTP server</div>
+        <div class="step-sub">npx serve . -l 3333 &nbsp;←&nbsp; note: flag is -l not --port (changed in newer versions)</div>
+      </div>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">6</div>
+      <div>
+        <div class="step-title">Create blank Figma file</div>
+        <div class="step-sub">create_new_file → returns fileKey: "5Hr8rCeHsuQD8AQtqa1FGq"</div>
+      </div>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">7</div>
+      <div>
+        <div class="step-title">Capture HTML into Figma</div>
+        <div class="step-sub">generate_figma_design → open hash URL in browser → poll until completed</div>
+      </div>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">8</div>
+      <div>
+        <div class="step-title">Export PNG from Figma</div>
+        <div class="step-sub">Select frame → right panel → Export → PNG → Export</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-label">Section 4 — Workflow</div>
+    <h3>The capture flow in detail</h3>
+    <p>The capture script is injected into your HTML. When you open the hash URL, the script fires and sends your page's DOM to Figma's servers, which convert it to a Figma frame.</p>
+    <div class="two-col" style="margin-top:14px;">
+      <div class="col-card">
+        <h4>What happens in the browser</h4>
+        <ul>
+          <li>Page loads normally</li>
+          <li>Hash params are parsed by capture.js</li>
+          <li>Page DOM is serialized + sent to Figma</li>
+          <li>A toolbar appears confirming capture</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>What happens in Figma</h4>
+        <ul>
+          <li>HTML elements → Figma frames</li>
+          <li>CSS styles → Figma fill/stroke/text</li>
+          <li>New page added to your file</li>
+          <li>Frame appears at node-id 1:2</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout blue"><strong>file:// URLs don't work.</strong> You must serve via localhost — that's why the HTTP server step is mandatory.</div>
+  </section>
+
+</section>
+
+<!-- ── SECTION 05: GOTCHAS & TIPS ── -->
+<section>
+
+  <section>
+    <div class="slide-label">Section 5 — Gotchas & Tips</div>
+    <p class="section-number">05</p>
+    <div class="section-title">Real Gotchas We Hit</div>
+    <p class="section-desc">Every one of these happened in this actual session — not hypothetical warnings.</p>
+    <div class="nav-hint">↓ gotchas</div>
+  </section>
+
+  <section>
+    <div class="slide-label">Section 5 — Gotchas & Tips</div>
+    <h3>Gotchas — what actually broke</h3>
+    <table class="tool-table">
+      <thead><tr><th>Problem</th><th>What happened</th><th>Fix</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="tool-name" style="color:var(--red);">--port flag</td>
+          <td class="tool-desc"><code>npx serve --port 3333</code> threw ArgError on newer serve versions</td>
+          <td class="tool-out">Use <code>-l 3333</code> instead</td>
+        </tr>
+        <tr>
+          <td class="tool-name" style="color:var(--red);">Skill not loaded</td>
+          <td class="tool-desc">Called create_new_file without loading figma-create-new-file skill first</td>
+          <td class="tool-out">ReadMcpResourceTool before every create_new_file</td>
+        </tr>
+        <tr>
+          <td class="tool-name" style="color:var(--red);">! in PowerShell</td>
+          <td class="tool-desc"><code>! npx serve</code> failed — ! is Claude Code chat syntax, not PS</td>
+          <td class="tool-out">Run without ! in PowerShell; Claude uses PowerShell tool</td>
+        </tr>
+        <tr>
+          <td class="tool-name" style="color:var(--red);">Server startup delay</td>
+          <td class="tool-desc">Checked server before it was ready → "Unable to connect"</td>
+          <td class="tool-out">Wait 5s after start before checking</td>
+        </tr>
+        <tr>
+          <td class="tool-name" style="color:var(--red);">View seat warning</td>
+          <td class="tool-desc">Figma plan showed "View" seat — seemed like no write access</td>
+          <td class="tool-out">Drafts folder still allows file creation on any plan</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <div class="slide-label">Section 5 — Gotchas & Tips</div>
+    <h3>Pro tips for junior devs</h3>
+    <div class="two-col">
+      <div class="col-card">
+        <h4>Design tips</h4>
+        <ul>
+          <li>Always build HTML first, iterate fast</li>
+          <li>CSS variables = brandbook tokens — name them the same</li>
+          <li>Design for fixed width (560px) for WhatsApp cards</li>
+          <li>Leave capture script in HTML — toolbar lets you recapture after edits</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4>MCP tips</h4>
+        <ul>
+          <li>Run whoami first — always know your planKey</li>
+          <li>Load skills before tools that require them</li>
+          <li>Poll generate_figma_design — don't call once and give up</li>
+          <li>fileKey is required on EVERY poll call, not just the first</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout green"><strong>Best practice:</strong> Keep edits in HTML, recapture to Figma. HTML is your source of truth — Figma is just the export layer.</div>
+  </section>
+
+</section>
+
+<!-- ── QUICK REFERENCE ── -->
+<section>
+  <div class="slide-label">Quick Reference</div>
+  <h3>Quick Reference</h3>
+  <div class="two-col">
+    <div>
+      <p style="font-size:0.65em; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Figma MCP Tools</p>
+      <span class="pill accent">whoami</span>
+      <span class="pill accent">create_new_file</span>
+      <span class="pill accent">generate_figma_design</span>
+      <span class="pill accent">get_metadata</span>
+
+      <p style="font-size:0.65em; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin: 12px 0 8px;">Key Concepts</p>
+      <span class="pill blue">MCP Protocol</span>
+      <span class="pill blue">captureId (single-use)</span>
+      <span class="pill blue">fileKey</span>
+      <span class="pill blue">planKey</span>
+      <span class="pill blue">DESIGN.md tokens</span>
+      <span class="pill blue">CSS variables</span>
+
+      <p style="font-size:0.65em; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin: 12px 0 8px;">CLI Commands</p>
+      <span class="pill">npx serve . -l 3333</span>
+      <span class="pill">node --version</span>
+    </div>
+    <div>
+      <div class="code" style="font-size:0.6em;">
+<span class="c"># Full workflow — 8 commands</span>
+
+<span class="dim">1.</span> <span class="hl">ReadMcpResourceTool</span>(<span class="s">"skill://figma/figma-create-new-file/SKILL.md"</span>)
+<span class="dim">2.</span> <span class="hl">whoami</span>()  <span class="c">→ get planKey</span>
+<span class="dim">3.</span> <span class="hl">create_new_file</span>(fileName, planKey, <span class="s">"design"</span>)  <span class="c">→ fileKey</span>
+<span class="dim">4.</span> Write HTML using DESIGN.md tokens as CSS vars
+<span class="dim">5.</span> Inject capture.js &lt;script&gt; into &lt;head&gt;
+<span class="dim">6.</span> <span class="k">npx serve . -l 3333</span>
+<span class="dim">7.</span> <span class="hl">generate_figma_design</span>(fileKey)  <span class="c">→ captureId</span>
+<span class="dim">8.</span> Open <span class="s">localhost:3333/page.html#figmacapture=...</span>
+<span class="dim">9.</span> <span class="hl">generate_figma_design</span>(fileKey, captureId)  <span class="c">→ poll</span>
+<span class="dim">10.</span> Export PNG from Figma → WhatsApp ✓
+      </div>
+    </div>
+  </div>
+  <div class="nav-hint">Made with Claude Code + Figma MCP · ayayai family AI learning</div>
+</section>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    transition: 'slide',
+    transitionSpeed: 'fast',
+    controls: true,
+    progress: true,
+    slideNumber: 'c/t',
+    width: 1280,
+    height: 720,
+    margin: 0.04,
+    minScale: 0.2,
+    maxScale: 2.0,
+  });
+</script>
+</body>
+</html>
