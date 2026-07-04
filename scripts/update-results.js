@@ -84,12 +84,25 @@ function main() {
       }
       const key = [homeEn, awayEn].sort().join("|");
       const g = byTeams[key];
-      if (!g || !g.score || !g.score.ft) return;
+      if (!g || !g.score) return;
 
-      const [t1, t2] = g.score.ft;
-      const [h, a] = g.team1 === homeEn ? [t1, t2] : [t2, t1];
-      resultsText = resultsText.replace(lineRe, `$1[${h},${a}]$2`);
-      changes.push(`${m.id}: ${m.home} ${h}-${a} ${m.away}`);
+      // Prefer the extra-time score (final) over the 90-minute score.
+      const finalScore = g.score.et || g.score.ft;
+      if (!finalScore) return;
+      const [t1, t2] = finalScore;
+      const isHome = g.team1 === homeEn;
+      const [h, a] = isHome ? [t1, t2] : [t2, t1];
+
+      if (g.score.p) {
+        const [p1, p2] = g.score.p;
+        const penHomeWins = isHome ? p1 > p2 : p2 > p1;
+        const pen = penHomeWins ? "H" : "A";
+        resultsText = resultsText.replace(lineRe, `$1[${h},${a},"${pen}"]$2`);
+        changes.push(`${m.id}: ${m.home} ${h}-${a} ${m.away} (pen. ${pen})`);
+      } else {
+        resultsText = resultsText.replace(lineRe, `$1[${h},${a}]$2`);
+        changes.push(`${m.id}: ${m.home} ${h}-${a} ${m.away}`);
+      }
     });
 
     if (changes.length === 0) {

@@ -489,16 +489,34 @@ async function fetchResults() {
     });
 
     MATCHES.forEach(m => {
+      // Never clobber a result we already resolved manually (e.g. penalty-shootout
+      // "H"/"A" markers) — the API only carries regulation-time score and would
+      // silently strip that info on every page load.
+      if (RESULTS[m.id] && RESULTS[m.id][2]) return;
+
       const homeEn = TEAM_NAME_MAP[m.home];
       const awayEn = TEAM_NAME_MAP[m.away];
       if (!homeEn || !awayEn) { console.warn("No map for:", m.home, m.away); return; }
       const key = [homeEn, awayEn].sort().join("|");
       const g = byTeams[key];
-      if (!g) return;
-      if (!g.score || !g.score.ft) return;
-      const [t1, t2] = g.score.ft;
-      // Align scores to our home/away order
-      RESULTS[m.id] = g.team1 === homeEn ? [t1, t2] : [t2, t1];
+      if (!g || !g.score) return;
+
+      // Prefer the extra-time score (final) over the 90-minute score if the
+      // match went to ET; fall back to full-time.
+      const finalScore = g.score.et || g.score.ft;
+      if (!finalScore) return;
+      const [t1, t2] = finalScore;
+      const isHome = g.team1 === homeEn;
+      const [h, a] = isHome ? [t1, t2] : [t2, t1];
+
+      // If it went to a penalty shootout, record the winner as a third element.
+      if (g.score.p) {
+        const [p1, p2] = g.score.p;
+        const penHomeWins = isHome ? p1 > p2 : p2 > p1;
+        RESULTS[m.id] = [h, a, penHomeWins ? "H" : "A"];
+      } else {
+        RESULTS[m.id] = [h, a];
+      }
     });
 
     renderStats();
