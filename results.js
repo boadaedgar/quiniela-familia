@@ -96,7 +96,7 @@ const RESULTS = {
   "m82": [3,0],  // España vs Austria          (3-Jul)
   "m83": [2,1],  // Portugal vs Croacia        (3-Jul)
   "m84": [2,0],  // Suiza vs Argelia           (3-Jul)
-  "m85": [1,1],  // Australia vs Egipto        (3-Jul) — VERIFICAR: auto-cargado antes del fix de ET/penales, confirmar si terminó así en 90'
+  "m85": [1,1,"A"],  // Australia vs Egipto    (3-Jul) — 1-1 en 90' y en ET, Egipto gana penales 4-2
   "m86": [3,2],  // Argentina vs Cabo Verde   (4-Jul) — 1-1 en 90', 3-2 en tiempo extra
-  "m87": [1,0],  // Colombia vs Ghana          (4-Jul) — VERIFICAR: auto-cargado antes del fix de ET/penales, confirmar si terminó así en 90'
+  "m87": [1,0],  // Colombia vs Ghana          (4-Jul)
 };
