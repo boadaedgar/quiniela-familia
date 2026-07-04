@@ -98,5 +98,5 @@ const RESULTS = {
   "m84": [2,0],  // Suiza vs Argelia           (3-Jul)
   "m85": [1,1],  // Australia vs Egipto        (3-Jul)
   "m86": [1,1],  // Argentina vs Cabo Verde    (4-Jul)
-  "m87": null,  // Colombia vs Ghana          (4-Jul)
+  "m87": [1,0],  // Colombia vs Ghana          (4-Jul)
 };
