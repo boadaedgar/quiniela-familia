@@ -96,7 +96,7 @@ const RESULTS = {
   "m82": [3,0],  // España vs Austria          (3-Jul)
   "m83": [2,1],  // Portugal vs Croacia        (3-Jul)
   "m84": [2,0],  // Suiza vs Argelia           (3-Jul)
-  "m85": null,  // Australia vs Egipto        (3-Jul)
-  "m86": null,  // Argentina vs Cabo Verde    (4-Jul)
+  "m85": [1,1],  // Australia vs Egipto        (3-Jul)
+  "m86": [1,1],  // Argentina vs Cabo Verde    (4-Jul)
   "m87": null,  // Colombia vs Ghana          (4-Jul)
 };
