@@ -86,7 +86,7 @@ const RESULTS = {
   // === RONDA DE 32 ===
   "m73": [2,1],        // Brasil vs Japón            (29-Jun)
   "m74": [1,1,"A"],   // Alemania vs Paraguay       (30-Jun) — Paraguay gana penales 4-3
-  "m75": [1,1,"A"],   // Países Bajos vs Marruecos  (30-Jun) — Marruecos gana penales 3-2
+  "m75": [2,2,"A"],   // Países Bajos vs Marruecos  (30-Jun) — 2-2 en 90'/ET, Marruecos gana penales 3-2
   "m76": [1,2],        // Costa de Marfil vs Noruega (30-Jun)
   "m77": [3,0],        // Francia vs Suecia          (30-Jun)
   "m78": [2,0],        // México vs Ecuador          (30-Jun)
