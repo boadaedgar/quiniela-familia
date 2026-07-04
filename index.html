@@ -489,10 +489,10 @@ async function fetchResults() {
     });
 
     MATCHES.forEach(m => {
-      // Never clobber a result we already resolved manually (e.g. penalty-shootout
-      // "H"/"A" markers) — the API only carries regulation-time score and would
-      // silently strip that info on every page load.
-      if (RESULTS[m.id] && RESULTS[m.id][2]) return;
+      // Never clobber a result we already have — the API's extra-time score
+      // often lags behind the regulation score, which would silently
+      // overwrite a correct ET/penalty result with the 90-minute score.
+      if (RESULTS[m.id]) return;
 
       const homeEn = TEAM_NAME_MAP[m.home];
       const awayEn = TEAM_NAME_MAP[m.away];
