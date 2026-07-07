@@ -86,7 +86,7 @@ const RESULTS = {
   // === RONDA DE 32 ===
   "m73": [2,1],        // Brasil vs Japón            (29-Jun)
   "m74": [1,1,"A"],   // Alemania vs Paraguay       (30-Jun) — Paraguay gana penales 4-3
-  "m75": [2,2,"A"],   // Países Bajos vs Marruecos  (30-Jun) — 2-2 en 90'/ET, Marruecos gana penales 3-2
+  "m75": [1,1,"A"],   // Países Bajos vs Marruecos  (29-Jun) — 1-1 en 90'/ET, Marruecos gana penales 3-2 (fuente: FIFA/ESPN, corrige el 2-2 anotado antes por error)
   "m76": [1,2],        // Costa de Marfil vs Noruega (30-Jun)
   "m77": [3,0],        // Francia vs Suecia          (30-Jun)
   "m78": [2,0],        // México vs Ecuador          (30-Jun)
@@ -99,4 +99,15 @@ const RESULTS = {
   "m85": [1,1,"A"],  // Australia vs Egipto    (3-Jul) — 1-1 en 90' y en ET, Egipto gana penales 4-2
   "m86": [3,2],  // Argentina vs Cabo Verde   (4-Jul) — 1-1 en 90', 3-2 en tiempo extra
   "m87": [1,0],  // Colombia vs Ghana          (4-Jul)
+  "m88": [1,0],  // Canadá vs Sudáfrica        (28-Jun) — faltaba en el formulario original, sin apuestas
+
+  // === RONDA DE 16 ===
+  "m89": [0,3],  // Canadá vs Marruecos        (4-Jul)
+  "m90": [0,1],  // Paraguay vs Francia        (4-Jul)
+  "m91": [1,2],  // Brasil vs Noruega          (5-Jul)
+  "m92": [2,3],  // México vs Inglaterra       (5-Jul)
+  "m93": [0,1],  // Portugal vs España         (6-Jul)
+  "m94": [1,4],  // EE.UU. vs Bélgica          (6-Jul)
+  "m95": null,   // Argentina vs Egipto        (7-Jul) — pendiente
+  "m96": null,   // Suiza vs Colombia          (7-Jul) — pendiente
 };
