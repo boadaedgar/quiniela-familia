@@ -332,19 +332,31 @@ const MULT = { grupos:0.33, ronda32:1, ronda16:1.5, cuartos:2, semis:3, tercero:
 function calcPts(bet, result, phase) {
   if (!result) return null;
   const mult = MULT[phase] || 0.33;
-  const [bh, ba] = bet;
-  const [rh, ra] = result;
-  if (bh === rh && ba === ra) return +(3 * mult).toFixed(2);
-  if (Math.sign(bh - ba) === Math.sign(rh - ra)) return +(1 * mult).toFixed(2);
-  return 0;
+  const [bh, ba, bPen] = bet;
+  const [rh, ra, rPen] = result;
+
+  if (phase === "grupos") {
+    if (bh === rh && ba === ra) return +(3 * mult).toFixed(2);
+    if (Math.sign(bh - ba) === Math.sign(rh - ra)) return +(1 * mult).toFixed(2);
+    return 0;
+  }
+
+  // Knockout: determine predicted and actual winner
+  const betWinner = bPen || (bh != null && ba != null ? (bh > ba ? "H" : bh < ba ? "A" : null) : null);
+  const realWinner = rPen || (rh > ra ? "H" : rh < ra ? "A" : null);
+  if (!betWinner || betWinner !== realWinner) return 0;
+
+  if (!bPen && !rPen && bh === rh && ba === ra) return +(3 * mult).toFixed(2); // exact + winner in 90min
+  if (bPen && rPen) return +(2 * mult).toFixed(2);                             // winner via penalties
+  return +(1 * mult).toFixed(2);                                                // correct winner, wrong method/score
 }
 
-function classifyBet(bet, result) {
+function classifyBet(bet, result, phase) {
   if (!result) return "none";
-  const [bh, ba] = bet;
-  const [rh, ra] = result;
-  if (bh === rh && ba === ra) return "exact";
-  if (Math.sign(bh - ba) === Math.sign(rh - ra)) return "winner";
+  const pts = calcPts(bet, result, phase);
+  const mult = MULT[phase] || 0.33;
+  if (pts >= 3 * mult - 0.001) return "exact";
+  if (pts > 0) return "winner";
   return "wrong";
 }
 
@@ -464,7 +476,7 @@ function render() {
       if (!bet) { html += '<td class="bet-none">—</td>'; return; }
 
       const pts = calcPts(bet, result, m.phase || "grupos");
-      const cls = "bet-" + classifyBet(bet, result);
+      const cls = "bet-" + classifyBet(bet, result, m.phase || "grupos");
       const betStr = `${bet[0]}–${bet[1]}`;
       const ptsStr = pts !== null ? `<span class="bet-pts">+${pts}pt</span>` : "";
 
