@@ -109,5 +109,5 @@ const RESULTS = {
   "m93": [0,1],  // Portugal vs España         (6-Jul)
   "m94": [1,4],  // EE.UU. vs Bélgica          (6-Jul)
   "m95": [3,2],   // Argentina vs Egipto        (7-Jul) — pendiente
-  "m96": null,   // Suiza vs Colombia          (7-Jul) — pendiente
+  "m96": [0,0,"H"],   // Suiza vs Colombia          (7-Jul) — pendiente
 };
