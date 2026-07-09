@@ -109,6 +109,12 @@ const MATCHES = [
   { id:"m94", phase:"ronda16", home:"EE.UU.",          away:"Bélgica",        date:"2026-07-06", hf:"🇺🇸", af:"🇧🇪" },
   { id:"m95", phase:"ronda16", home:"Argentina",       away:"Egipto",         date:"2026-07-07", hf:"🇦🇷", af:"🇪🇬" },
   { id:"m96", phase:"ronda16", home:"Suiza",           away:"Colombia",       date:"2026-07-07", hf:"🇨🇭", af:"🇨🇴" },
+
+  // === CUARTOS DE FINAL (Jul 9 – Jul 11) ===
+  { id:"m97", phase:"cuartos", home:"Francia",         away:"Marruecos",      date:"2026-07-09", hf:"🇫🇷", af:"🇲🇦" },
+  { id:"m98", phase:"cuartos", home:"España",          away:"Bélgica",        date:"2026-07-10", hf:"🇪🇸", af:"🇧🇪" },
+  { id:"m99", phase:"cuartos", home:"Noruega",         away:"Inglaterra",     date:"2026-07-11", hf:"🇳🇴", af:"🏴󠁧󠁢󠁥󠁮󠁧󠁿" },
+  { id:"m100", phase:"cuartos", home:"Argentina",      away:"Suiza",          date:"2026-07-11", hf:"🇦🇷", af:"🇨🇭" },
 ];
 
 const MATCH_IDS = MATCHES.map(m => m.id);

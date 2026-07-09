@@ -108,6 +108,12 @@ const RESULTS = {
   "m92": [2,3],  // México vs Inglaterra       (5-Jul)
   "m93": [0,1],  // Portugal vs España         (6-Jul)
   "m94": [1,4],  // EE.UU. vs Bélgica          (6-Jul)
-  "m95": null,   // Argentina vs Egipto        (7-Jul) — pendiente
-  "m96": null,   // Suiza vs Colombia          (7-Jul) — pendiente
+  "m95": [3,2],  // Argentina vs Egipto        (7-Jul) — Argentina remonta 0-2, gana 3-2
+  "m96": [0,0,"H"],  // Suiza vs Colombia      (7-Jul) — 0-0 en 120', Suiza gana penales 4-3
+
+  // === CUARTOS DE FINAL ===
+  "m97": [2,0],  // Francia vs Marruecos       (9-Jul)
+  "m98": null,   // España vs Bélgica          (10-Jul) — pendiente
+  "m99": null,   // Noruega vs Inglaterra      (11-Jul) — pendiente
+  "m100": null,  // Argentina vs Suiza         (11-Jul) — pendiente
 };
