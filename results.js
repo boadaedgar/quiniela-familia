@@ -113,7 +113,7 @@ const RESULTS = {
 
   // === CUARTOS DE FINAL ===
   "m97": [2,0],  // Francia vs Marruecos       (9-Jul)
-  "m98": null,   // España vs Bélgica          (10-Jul) — pendiente
+  "m98": [2,1],   // España vs Bélgica          (10-Jul) — pendiente
   "m99": null,   // Noruega vs Inglaterra      (11-Jul) — pendiente
   "m100": null,  // Argentina vs Suiza         (11-Jul) — pendiente
 };
