@@ -115,5 +115,5 @@ const RESULTS = {
   "m97": [2,0],  // Francia vs Marruecos       (9-Jul)
   "m98": [2,1],   // España vs Bélgica          (10-Jul) — pendiente
   "m99": [1,2],   // Noruega vs Inglaterra      (11-Jul) — pendiente
-  "m100": null,  // Argentina vs Suiza         (11-Jul) — pendiente
+  "m100": [3,1],  // Argentina vs Suiza         (11-Jul) — pendiente
 };
