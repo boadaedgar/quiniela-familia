@@ -141,7 +141,7 @@ const BETS_RAW = [
     // R16
     [1,2],[0,4],[null,null,"H"],[2,1],[null,null,"A"],[null,null,"A"],[3,1],[0,2],
     // Cuartos
-    [2,0],[1,0],[null,null,"H"],[1,3],
+    [2,0],[1,0],[null,null,"H"],[3,1],
     // Semis
     [3,2],[2,3]],
 
