@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Escenarios de la Final — Quiniela Mundial 2026</title>
+<style>
+  :root {
+    --bg:      #0f0f1a;
+    --card:    #1a1a2e;
+    --card2:   #22223a;
+    --text:    #e0e0e0;
+    --muted:   #8888a0;
+    --accent:  #f5a623;
+    --blue:    #4fc3f7;
+    --green:   #81c784;
+    --yellow:  #ffd54f;
+    --red:     #e57373;
+    --gold:    #ffd700;
+    --silver:  #c0c0c0;
+    --bronze:  #cd7f32;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background:var(--bg); color:var(--text);
+    font-family:'Segoe UI', system-ui, sans-serif;
+    padding:24px 16px 60px; max-width:1000px; margin:0 auto;
+  }
+  h1 { text-align:center; font-size:1.6rem; margin-bottom:4px; }
+  h1 .fin { color:var(--accent); }
+  .sub { text-align:center; color:var(--muted); margin-bottom:28px; font-size:.95rem; }
+  h2 { font-size:1.15rem; margin:36px 0 14px; border-left:4px solid var(--accent); padding-left:10px; }
+
+  /* tabla base */
+  table { width:100%; border-collapse:collapse; background:var(--card); border-radius:10px; overflow:hidden; font-size:.9rem; }
+  th, td { padding:8px 12px; text-align:left; }
+  th { background:var(--card2); color:var(--muted); font-weight:600; font-size:.8rem; text-transform:uppercase; letter-spacing:.5px; }
+  tr:nth-child(even) td { background:rgba(255,255,255,.02); }
+  td.num, th.num { text-align:right; font-variant-numeric:tabular-nums; }
+  .bet-esp { color:var(--yellow); }
+  .bet-arg { color:var(--blue); }
+  .bet-null { color:var(--muted); font-style:italic; }
+
+  /* escenarios */
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:14px; }
+  .esc {
+    background:var(--card); border-radius:12px; padding:14px 16px;
+    border-top:3px solid var(--muted);
+  }
+  .esc.esp { border-top-color:var(--yellow); }
+  .esc.arg { border-top-color:var(--blue); }
+  .esc h3 { font-size:1rem; margin-bottom:2px; }
+  .esc .cond { color:var(--muted); font-size:.8rem; margin-bottom:10px; }
+  .podio { list-style:none; }
+  .podio li {
+    display:flex; align-items:center; gap:8px;
+    padding:5px 0; font-size:.92rem;
+  }
+  .medal { width:1.4em; text-align:center; }
+  .pts { margin-left:auto; font-variant-numeric:tabular-nums; color:var(--green); font-size:.85rem; }
+  .delta { color:var(--muted); font-size:.75rem; }
+  .alerta {
+    background:var(--card2); border-left:4px solid var(--red);
+    border-radius:8px; padding:12px 16px; margin:20px 0; font-size:.92rem; line-height:1.5;
+  }
+  .alerta b { color:var(--red); }
+
+  /* resumen */
+  .resumen { display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:14px; }
+  .res-card { background:var(--card); border-radius:12px; padding:16px; }
+  .res-card h3 { font-size:1rem; margin-bottom:10px; }
+  .res-card ul { list-style:none; }
+  .res-card li { padding:4px 0; font-size:.9rem; line-height:1.45; }
+  .res-card li .cond { color:var(--muted); font-size:.8rem; }
+  .name { font-weight:600; }
+  .foot { text-align:center; color:var(--muted); font-size:.8rem; margin-top:40px; }
+</style>
+</head>
+<body>
+
+<h1>🏆 Escenarios de la <span class="fin">FINAL</span></h1>
+<p class="sub">🇪🇸 España vs Argentina 🇦🇷 · 19-Jul-2026 · Final vale ×5 (ganador 5 pts · penales 10 pts · exacto 15 pts)</p>
+
+<h2>Clasificación antes de la final (103 partidos jugados)</h2>
+<table>
+  <tr><th>#</th><th>Participante</th><th class="num">Puntos</th><th>Apuesta final</th><th class="num">Máx. posible</th></tr>
+  <tr><td>1</td><td>Ender Ramirez</td><td class="num">71.78</td><td class="bet-arg">🇦🇷 Argentina 2-1</td><td class="num">86.78</td></tr>
+  <tr><td>2</td><td>Jose Daniel</td><td class="num">67.13</td><td class="bet-arg">🇦🇷 Argentina 3-2</td><td class="num">82.13</td></tr>
+  <tr><td>3</td><td>Alejandra</td><td class="num">61.99</td><td class="bet-arg">🇦🇷 Argentina 3-2</td><td class="num">76.99</td></tr>
+  <tr><td>4</td><td>Diego</td><td class="num">59.80</td><td class="bet-arg">🇦🇷 Argentina 3-2</td><td class="num">74.80</td></tr>
+  <tr><td>5</td><td>Saelma</td><td class="num">58.34</td><td class="bet-arg">🇦🇷 Argentina 2-1</td><td class="num">73.34</td></tr>
+  <tr><td>6</td><td>Alexander</td><td class="num">55.79</td><td class="bet-esp">🇪🇸 España 2-1</td><td class="num">70.79</td></tr>
+  <tr><td>7</td><td>Yesika</td><td class="num">53.13</td><td class="bet-arg">🇦🇷 Argentina 3-2</td><td class="num">68.13</td></tr>
+  <tr><td>8</td><td>Jose Luis Mejias</td><td class="num">49.32</td><td class="bet-esp">🇪🇸 España 3-2</td><td class="num">64.32</td></tr>
+  <tr><td>9</td><td>Jonathan</td><td class="num">48.49</td><td class="bet-esp">🇪🇸 España en penales</td><td class="num">58.49</td></tr>
+  <tr><td>10</td><td>Fernando Mora</td><td class="num">48.30</td><td class="bet-arg">🇦🇷 Argentina 3-2</td><td class="num">63.30</td></tr>
+  <tr><td>11</td><td>edgar</td><td class="num">47.00</td><td class="bet-arg">🇦🇷 Argentina 3-1</td><td class="num">62.00</td></tr>
+  <tr><td>12</td><td>Andres Mejias</td><td class="num">44.86</td><td class="bet-esp">🇪🇸 España 3-2</td><td class="num">59.86</td></tr>
+  <tr><td>13</td><td>Nersy Teresa Boada Hare</td><td class="num">44.29</td><td class="bet-arg">🇦🇷 Argentina 5-4</td><td class="num">59.29</td></tr>
+  <tr><td>14</td><td>Nina</td><td class="num">42.15</td><td class="bet-arg">🇦🇷 Argentina 2-1</td><td class="num">57.15</td></tr>
+  <tr><td>15</td><td>Valeria corrales</td><td class="num">36.18</td><td class="bet-null">sin apuesta</td><td class="num">36.18</td></tr>
+  <tr><td>16</td><td>Daniel</td><td class="num">35.49</td><td class="bet-null">sin apuesta</td><td class="num">35.49</td></tr>
+  <tr><td>17</td><td>Jose Mendoza</td><td class="num">34.20</td><td class="bet-esp">🇪🇸 España 2-1</td><td class="num">49.20</td></tr>
+  <tr><td>18</td><td>Claudio</td><td class="num">22.44</td><td class="bet-null">sin apuesta</td><td class="num">22.44</td></tr>
+  <tr><td>19</td><td>Sebastian Boada</td><td class="num">12.87</td><td class="bet-null">sin apuesta</td><td class="num">12.87</td></tr>
+</table>
+
+<div class="alerta">
+  ⚠️ <b>El único resultado que le quita el título a Ender es Argentina 3-2</b> (marcador exacto de Jose Daniel, Alejandra, Diego y Yesika).
+  En ese caso Jose Daniel es campeón, y Alejandra le gana el 2do puesto a Ender por apenas <b>0.21 puntos</b>.
+  Con cualquier otro resultado — gane quien gane, como sea — <b>Ender es campeón</b>.
+</div>
+
+<h2>Los 10 escenarios posibles</h2>
+<div class="grid">
+
+  <div class="esc esp">
+    <h3>🇪🇸 España gana 2-1</h3>
+    <div class="cond">Exacto de Alexander y Jose Mendoza (+15)</div>
+    <ol class="podio">
+      <li><span class="medal">🥇</span><span class="name">Ender Ramirez</span><span class="pts">71.78</span></li>
+      <li><span class="medal">🥈</span><span class="name">Alexander</span><span class="pts">70.79</span></li>
+      <li><span class="medal">🥉</span><span class="name">Jose Daniel</span><span class="pts">67.13</span></li>
+    </ol>
+  </div>
+
+  <div class="esc esp">
+    <h3>🇪🇸 España gana 3-2</h3>
+    <div class="cond">Exacto de Jose Luis y Andres (+15)</div>
+    <ol class="podio">
+      <li><span class="medal">🥇</span><span class="name">Ender Ramirez</span><span class="pts">71.78</span></li>
+      <li><span class="medal">🥈</span><span class="name">Jose Daniel</span><span class="pts">67.13</span></li>
+      <li><span class="medal">🥉</span><span class="name">Jose Luis Mejias</span><span class="pts">64.32</span></li>
+    </ol>
+  </div>
+
+  <div class="esc esp">
+    <h3>🇪🇸 España gana (otro marcador)</h3>
+    <div class="cond">Alexander, Jose Luis, Andres, Jose Mendoza +5 · Jonathan +5</div>
+    <ol class="podio">
+      <li><span class="medal">🥇</span><span class="name">Ender Ramirez</span><span class="pts">71.78</span></li>
+      <li><span class="medal">🥈</span><span class="name">Jose Daniel</span><span class="pts">67.13</span></li>
+      <li><span class="medal">🥉</span><span class="name">Alejandra</span><span class="pts">61.99</span></li>
+    </ol>
+  </div>
+
+  <div class="esc esp">
+    <h3>🇪🇸 España gana en penales</h3>
+    <div class="cond">Jonathan acierta método (+10) · apostadores España +5</div>
+    <ol class="podio">
+      <li><span class="medal">🥇</span><span class="name">Ender Ramirez</span><span class="pts">71.78</span></li>
+      <li><span class="medal">🥈</span><span class="name">Jose Daniel</span><span class="pts">67.13</span></li>
+      <li><span class="medal">🥉</span><span class="name">Alejandra</span><span class="pts">61.99</span></li>
+    </ol>
+  </div>
+
+  <div class="esc arg">
+    <h3>🇦🇷 Argentina gana 3-2 ⚡</h3>
+    <div class="cond">Exacto de Jose Daniel, Alejandra, Diego y Yesika (+15) · ¡el único escenario que destrona a Ender!</div>
+    <ol class="podio">
+      <li><span class="medal">🥇</span><span class="name">Jose Daniel</span><span class="pts">82.13</span></li>
+      <li><span class="medal">🥈</span><span class="name">Alejandra</span><span class="pts">76.99</span></li>
+      <li><span class="medal">🥉</span><span class="name">Ender Ramirez</span><span class="pts">76.78 <span class="delta">(−0.21)</span></span></li>
+    </ol>
+  </div>
+
+  <div class="esc arg">
+    <h3>🇦🇷 Argentina gana 3-1</h3>
+    <div class="cond">Exacto de edgar (+15, llega a 62 — 6to) · resto Argentina +5</div>
+    <ol class="podio">
+      <li><span class="medal">🥇</span><span class="name">Ender Ramirez</span><span class="pts">76.78</span></li>
+      <li><span class="medal">🥈</span><span class="name">Jose Daniel</span><span class="pts">72.13</span></li>
+      <li><span class="medal">🥉</span><span class="name">Alejandra</span><span class="pts">66.99</span></li>
+    </ol>
+  </div>
+
+  <div class="esc arg">
+    <h3>🇦🇷 Argentina gana 2-1</h3>
+    <div class="cond">Exacto de Ender, Saelma y Nina (+15)</div>
+    <ol class="podio">
+      <li><span class="medal">🥇</span><span class="name">Ender Ramirez</span><span class="pts">86.78</span></li>
+      <li><span class="medal">🥈</span><span class="name">Saelma</span><span class="pts">73.34</span></li>
+      <li><span class="medal">🥉</span><span class="name">Jose Daniel</span><span class="pts">72.13</span></li>
+    </ol>
+  </div>
+
+  <div class="esc arg">
+    <h3>🇦🇷 Argentina gana 5-4</h3>
+    <div class="cond">Exacto de Nersy (+15, llega a 59.29 — 6ta) · resto Argentina +5</div>
+    <ol class="podio">
+      <li><span class="medal">🥇</span><span class="name">Ender Ramirez</span><span class="pts">76.78</span></li>
+      <li><span class="medal">🥈</span><span class="name">Jose Daniel</span><span class="pts">72.13</span></li>
+      <li><span class="medal">🥉</span><span class="name">Alejandra</span><span class="pts">66.99</span></li>
+    </ol>
+  </div>
+
+  <div class="esc arg">
+    <h3>🇦🇷 Argentina gana (otro marcador)</h3>
+    <div class="cond">Todos los apostadores Argentina +5</div>
+    <ol class="podio">
+      <li><span class="medal">🥇</span><span class="name">Ender Ramirez</span><span class="pts">76.78</span></li>
+      <li><span class="medal">🥈</span><span class="name">Jose Daniel</span><span class="pts">72.13</span></li>
+      <li><span class="medal">🥉</span><span class="name">Alejandra</span><span class="pts">66.99</span></li>
+    </ol>
+  </div>
+
+  <div class="esc arg">
+    <h3>🇦🇷 Argentina gana en penales</h3>
+    <div class="cond">Nadie apostó penales para Argentina · apostadores Argentina +5</div>
+    <ol class="podio">
+      <li><span class="medal">🥇</span><span class="name">Ender Ramirez</span><span class="pts">76.78</span></li>
+      <li><span class="medal">🥈</span><span class="name">Jose Daniel</span><span class="pts">72.13</span></li>
+      <li><span class="medal">🥉</span><span class="name">Alejandra</span><span class="pts">66.99</span></li>
+    </ol>
+  </div>
+
+</div>
+
+<h2>Resumen: quién puede terminar en cada puesto</h2>
+<div class="resumen">
+
+  <div class="res-card">
+    <h3>🥇 Posibles campeones (2)</h3>
+    <ul>
+      <li><span class="name">Ender Ramirez</span><br><span class="cond">con cualquier resultado excepto Argentina 3-2 (9 de 10 escenarios)</span></li>
+      <li><span class="name">Jose Daniel</span><br><span class="cond">solo si Argentina gana exactamente 3-2</span></li>
+    </ul>
+  </div>
+
+  <div class="res-card">
+    <h3>🥈 Posibles subcampeones (4)</h3>
+    <ul>
+      <li><span class="name">Jose Daniel</span><br><span class="cond">España gana 3-2, otro marcador o penales; Argentina gana 3-1, 5-4, otro o penales</span></li>
+      <li><span class="name">Alexander</span><br><span class="cond">solo si España gana exactamente 2-1</span></li>
+      <li><span class="name">Alejandra</span><br><span class="cond">solo si Argentina gana exactamente 3-2</span></li>
+      <li><span class="name">Saelma</span><br><span class="cond">solo si Argentina gana exactamente 2-1</span></li>
+    </ul>
+  </div>
+
+  <div class="res-card">
+    <h3>🥉 Posibles terceros (4)</h3>
+    <ul>
+      <li><span class="name">Alejandra</span><br><span class="cond">España gana con otro marcador o en penales; Argentina gana 3-1, 5-4, otro o penales</span></li>
+      <li><span class="name">Jose Daniel</span><br><span class="cond">España gana 2-1, o Argentina gana 2-1</span></li>
+      <li><span class="name">Jose Luis Mejias</span><br><span class="cond">solo si España gana exactamente 3-2</span></li>
+      <li><span class="name">Ender Ramirez</span><br><span class="cond">solo si Argentina gana exactamente 3-2</span></li>
+    </ul>
+  </div>
+
+  <div class="res-card">
+    <h3>🔒 Sin opción de podio</h3>
+    <ul>
+      <li><span class="cond">Diego llega máximo a 74.80 (Argentina 3-2), pero en ese escenario Jose Daniel, Alejandra y Ender lo superan — queda 4to. Nadie más alcanza el podio en ningún escenario.</span></li>
+    </ul>
+  </div>
+
+</div>
+
+<p class="foot">Calculado con las reglas oficiales de la quiniela · Final ×5 · 103 de 104 partidos jugados</p>
+
+</body>
+</html>
