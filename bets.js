@@ -119,6 +119,12 @@ const MATCHES = [
   // === SEMIFINALES (Jul 14 – Jul 15) ===
   { id:"m101", phase:"semis", home:"Francia",           away:"España",         date:"2026-07-14", hf:"🇫🇷", af:"🇪🇸" },
   { id:"m102", phase:"semis", home:"Inglaterra",        away:"Argentina",      date:"2026-07-15", hf:"🏴󠁧󠁢󠁥󠁮󠁧󠁿", af:"🇦🇷" },
+
+  // === TERCER LUGAR (Jul 18) ===
+  { id:"m103", phase:"tercero", home:"Francia",          away:"Inglaterra",     date:"2026-07-18", hf:"🇫🇷", af:"🏴󠁧󠁢󠁥󠁮󠁧󠁿" },
+
+  // === FINAL (Jul 19) ===
+  { id:"m104", phase:"final", home:"España",             away:"Argentina",      date:"2026-07-19", hf:"🇪🇸", af:"🇦🇷" },
 ];
 
 const MATCH_IDS = MATCHES.map(m => m.id);
@@ -143,7 +149,9 @@ const BETS_RAW = [
     // Cuartos
     [2,0],[1,0],[null,null,"H"],[3,1],
     // Semis
-    [3,2],[2,3]],
+    [3,2],[2,3],
+    // Tercer lugar y Final
+    [2,1],[2,3]],
 
   ["Alexander",
     // J1
@@ -159,7 +167,9 @@ const BETS_RAW = [
     // Cuartos
     [2,1],[1,2],[1,0],[1,2],
     // Semis
-    [2,1],[2,1]],
+    [2,1],[2,1],
+    // Tercer lugar y Final
+    [0,1],[2,1]],
 
   ["Andres Mejias",
     // J1
@@ -176,7 +186,9 @@ const BETS_RAW = [
     // Cuartos
     [2,0],[null,null,"H"],[null,null,"H"],[3,2],
     // Semis (sin apuesta)
-    null,null],
+    null,null,
+    // Tercer lugar y Final
+    [1,2],[3,2]],
 
   ["Daniel",
     // J1
@@ -192,6 +204,8 @@ const BETS_RAW = [
     // Cuartos (sin apuesta)
     null,null,null,null,
     // Semis (sin apuesta)
+    null,null,
+    // Tercer lugar y Final (sin apuesta)
     null,null],
 
   ["Diego",
@@ -208,7 +222,9 @@ const BETS_RAW = [
     // Cuartos
     [2,1],[1,0],[2,1],[3,1],
     // Semis
-    [1,2],[null,null,"A"]],
+    [1,2],[null,null,"A"],
+    // Tercer lugar y Final
+    [2,1],[2,3]],
 
   ["edgar",
     // J1
@@ -224,7 +240,9 @@ const BETS_RAW = [
     // Cuartos
     [2,0],[2,0],[2,0],[2,0],
     // Semis
-    [3,1],[null,null,"A"]],
+    [3,1],[null,null,"A"],
+    // Tercer lugar y Final
+    [3,1],[1,3]],
 
   ["Ender Ramirez",
     // J1
@@ -240,6 +258,8 @@ const BETS_RAW = [
     // Cuartos
     [2,1],[2,1],[1,2],[2,1],
     // Semis
+    [2,1],[1,2],
+    // Tercer lugar y Final
     [2,1],[1,2]],
 
   ["Fernando Mora",
@@ -256,7 +276,9 @@ const BETS_RAW = [
     // Cuartos
     [null,null,"H"],[1,2],[null,null,"A"],[2,0],
     // Semis
-    [2,1],[1,0]],
+    [2,1],[1,0],
+    // Tercer lugar y Final
+    [1,2],[2,3]],
 
   ["Jonathan",
     // J1
@@ -272,7 +294,9 @@ const BETS_RAW = [
     // Cuartos (sin apuesta)
     null,null,null,null,
     // Semis
-    [2,0],[null,null,"A"]],
+    [2,0],[null,null,"A"],
+    // Tercer lugar y Final
+    [0,2],[null,null,"H"]],
 
   ["Jose Daniel",
     // J1
@@ -288,7 +312,9 @@ const BETS_RAW = [
     // Cuartos
     [2,1],[2,1],[3,1],[3,1],
     // Semis
-    [2,1],[1,2]],
+    [2,1],[1,2],
+    // Tercer lugar y Final
+    [2,1],[2,3]],
 
   ["Jose Luis Mejias",
     // J1
@@ -304,7 +330,9 @@ const BETS_RAW = [
     // Cuartos
     [3,2],[2,1],[null,null,"H"],[2,0],
     // Semis
-    [3,2],[4,2]],
+    [3,2],[4,2],
+    // Tercer lugar y Final
+    [2,1],[3,2]],
 
   ["Jose Mendoza",
     // J1
@@ -320,7 +348,9 @@ const BETS_RAW = [
     // Cuartos (sin apuesta)
     null,null,null,null,
     // Semis
-    [2,1],[3,2]],
+    [2,1],[3,2],
+    // Tercer lugar y Final (formulario como "frank", email jgilmendoza70)
+    [1,2],[2,1]],
 
   ["Nersy Teresa Boada Hare",
     // J1
@@ -336,7 +366,9 @@ const BETS_RAW = [
     // Cuartos (Suiza ">=6" en formulario, usado como 6)
     [3,1],[5,4],[2,4],[5,6],
     // Semis (sin apuesta)
-    null,null],
+    null,null,
+    // Tercer lugar y Final
+    [3,1],[4,5]],
 
   ["Nina",
     // J1
@@ -352,7 +384,9 @@ const BETS_RAW = [
     // Cuartos
     [3,0],[1,2],[3,2],[2,3],
     // Semis
-    [3,1],[2,1]],
+    [3,1],[2,1],
+    // Tercer lugar y Final
+    [3,2],[1,2]],
 
   ["Saelma",
     // J1
@@ -368,6 +402,8 @@ const BETS_RAW = [
     // Cuartos
     [2,1],[1,2],[1,2],[2,1],
     // Semis
+    [2,1],[1,2],
+    // Tercer lugar y Final
     [2,1],[1,2]],
 
   ["Sebastian Boada",
@@ -384,6 +420,8 @@ const BETS_RAW = [
     // Cuartos (no disponible)
     null,null,null,null,
     // Semis (sin apuesta)
+    null,null,
+    // Tercer lugar y Final (sin apuesta)
     null,null],
 
   ["Valeria corrales",
@@ -400,6 +438,8 @@ const BETS_RAW = [
     // Cuartos (no disponible)
     null,null,null,null,
     // Semis (sin apuesta)
+    null,null,
+    // Tercer lugar y Final (sin apuesta)
     null,null],
 
   ["Yesika",
@@ -416,7 +456,9 @@ const BETS_RAW = [
     // Cuartos
     [3,2],[2,1],[2,1],[3,2],
     // Semis
-    [3,2],[null,null,"A"]],
+    [3,2],[null,null,"A"],
+    // Tercer lugar y Final
+    [2,1],[2,3]],
 
   ["Claudio",
     // J1
@@ -432,6 +474,8 @@ const BETS_RAW = [
     // Cuartos (no disponible)
     null,null,null,null,
     // Semis (sin apuesta)
+    null,null,
+    // Tercer lugar y Final (sin apuesta)
     null,null],
 ];
 

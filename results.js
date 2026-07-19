@@ -120,4 +120,10 @@ const RESULTS = {
   // === SEMIFINALES ===
   "m101": [0,2],  // Francia vs España          (14-Jul)
   "m102": [1,2],  // Inglaterra vs Argentina    (15-Jul)
+
+  // === TERCER LUGAR ===
+  "m103": [4,6],  // Francia vs Inglaterra      (18-Jul)
+
+  // === FINAL ===
+  "m104": null,  // España vs Argentina        (19-Jul)
 };
