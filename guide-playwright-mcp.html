@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>@playwright/mcp — User Guide</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/moon.css" />
+  <style>
+    :root {
+      --accent:  #f5a623;
+      --blue:    #4fc3f7;
+      --green:   #81c784;
+      --red:     #e57373;
+      --yellow:  #ffd54f;
+      --bg:      #0f0f1a;
+      --surface: #1a1a2e;
+      --border:  rgba(255,255,255,0.08);
+      --text:    #e0e0e0;
+      --muted:   #888;
+    }
+    .reveal .slides section { text-align: left; }
+    .reveal h1, .reveal h2  { color: var(--accent); }
+    .reveal h3               { color: var(--blue); font-size: 0.95em; margin-bottom: 12px; }
+    .reveal p, .reveal li    { font-size: 0.78em; line-height: 1.55; color: var(--text); }
+    .reveal ul  { list-style: none; padding: 0; margin: 0; }
+    .reveal ul li { padding: 4px 0; }
+    .reveal ul li::before { content: "▸ "; color: var(--accent); }
+
+    .slide-label {
+      position: absolute; top: -38px; right: 0;
+      font-size: 0.42em; color: #444;
+      letter-spacing: 1px; text-transform: uppercase;
+    }
+
+    /* COVER */
+    .cover-title { font-size: 1.6em; font-weight: 800; color: var(--accent); margin-bottom: 6px; }
+    .cover-sub   { font-size: 0.8em; color: var(--muted); margin-bottom: 24px; }
+    .cover-tags  { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; }
+    .tag {
+      display: inline-block;
+      background: rgba(79,195,247,0.1); border: 1px solid rgba(79,195,247,0.25);
+      border-radius: 20px; padding: 3px 12px;
+      font-size: 0.65em; color: var(--blue);
+    }
+    .tag.amber {
+      background: rgba(245,166,35,0.1); border-color: rgba(245,166,35,0.25);
+      color: var(--accent);
+    }
+
+    /* SECTION COVER */
+    .section-number { font-size: 0.6em; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+    .section-title  { font-size: 1.4em; font-weight: 700; color: var(--accent); line-height: 1.2; margin-bottom: 12px; }
+    .section-desc   { font-size: 0.78em; color: #aaa; max-width: 620px; }
+
+    /* CODE */
+    .code {
+      background: rgba(0,0,0,0.5); border: 1px solid var(--border);
+      border-radius: 8px; padding: 14px 18px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.68em; line-height: 1.8; color: #ccc; margin: 10px 0;
+      white-space: pre;
+    }
+    .code .k   { color: var(--blue); }
+    .code .s   { color: var(--green); }
+    .code .c   { color: #444; font-style: italic; }
+    .code .hl  { color: var(--accent); }
+    .code .dim { color: #555; }
+
+    /* CALLOUT */
+    .callout {
+      background: rgba(245,166,35,0.08); border-left: 3px solid var(--accent);
+      border-radius: 0 6px 6px 0; padding: 10px 14px;
+      font-size: 0.74em; margin: 12px 0; color: #ccc; font-style: italic;
+    }
+    .callout strong { color: var(--accent); font-style: normal; }
+    .callout.blue   { background: rgba(79,195,247,0.08); border-left-color: var(--blue); }
+    .callout.blue strong { color: var(--blue); }
+    .callout.green  { background: rgba(129,199,132,0.08); border-left-color: var(--green); }
+    .callout.green strong { color: var(--green); }
+    .callout.red    { background: rgba(229,115,115,0.08); border-left-color: var(--red); }
+    .callout.red strong { color: var(--red); }
+
+    /* TOOL TABLE */
+    .tool-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    .tool-table th {
+      font-size: 0.6em; color: var(--muted); text-transform: uppercase;
+      letter-spacing: 1px; padding: 6px 10px; text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .tool-table td { padding: 7px 10px; font-size: 0.68em; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: top; }
+    .tool-table tr:last-child td { border-bottom: none; }
+    .tool-name { font-family: 'Courier New', monospace; color: var(--blue); white-space: nowrap; }
+    .tool-desc { color: #bbb; }
+
+    /* WORKFLOW STEPS */
+    .workflow-step { display: flex; align-items: flex-start; gap: 14px; margin: 10px 0; }
+    .step-num {
+      min-width: 28px; height: 28px; background: var(--accent); color: #0f0f1a;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 0.8em; flex-shrink: 0; margin-top: 2px;
+    }
+    .step-title { font-size: 0.78em; font-weight: 600; color: var(--text); }
+    .step-sub   { font-size: 0.66em; color: var(--muted); margin-top: 2px; font-family: monospace; }
+
+    /* TWO-COL */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 10px; }
+    .col-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+    .col-card h4 { font-size: 0.72em; color: var(--accent); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* PILL */
+    .pill {
+      display: inline-block; background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border); border-radius: 20px;
+      padding: 2px 10px; font-size: 0.62em; color: #aaa; margin: 2px;
+      font-family: monospace;
+    }
+
+    /* NAV HINT */
+    .nav-hint { font-size: 0.4em; color: #333; text-align: center; margin-top: 20px; }
+  </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ═══════════ COVER ═══════════ -->
+<section>
+  <p class="section-number">User Guide</p>
+  <div class="cover-title">@playwright/mcp</div>
+  <p class="cover-sub">Browser automation for AI agents — accessibility tree, not pixels</p>
+  <ul style="color:#888; font-size:0.72em;">
+    <li>40+ tools: navigate, click, fill forms, screenshot, trace, mock network</li>
+    <li>Works with Claude Code, VS Code Copilot, Cursor, Windsurf, Claude Desktop, and more</li>
+    <li>Free open source (Apache 2.0) — runs locally, zero SaaS cost</li>
+  </ul>
+  <div class="cover-tags">
+    <span class="tag amber">Browser Automation</span>
+    <span class="tag">MCP</span>
+    <span class="tag">Playwright</span>
+    <span class="tag">Microsoft</span>
+    <span class="tag">Node.js 18+</span>
+    <span class="tag amber">Free / Apache 2.0</span>
+  </div>
+  <div class="nav-hint">→ next section &nbsp;·&nbsp; ↓ sub-slides within section</div>
+</section>
+
+<!-- ═══════════ SECTION 01: WHAT IS IT ═══════════ -->
+<section>
+
+  <section>
+    <div class="slide-label">Section 1 — What Is It</div>
+    <p class="section-number">01</p>
+    <div class="section-title">What Is It</div>
+    <p class="section-desc">How @playwright/mcp bridges AI agents and real browsers through structured accessibility data — and why that beats screenshots.</p>
+    <div class="nav-hint">↓ to dive in</div>
+  </section>
+
+  <section>
+    <div class="slide-label">01 — Core Concept</div>
+    <h2>The Core Concept</h2>
+    <p>@playwright/mcp is the official Microsoft MCP server that gives any AI agent structured control over a real web browser. It wraps the Playwright engine in Model Context Protocol tools — so AI clients can navigate, click, fill forms, and inspect pages without writing a line of code.</p>
+    <div class="callout">
+      <strong>Key insight:</strong> The AI doesn't see pixels — it reads a structured accessibility snapshot. Each interactive element gets a unique ref. The model picks the right ref and acts on it deterministically.
+    </div>
+    <p style="margin-top:10px;">Supported browsers: <strong style="color:var(--blue);">Chrome · Firefox · WebKit · Edge</strong> — one config, any engine.</p>
+  </section>
+
+  <section>
+    <div class="slide-label">01 — Accessibility Tree vs Screenshots</div>
+    <h2>Accessibility Tree vs. Screenshots</h2>
+    <div class="two-col">
+      <div class="col-card">
+        <h4>❌ Screenshot approach</h4>
+        <ul>
+          <li>Vision model reads raw pixels</li>
+          <li>2,000 – 10,000+ tokens per frame</li>
+          <li>Coordinate guessing — brittle on resize</li>
+          <li>Requires vision-capable model</li>
+          <li>Breaks on dynamic / animated layouts</li>
+        </ul>
+      </div>
+      <div class="col-card">
+        <h4 style="color:var(--green);">✅ Accessibility tree</h4>
+        <ul>
+          <li>Structured text: role, name, ref</li>
+          <li>200 – 400 tokens per snapshot</li>
+          <li>Deterministic refs — reliable</li>
+          <li>Works with any language model</li>
+          <li>Layout-independent</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout blue" style="margin-top:14px;">
+      <strong>Result:</strong> 10–50× cheaper per action. No vision model needed. Works with Claude, GPT-4o, Gemini, or any MCP-compatible agent.
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-label">01 — Architecture</div>
+    <h2>How It Fits Together</h2>
+    <div class="workflow-step">
+      <div class="step-num">1</div>
+      <div>
+        <div class="step-title">User gives AI client a natural-language task</div>
+        <div class="step-sub">"Navigate to github.com and find the playwright/playwright repo star count"</div>
+      </div>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">2</div>
+      <div>
+        <div class="step-title">AI client calls @playwright/mcp tools via MCP protocol</div>
+        <div class="step-sub">browser_navigate → browser_snapshot → browser_click → …</div>
+      </div>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">3</div>
+      <div>
+        <div class="step-title">MCP server drives a local browser with Playwright</div>
+        <div class="step-sub">Chrome / Firefox / WebKit / Edge — your choice</div>
+      </div>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">4</div>
+      <div>
+        <div class="step-title">Accessibility snapshot returned to AI — loop continues</div>
+        <div class="step-sub">Model reads refs, decides next action, calls next tool</div>
+      </div>
+    </div>
+  </section>
+
+</section>
+
+<!-- ═══════════ SECTION 02: SETUP ═══════════ -->
+<section>
+
+  <section>
+    <div class="slide-label">Section 2 — Setup</div>
+    <p class="section-number">02</p>
+    <div class="section-title">Setup</div>
+    <p class="section-desc">Prerequisites, installation commands for every major MCP client, and the universal JSON config.</p>
+    <div class="nav-hint">↓ to dive in</div>
+  </section>
+
+  <section>
+    <div class="slide-label">02 — Prerequisites</div>
+    <h2>Prerequisites</h2>
+    <ul>
+      <li><strong>Node.js 18+</strong> — the only hard requirement; check with <code style="color:var(--blue);">node --version</code></li>
+      <li><strong>An MCP client</strong> — Claude Code, VS Code Copilot, Cursor, Windsurf, Claude Desktop, Cline, Goose, Kiro, Codex, and others</li>
+      <li><strong>No global install needed</strong> — <code style="color:var(--blue);">npx @playwright/mcp@latest</code> fetches it on first run</li>
+      <li>Browsers download automatically via Playwright on first use</li>
+    </ul>
+    <div class="callout red" style="margin-top:14px;">
+      <strong>Warning:</strong> The correct package is <code>@playwright/mcp</code> (scoped, by Microsoft). The unscoped <code>playwright-mcp</code> on npm is a different community package — easy to install by mistake.
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-label">02 — Install by Client</div>
+    <h2>Install by MCP Client</h2>
+    <table class="tool-table">
+      <tr>
+        <th>Client</th>
+        <th>Command</th>
+      </tr>
+      <tr>
+        <td class="tool-name">Claude Code</td>
+        <td class="tool-desc"><code>claude mcp add playwright npx @playwright/mcp@latest</code></td>
+      </tr>
+      <tr>
+        <td class="tool-name">VS Code CLI</td>
+        <td class="tool-desc"><code>code --add-mcp '{"name":"playwright","command":"npx","args":["@playwright/mcp@latest"]}'</code></td>
+      </tr>
+      <tr>
+        <td class="tool-name">Cursor / Windsurf</td>
+        <td class="tool-desc">Settings → MCP Servers → paste JSON config (next slide)</td>
+      </tr>
+      <tr>
+        <td class="tool-name">Claude Desktop</td>
+        <td class="tool-desc">Edit <code>claude_desktop_config.json</code> → add JSON config (next slide)</td>
+      </tr>
+      <tr>
+        <td class="tool-name">Cline / Goose / Kiro</td>
+        <td class="tool-desc">MCP settings UI → add server with command <code>npx @playwright/mcp@latest</code></td>
+      </tr>
+    </table>
+  </section>
+
+  <section>
+    <div class="slide-label">02 — Universal JSON Config</div>
+    <h2>Universal JSON Config</h2>
+    <p>Use this in any MCP client that accepts a settings JSON (Cursor, Windsurf, Claude Desktop, etc.):</p>
+    <div class="code"><span class="k">{</span>
+  <span class="hl">"mcpServers"</span><span class="k">: {</span>
+    <span class="s">"playwright"</span><span class="k">: {</span>
+      <span class="s">"command"</span><span class="k">:</span> <span class="s">"npx"</span><span class="k">,</span>
+      <span class="s">"args"</span><span class="k">: [</span><span class="s">"@playwright/mcp@latest"</span><span class="k">]</span>
+    <span class="k">}</span>
+  <span class="k">}</span>
+<span class="k">}</span></div>
+    <div class="callout green" style="margin-top:12px;">
+      <strong>Verify:</strong> Restart your MCP client → look for Playwright tools in the tool list → prompt: "Take a screenshot of example.com" to confirm.
+    </div>
+  </section>
+
+</section>
+
+<!-- ═══════════ SECTION 03: CORE TOOLS ═══════════ -->
+<section>
+
+  <section>
+    <div class="slide-label">Section 3 — Core Tools</div>
+    <p class="section-number">03</p>
+    <div class="section-title">Core Tools</div>
+    <p class="section-desc">40+ browser tools grouped by function — navigation, interaction, capture, and advanced control.</p>
+    <div class="nav-hint">↓ to dive in</div>
+  </section>
+
+  <section>
+    <div class="slide-label">03 — Navigation & Capture</div>
+    <h2>Navigation & Capture</h2>
+    <table class="tool-table">
+      <tr><th>Tool</th><th>What it does</th><th>Returns</th></tr>
+      <tr>
+        <td class="tool-name">browser_navigate</td>
+        <td class="tool-desc">Go to any URL</td>
+        <td class="tool-desc">Page title + final URL</td>
+      </tr>
+      <tr>
+        <td class="tool-name">browser_back</td>
+        <td class="tool-desc">Browser back button</td>
+        <td class="tool-desc">—</td>
+      </tr>
+      <tr>
+        <td class="tool-name">browser_forward</td>
+        <td class="tool-desc">Browser forward button</td>
+        <td class="tool-desc">—</td>
+      </tr>
+      <tr>
+        <td class="tool-name">browser_reload</td>
+        <td class="tool-desc">Reload current page</td>
+        <td class="tool-desc">—</td>
+      </tr>
+      <tr>
+        <td class="tool-name">browser_snapshot</td>
+        <td class="tool-desc">Get accessibility tree of current page</td>
+        <td class="tool-desc">Structured tree with element refs (~200–400 tokens)</td>
+      </tr>
+      <tr>
+        <td class="tool-name">browser_screenshot</td>
+        <td class="tool-desc">Capture full page or element as PNG</td>
+        <td class="tool-desc">Base64 PNG image</td>
+      </tr>
+      <tr>
+        <td class="tool-name">browser_pdf</td>
+        <td class="tool-desc">Export current page as PDF</td>
+        <td class="tool-desc">PDF file path</td>
+      </tr>
+    </table>
+  </section>
+
+  <section>
+    <div class="slide-label">03 — Interaction Tools</div>
+    <h2>Interaction Tools</h2>
+    <table class="tool-table">
+      <tr><th>Tool</th><th>What it does</th></tr>
+      <tr><td class="tool-name">browser_click</td><td class="tool-desc">Click an element by its accessibility ref</td></tr>
+      <tr><td class="tool-name">browser_fill</td><td class="tool-desc">Fill form field — clears existing value, then types</td></tr>
+      <tr><td class="tool-name">browser_type</td><td class="tool-desc">Type text into focused element (appends to existing)</td></tr>
+      <tr><td class="tool-name">browser_select_option</td><td class="tool-desc">Choose a &lt;select&gt; dropdown option by value or label</td></tr>
+      <tr><td class="tool-name">browser_check</td><td class="tool-desc">Check a checkbox or radio button</td></tr>
+      <tr><td class="tool-name">browser_uncheck</td><td class="tool-desc">Uncheck a checkbox</td></tr>
+      <tr><td class="tool-name">browser_hover</td><td class="tool-desc">Hover over element — triggers tooltips and hover menus</td></tr>
+      <tr><td class="tool-name">browser_drag</td><td class="tool-desc">Drag element from source to target position</td></tr>
+      <tr><td class="tool-name">browser_key_press</td><td class="tool-desc">Send keyboard keys — Enter, Tab, Escape, Ctrl+A, etc.</td></tr>
+      <tr><td class="tool-name">browser_focus</td><td class="tool-desc">Focus an element without clicking</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <div class="slide-label">03 — Advanced Tools</div>
+    <h2>Advanced Tools</h2>
+    <table class="tool-table">
+      <tr><th>Tool</th><th>What it does</th></tr>
+      <tr><td class="tool-name">browser_evaluate</td><td class="tool-desc">Execute JavaScript in the page context and return the result</td></tr>
+      <tr><td class="tool-name">browser_console</td><td class="tool-desc">Read browser console messages and errors</td></tr>
+      <tr><td class="tool-name">browser_network_requests</td><td class="tool-desc">List all network requests made by the current page</td></tr>
+      <tr><td class="tool-name">browser_mock_api</td><td class="tool-desc">Intercept and return a custom response for any URL pattern</td></tr>
+      <tr><td class="tool-name">browser_get_cookies</td><td class="tool-desc">Retrieve current session cookies</td></tr>
+      <tr><td class="tool-name">browser_set_cookies</td><td class="tool-desc">Inject cookies — restore a session without logging in</td></tr>
+      <tr><td class="tool-name">browser_get_storage</td><td class="tool-desc">Read localStorage / sessionStorage values</td></tr>
+      <tr><td class="tool-name">browser_handle_dialog</td><td class="tool-desc">Accept or dismiss alert / confirm / prompt dialogs</td></tr>
+      <tr><td class="tool-name">browser_start_trace</td><td class="tool-desc">Begin a Playwright trace recording (for debugging)</td></tr>
+      <tr><td class="tool-name">browser_stop_trace</td><td class="tool-desc">Stop trace and export to a .zip file viewable in trace viewer</td></tr>
+    </table>
+  </section>
+
+</section>
+
+<!-- ═══════════ SECTION 04: WORKFLOWS ═══════════ -->
+<section>
+
+  <section>
+    <div class="slide-label">Section 4 — Workflows</div>
+    <p class="section-number">04</p>
+    <div class="section-title">Workflows</div>
+    <p class="section-desc">Four common patterns: basic web task, login + session persistence, form automation, and AI web research.</p>
+    <div class="nav-hint">↓ to dive in</div>
+  </section>
+
+  <section>
+    <div class="slide-label">04 — Basic Web Task</div>
+    <h2>Basic Web Task</h2>
+    <div class="workflow-step">
+      <div class="step-num">1</div>
+      <div>
+        <div class="step-title">Navigate to the target URL</div>
+        <div class="step-sub">browser_navigate → "https://example.com"</div>
+      </div>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">2</div>
+      <div>
+        <div class="step-title">Take an accessibility snapshot</div>
+        <div class="step-sub">browser_snapshot → returns tree with element refs (buttons, links, inputs)</div>
+      </div>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">3</div>
+      <div>
+        <div class="step-title">Act on the target element using its ref</div>
+        <div class="step-sub">browser_click ref="e15" → clicks the "Sign in" button</div>
+      </div>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">4</div>
+      <div>
+        <div class="step-title">Snapshot again to confirm state change</div>
+        <div class="step-sub">browser_snapshot → verify page transitioned as expected</div>
+      </div>
+    </div>
+    <div class="callout blue" style="margin-top:10px;">
+      <strong>Core pattern:</strong> navigate → snapshot → act → snapshot (repeat until done)
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-label">04 — Login Flow</div>
+    <h2>Login Flow + Session Persistence</h2>
+    <div class="workflow-step">
+      <div class="step-num">1</div>
+      <div>
+        <div class="step-title">Navigate to login page</div>
+        <div class="step-sub">browser_navigate → "https://app.example.com/login"</div>
+      </div>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">2</div>
+      <div>
+        <div class="step-title">Snapshot to get input refs</div>
+        <div class="step-sub">browser_snapshot → identifies email field ref="e3", password ref="e4"</div>
+      </div>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">3</div>
+      <div>
+        <div class="step-title">Fill credentials and submit</div>
+        <div class="step-sub">browser_fill ref="e3" → "user@example.com"<br/>browser_fill ref="e4" → "password"<br/>browser_click ref="submit-btn"</div>
+      </div>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">4</div>
+      <div>
+        <div class="step-title">Session persists automatically between agent turns</div>
+        <div class="step-sub">Cookies + localStorage saved — no re-auth needed for rest of session</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-label">04 — AI Web Research</div>
+    <h2>AI Agent Web Research</h2>
+    <div class="workflow-step">
+      <div class="step-num">1</div>
+      <div>
+        <div class="step-title">User gives agent a research task</div>
+        <div class="step-sub">"Search for '@playwright/mcp' and summarize the top 3 results"</div>
+      </div>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">2</div>
+      <div>
+        <div class="step-title">Agent navigates and fills search</div>
+        <div class="step-sub">browser_navigate → google.com → browser_fill search box → browser_key_press "Enter"</div>
+      </div>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">3</div>
+      <div>
+        <div class="step-title">Snapshot extracts result titles and links</div>
+        <div class="step-sub">browser_snapshot → agent reads result titles, URLs, descriptions from accessibility tree</div>
+      </div>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">4</div>
+      <div>
+        <div class="step-title">Agent visits each page and synthesizes</div>
+        <div class="step-sub">browser_navigate (×3) → browser_snapshot → agent writes summary</div>
+      </div>
+    </div>
+    <div class="callout green" style="margin-top:10px;">
+      <strong>Tip:</strong> Snapshots keep research loops cheap. Use browser_screenshot only when you need visual proof.
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-label">04 — Network Mocking for Testing</div>
+    <h2>Network Mocking for Testing</h2>
+    <div class="workflow-step">
+      <div class="step-num">1</div>
+      <div>
+        <div class="step-title">Set up mock before navigating</div>
+        <div class="step-sub">browser_mock_api url="/api/orders" → return fake order data</div>
+      </div>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">2</div>
+      <div>
+        <div class="step-title">Navigate to the page that calls the API</div>
+        <div class="step-sub">browser_navigate → "https://app.example.com/orders"</div>
+      </div>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">3</div>
+      <div>
+        <div class="step-title">Snapshot to verify page rendered mocked data</div>
+        <div class="step-sub">browser_snapshot → confirm mock order list appears in accessibility tree</div>
+      </div>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">4</div>
+      <div>
+        <div class="step-title">Inspect network requests to audit traffic</div>
+        <div class="step-sub">browser_network_requests → verify only expected endpoints were called</div>
+      </div>
+    </div>
+  </section>
+
+</section>
+
+<!-- ═══════════ SECTION 05: LIMITS & TIPS ═══════════ -->
+<section>
+
+  <section>
+    <div class="slide-label">Section 5 — Limits & Tips</div>
+    <p class="section-number">05</p>
+    <div class="section-title">Limits & Tips</div>
+    <p class="section-desc">Known constraints, common gotchas, and pro tips for reliable AI browser automation.</p>
+    <div class="nav-hint">↓ to dive in</div>
+  </section>
+
+  <section>
+    <div class="slide-label">05 — Known Limits</div>
+    <h2>Known Limits</h2>
+    <table class="tool-table">
+      <tr><th>Limit</th><th>Why it happens</th><th>Workaround</th></tr>
+      <tr>
+        <td class="tool-name" style="color:var(--red);">Sparse accessibility trees</td>
+        <td class="tool-desc">Sites suppress ARIA roles or use canvas-heavy UIs</td>
+        <td class="tool-desc">Fall back to browser_screenshot + vision model</td>
+      </tr>
+      <tr>
+        <td class="tool-name" style="color:var(--red);">Web only</td>
+        <td class="tool-desc">No native desktop UI automation support</td>
+        <td class="tool-desc">Use Anthropic computer-use for desktop targets</td>
+      </tr>
+      <tr>
+        <td class="tool-name" style="color:var(--red);">Node.js 18+ required</td>
+        <td class="tool-desc">Hard dependency on local Node runtime</td>
+        <td class="tool-desc">Use Browserbase cloud if you can't install Node</td>
+      </tr>
+      <tr>
+        <td class="tool-name" style="color:var(--red);">Single session per instance</td>
+        <td class="tool-desc">One browser window per MCP server process</td>
+        <td class="tool-desc">Run multiple MCP server instances for parallel tasks</td>
+      </tr>
+      <tr>
+        <td class="tool-name" style="color:var(--yellow);">Package name confusion</td>
+        <td class="tool-desc">Unscoped <code>playwright-mcp</code> on npm is a different package</td>
+        <td class="tool-desc">Always use <code>@playwright/mcp</code> (scoped)</td>
+      </tr>
+    </table>
+  </section>
+
+  <section>
+    <div class="slide-label">05 — Pro Tips</div>
+    <h2>Pro Tips</h2>
+    <ul>
+      <li><strong>Always snapshot before acting</strong> — element refs change after navigation; stale refs fail silently</li>
+      <li><strong>Use browser_fill, not browser_type</strong> — fill replaces the existing value cleanly; type appends</li>
+      <li><strong>Set up browser_mock_api before navigating</strong> — intercepts must be registered before the page loads</li>
+      <li><strong>Start a trace before long workflows</strong> — browser_start_trace gives you a full debug replay on failure</li>
+      <li><strong>Prefer snapshots over screenshots</strong> — snapshots are 10–50× cheaper; use screenshots only for visual proof</li>
+      <li><strong>Session persists by default</strong> — log in once; subsequent agent turns reuse cookies automatically</li>
+      <li><strong>Pin a version for production</strong> — use <code>@playwright/mcp@1.x.x</code> instead of <code>@latest</code> in CI</li>
+    </ul>
+  </section>
+
+</section>
+
+<!-- ═══════════ QUICK REFERENCE ═══════════ -->
+<section>
+  <div class="slide-label">Quick Reference</div>
+  <h2>Quick Reference</h2>
+  <div class="two-col">
+
+    <div>
+      <h3>Navigation</h3>
+      <span class="pill">browser_navigate</span>
+      <span class="pill">browser_back</span>
+      <span class="pill">browser_forward</span>
+      <span class="pill">browser_reload</span>
+
+      <h3 style="margin-top:12px;">Capture</h3>
+      <span class="pill">browser_snapshot</span>
+      <span class="pill">browser_screenshot</span>
+      <span class="pill">browser_pdf</span>
+
+      <h3 style="margin-top:12px;">Interaction</h3>
+      <span class="pill">browser_click</span>
+      <span class="pill">browser_fill</span>
+      <span class="pill">browser_type</span>
+      <span class="pill">browser_select_option</span>
+      <span class="pill">browser_check</span>
+      <span class="pill">browser_hover</span>
+      <span class="pill">browser_drag</span>
+      <span class="pill">browser_key_press</span>
+      <span class="pill">browser_focus</span>
+
+      <h3 style="margin-top:12px;">Advanced</h3>
+      <span class="pill">browser_evaluate</span>
+      <span class="pill">browser_mock_api</span>
+      <span class="pill">browser_network_requests</span>
+      <span class="pill">browser_console</span>
+      <span class="pill">browser_get_cookies</span>
+      <span class="pill">browser_set_cookies</span>
+      <span class="pill">browser_get_storage</span>
+      <span class="pill">browser_handle_dialog</span>
+      <span class="pill">browser_start_trace</span>
+      <span class="pill">browser_stop_trace</span>
+    </div>
+
+    <div>
+      <h3>Add to any MCP client</h3>
+      <div class="code"><span class="k">{</span>
+  <span class="hl">"mcpServers"</span><span class="k">: {</span>
+    <span class="s">"playwright"</span><span class="k">: {</span>
+      <span class="s">"command"</span><span class="k">:</span> <span class="s">"npx"</span><span class="k">,</span>
+      <span class="s">"args"</span><span class="k">: [</span><span class="s">"@playwright/mcp@latest"</span><span class="k">]</span>
+    <span class="k">}</span>
+  <span class="k">}</span>
+<span class="k">}</span></div>
+
+      <h3 style="margin-top:10px;">Claude Code</h3>
+      <div class="code"><span class="hl">claude mcp add playwright npx @playwright/mcp@latest</span></div>
+
+      <h3 style="margin-top:10px;">Core loop</h3>
+      <div class="code"><span class="dim">navigate → snapshot → act → snapshot</span></div>
+
+      <h3 style="margin-top:10px;">Key facts</h3>
+      <span class="pill">Node.js 18+</span>
+      <span class="pill">Apache 2.0 — free</span>
+      <span class="pill">40+ tools</span>
+      <span class="pill">Chrome · Firefox · WebKit · Edge</span>
+      <span class="pill">200–400 tokens/snapshot</span>
+      <span class="pill">Session-persistent by default</span>
+    </div>
+
+  </div>
+</section>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    transition: 'slide',
+    transitionSpeed: 'fast',
+    controls: true,
+    progress: true,
+    slideNumber: 'c/t',
+    width: 1280,
+    height: 720,
+    margin: 0.04,
+    minScale: 0.2,
+    maxScale: 2.0,
+  });
+</script>
+</body>
+</html>

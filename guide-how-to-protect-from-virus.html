@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Protect From Virus — User Guide</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/moon.css" />
+  <style>
+    :root {
+      --accent:  #f5a623;
+      --blue:    #4fc3f7;
+      --green:   #81c784;
+      --red:     #e57373;
+      --yellow:  #ffd54f;
+      --bg:      #0f0f1a;
+      --surface: #1a1a2e;
+      --border:  rgba(255,255,255,0.08);
+      --text:    #e0e0e0;
+      --muted:   #888;
+    }
+    .reveal .slides section { text-align: left; }
+    .reveal h1, .reveal h2 { color: var(--accent); }
+    .reveal h3 { color: var(--blue); font-size: 0.95em; margin-bottom: 12px; }
+    .reveal p, .reveal li { font-size: 0.78em; line-height: 1.55; color: var(--text); }
+    .reveal ul { list-style: none; padding: 0; margin: 0; }
+    .reveal ul li { padding: 4px 0; }
+    .reveal ul li::before { content: "▸ "; color: var(--accent); }
+
+    .slide-label {
+      position: absolute; top: -38px; right: 0;
+      font-size: 0.42em; color: #444;
+      letter-spacing: 1px; text-transform: uppercase;
+    }
+
+    .cover-title { font-size: 1.6em; font-weight: 800; color: var(--accent); margin-bottom: 6px; }
+    .cover-sub   { font-size: 0.8em; color: var(--muted); margin-bottom: 24px; }
+    .cover-tags  { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; }
+    .tag {
+      display: inline-block;
+      background: rgba(79,195,247,0.1); border: 1px solid rgba(79,195,247,0.25);
+      border-radius: 20px; padding: 3px 12px;
+      font-size: 0.65em; color: var(--blue);
+    }
+    .tag.amber {
+      background: rgba(245,166,35,0.1); border-color: rgba(245,166,35,0.25);
+      color: var(--accent);
+    }
+
+    .section-number { font-size: 0.6em; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+    .section-title  { font-size: 1.4em; font-weight: 700; color: var(--accent); line-height: 1.2; margin-bottom: 12px; }
+    .section-desc   { font-size: 0.78em; color: #aaa; max-width: 600px; }
+
+    .code {
+      background: rgba(0,0,0,0.5); border: 1px solid var(--border);
+      border-radius: 8px; padding: 14px 18px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.68em; line-height: 1.8; color: #ccc; margin: 10px 0;
+    }
+    .code .k   { color: var(--blue); }
+    .code .s   { color: var(--green); }
+    .code .c   { color: #444; font-style: italic; }
+    .code .hl  { color: var(--accent); }
+    .code .dim { color: #555; }
+
+    .callout {
+      background: rgba(245,166,35,0.08); border-left: 3px solid var(--accent);
+      border-radius: 0 6px 6px 0; padding: 10px 14px;
+      font-size: 0.74em; margin: 12px 0; color: #ccc; font-style: italic;
+    }
+    .callout strong { color: var(--accent); font-style: normal; }
+    .callout.blue   { background: rgba(79,195,247,0.08); border-left-color: var(--blue); }
+    .callout.blue strong { color: var(--blue); }
+    .callout.green  { background: rgba(129,199,132,0.08); border-left-color: var(--green); }
+    .callout.green strong { color: var(--green); }
+
+    .tool-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    .tool-table th {
+      font-size: 0.6em; color: var(--muted); text-transform: uppercase;
+      letter-spacing: 1px; padding: 6px 10px; text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .tool-table td { padding: 7px 10px; font-size: 0.68em; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: top; }
+    .tool-table tr:last-child td { border-bottom: none; }
+    .tool-name { font-family: 'Courier New', monospace; color: var(--blue); white-space: nowrap; }
+    .tool-desc { color: #bbb; }
+
+    .workflow-step { display: flex; align-items: flex-start; gap: 14px; margin: 10px 0; }
+    .step-num {
+      min-width: 28px; height: 28px; background: var(--accent); color: #0f0f1a;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 0.8em; flex-shrink: 0; margin-top: 2px;
+    }
+    .step-title { font-size: 0.78em; font-weight: 600; color: var(--text); }
+    .step-sub   { font-size: 0.68em; color: var(--muted); margin-top: 2px; font-family: monospace; }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 10px; }
+    .col-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+    .col-card h4 { font-size: 0.72em; color: var(--accent); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .badge {
+      display: inline-block; border-radius: 4px; padding: 1px 7px;
+      font-size: 0.6em; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.5px; vertical-align: middle; margin-left: 6px;
+    }
+    .badge-beta { background: rgba(255,213,79,0.15); color: var(--yellow); border: 1px solid rgba(255,213,79,0.3); }
+    .badge-free { background: rgba(129,199,132,0.15); color: var(--green); border: 1px solid rgba(129,199,132,0.3); }
+    .badge-paid { background: rgba(229,115,115,0.15); color: var(--red);   border: 1px solid rgba(229,115,115,0.3); }
+
+    .pill {
+      display: inline-block; background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border); border-radius: 20px;
+      padding: 2px 10px; font-size: 0.62em; color: #aaa; margin: 2px;
+    }
+
+    .nav-hint { font-size: 0.4em; color: #333; text-align: center; margin-top: 20px; }
+  </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- COVER -->
+<section>
+  <p class="section-number">User Guide</p>
+  <div class="cover-title">Protect From Virus</div>
+  <p class="cover-sub">Keep laptop malware-free with built-in Windows tools</p>
+  <ul style="color:#888; font-size:0.72em;">
+    <li>Windows Defender + Firewall are free and enough for most users</li>
+    <li>Most infections come from human choices, not zero-days</li>
+    <li>Backups turn ransomware from disaster into inconvenience</li>
+  </ul>
+  <div class="cover-tags">
+    <span class="tag amber">Windows Defender</span>
+    <span class="tag">Firewall</span>
+    <span class="tag">PowerShell</span>
+    <span class="tag amber">Ransomware</span>
+    <span class="tag">MFA</span>
+    <span class="tag">Backups</span>
+  </div>
+  <div class="nav-hint">→ next section · ↓ sub-slides within section</div>
+</section>
+
+<!-- SECTION 1: WHAT IS IT -->
+<section>
+  <section>
+    <div class="slide-label">Section 1 — Threat Landscape</div>
+    <p class="section-number">01</p>
+    <div class="section-title">Threat Landscape</div>
+    <p class="section-desc">What you're actually defending against, and where it comes from.</p>
+    <div class="nav-hint">↓ to dive in</div>
+  </section>
+
+  <section>
+    <div class="slide-label">01 — Threat Landscape</div>
+    <h3>Malware types</h3>
+    <table class="tool-table">
+      <tr><th>Type</th><th>What it does</th></tr>
+      <tr><td class="tool-name">Virus</td><td class="tool-desc">Attaches to files, spreads when executed</td></tr>
+      <tr><td class="tool-name">Ransomware</td><td class="tool-desc">Encrypts your files, demands payment to unlock</td></tr>
+      <tr><td class="tool-name">Spyware</td><td class="tool-desc">Silently harvests keystrokes, credentials, browsing data</td></tr>
+      <tr><td class="tool-name">Trojan</td><td class="tool-desc">Disguised as legit software, opens backdoor once run</td></tr>
+      <tr><td class="tool-name">Worm</td><td class="tool-desc">Self-replicates across network without user action</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <div class="slide-label">01 — Threat Landscape</div>
+    <h3>Where infections actually come from</h3>
+    <ul>
+      <li>Pirated software / cracked installers / key generators</li>
+      <li>Phishing emails and spoofed sender accounts</li>
+      <li>Malicious or lookalike URLs (credential harvesting)</li>
+      <li>Infected USB drives and unknown external devices</li>
+      <li>Unpatched OS, browser, or app vulnerabilities</li>
+    </ul>
+    <div class="callout">
+      <strong>Reality check:</strong> most infections are a human decision (click, download, plug-in), not a hacker breaking through firewalls.
+    </div>
+  </section>
+</section>
+
+<!-- SECTION 2: VERIFY PROTECTION -->
+<section>
+  <section>
+    <div class="slide-label">Section 2 — Verify Protection</div>
+    <p class="section-number">02</p>
+    <div class="section-title">Verify Protection</div>
+    <p class="section-desc">Confirm Defender and Firewall are actually active, right now.</p>
+    <div class="nav-hint">↓ to dive in</div>
+  </section>
+
+  <section>
+    <div class="slide-label">02 — Verify Protection</div>
+    <h3>Check Defender status</h3>
+    <div class="code">
+<span class="k">Get-MpComputerStatus</span> | <span class="k">Select-Object</span> <span class="hl">RealTimeProtectionEnabled</span>, <span class="hl">AntivirusEnabled</span>,<br>
+&nbsp;&nbsp;<span class="hl">AntivirusSignatureLastUpdated</span>, <span class="hl">FullScanAge</span>, <span class="hl">QuickScanAge</span>
+    </div>
+    <div class="callout green">
+      <strong>Good state:</strong> RealTimeProtectionEnabled = True, signatures updated within last day.
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-label">02 — Verify Protection</div>
+    <h3>Check Firewall status</h3>
+    <div class="code">
+<span class="k">Get-NetFirewallProfile</span> | <span class="k">Select-Object</span> <span class="hl">Name</span>, <span class="hl">Enabled</span>,<br>
+&nbsp;&nbsp;<span class="hl">DefaultInboundAction</span>, <span class="hl">DefaultOutboundAction</span>
+    </div>
+    <p>Check all 3 profiles: <span class="tool-name">Domain</span>, <span class="tool-name">Private</span>, <span class="tool-name">Public</span> — all should show <strong style="color:var(--green)">Enabled = True</strong>.</p>
+    <div class="callout blue">
+      <strong>Note:</strong> "NotConfigured" on inbound/outbound action is normal — means Windows secure defaults apply.
+    </div>
+  </section>
+</section>
+
+<!-- SECTION 3: PROTECTION LAYERS -->
+<section>
+  <section>
+    <div class="slide-label">Section 3 — Protection Layers</div>
+    <p class="section-number">03</p>
+    <div class="section-title">Protection Layers</div>
+    <p class="section-desc">The stack that keeps a laptop safe, built-in and free.</p>
+    <div class="nav-hint">↓ to dive in</div>
+  </section>
+
+  <section>
+    <div class="slide-label">03 — Protection Layers</div>
+    <table class="tool-table">
+      <tr><th>Layer</th><th>Purpose</th><th></th></tr>
+      <tr><td class="tool-name">Auto updates</td><td class="tool-desc">Patch OS + browser vulnerabilities before exploited</td><td><span class="badge badge-free">Free</span></td></tr>
+      <tr><td class="tool-name">Defender</td><td class="tool-desc">Real-time malware detection + removal</td><td><span class="badge badge-free">Free</span></td></tr>
+      <tr><td class="tool-name">Firewall</td><td class="tool-desc">Blocks unsolicited inbound network connections</td><td><span class="badge badge-free">Free</span></td></tr>
+      <tr><td class="tool-name">Standard user acct</td><td class="tool-desc">Limits damage if malware executes</td><td><span class="badge badge-free">Free</span></td></tr>
+      <tr><td class="tool-name">Password manager</td><td class="tool-desc">Unique passwords stop credential-stuffing spread</td><td><span class="badge badge-free">Free</span></td></tr>
+      <tr><td class="tool-name">MFA</td><td class="tool-desc">Stops account takeover even if password leaks</td><td><span class="badge badge-free">Free</span></td></tr>
+      <tr><td class="tool-name">Disk encryption</td><td class="tool-desc">BitLocker — protects data if device lost/stolen</td><td><span class="badge badge-free">Free</span></td></tr>
+      <tr><td class="tool-name">Backups (3-2-1)</td><td class="tool-desc">Recovery path from ransomware without paying</td><td><span class="badge badge-free">Free*</span></td></tr>
+    </table>
+  </section>
+</section>
+
+<!-- SECTION 4: RUN A FULL SCAN -->
+<section>
+  <section>
+    <div class="slide-label">Section 4 — Run a Full Scan</div>
+    <p class="section-number">04</p>
+    <div class="section-title">Run a Full Scan</div>
+    <p class="section-desc">Step-by-step: launch, monitor, confirm clean.</p>
+    <div class="nav-hint">↓ to dive in</div>
+  </section>
+
+  <section>
+    <div class="slide-label">04 — Run a Full Scan</div>
+    <h3>Workflow</h3>
+    <div class="workflow-step">
+      <div class="step-num">1</div>
+      <div><div class="step-title">Check current scan age first</div>
+      <div class="step-sub">Get-MpComputerStatus → FullScanAge</div></div>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">2</div>
+      <div><div class="step-title">Launch full scan (runs in background)</div>
+      <div class="step-sub">Start-MpScan -ScanType FullScan</div></div>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">3</div>
+      <div><div class="step-title">Let it run — can take 30min to 2hrs</div>
+      <div class="step-sub">Scans every file on disk, non-destructive, read-only</div></div>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">4</div>
+      <div><div class="step-title">Confirm completion + check threats</div>
+      <div class="step-sub">Get-MpComputerStatus → FullScanAge = 0</div></div>
+    </div>
+    <div class="workflow-step">
+      <div class="step-num">5</div>
+      <div><div class="step-title">List any detections found</div>
+      <div class="step-sub">Get-MpThreatDetection</div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-label">04 — Run a Full Scan</div>
+    <h3>Reading the result</h3>
+    <div class="callout green">
+      <strong>Clean:</strong> Get-MpThreatDetection returns empty output — nothing found.
+    </div>
+    <div class="callout">
+      <strong>Threat found:</strong> Get-MpThreatDetection lists ThreatID + Resources + InitialDetectionTime — Defender typically auto-quarantines, verify via Windows Security app.
+    </div>
+    <p>Run full scan monthly. Quick scan (daily, automatic) covers common infection points only.</p>
+  </section>
+</section>
+
+<!-- SECTION 5: LIMITS & TIPS -->
+<section>
+  <section>
+    <div class="slide-label">Section 5 — Limits & Tips</div>
+    <p class="section-number">05</p>
+    <div class="section-title">Limits & Tips</div>
+    <p class="section-desc">What antivirus can't do, and cheap habits that cover the gap.</p>
+    <div class="nav-hint">↓ to dive in</div>
+  </section>
+
+  <section>
+    <div class="slide-label">05 — Limits & Tips</div>
+    <table class="tool-table">
+      <tr><th>Limit</th><th>Why it matters</th></tr>
+      <tr><td class="tool-desc">No AV catches 100% of new threats</td><td class="tool-desc">Signature-based detection lags brand-new malware</td></tr>
+      <tr><td class="tool-desc">Can't stop you from typing password into phishing site</td><td class="tool-desc">Social engineering bypasses technical controls entirely</td></tr>
+      <tr><td class="tool-desc">Can't undo ransomware encryption</td><td class="tool-desc">Only backups restore files — AV just blocks/detects</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <div class="slide-label">05 — Limits & Tips</div>
+    <h3>Habits that matter more than any tool</h3>
+    <ul>
+      <li>Never download cracked software or key generators</li>
+      <li>Hover/check URLs before entering credentials anywhere</li>
+      <li>Treat unexpected attachments as hostile, even from known contacts</li>
+      <li>Use MFA app (not SMS) on email, banking, cloud storage</li>
+      <li>Keep 3-2-1 backup: 3 copies, 2 media types, 1 offsite/cloud</li>
+    </ul>
+  </section>
+</section>
+
+<!-- QUICK REFERENCE -->
+<section>
+  <div class="slide-label">Quick Reference</div>
+  <p class="section-number">Cheat Sheet</p>
+  <div class="section-title">Quick Reference</div>
+  <div class="two-col">
+    <div class="col-card">
+      <h4>Protection Layers</h4>
+      <span class="pill">Defender</span>
+      <span class="pill">Firewall</span>
+      <span class="pill">Auto-updates</span>
+      <span class="pill">Standard user acct</span>
+      <span class="pill">Password manager</span>
+      <span class="pill">MFA</span>
+      <span class="pill">BitLocker</span>
+      <span class="pill">3-2-1 backups</span>
+      <span class="pill">Safe browsing</span>
+    </div>
+    <div class="col-card">
+      <h4>Key PowerShell commands</h4>
+      <div class="code">
+<span class="c"># Defender status</span><br>
+<span class="k">Get-MpComputerStatus</span><br><br>
+<span class="c"># Run full scan</span><br>
+<span class="k">Start-MpScan</span> -ScanType <span class="hl">FullScan</span><br><br>
+<span class="c"># List detected threats</span><br>
+<span class="k">Get-MpThreatDetection</span><br><br>
+<span class="c"># Firewall status</span><br>
+<span class="k">Get-NetFirewallProfile</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    transition: 'slide',
+    transitionSpeed: 'fast',
+    controls: true,
+    progress: true,
+    slideNumber: 'c/t',
+    width: 1280,
+    height: 720,
+    margin: 0.04,
+    minScale: 0.2,
+    maxScale: 2.0,
+  });
+</script>
+</body>
+</html>
