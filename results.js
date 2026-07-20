@@ -125,5 +125,5 @@ const RESULTS = {
   "m103": [4,6],  // Francia vs Inglaterra      (18-Jul)
 
   // === FINAL ===
-  "m104": null,  // España vs Argentina        (19-Jul)
+  "m104": [1,0],  // España vs Argentina       (19-Jul) — España campeón del mundo
 };
